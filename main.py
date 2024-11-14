@@ -1,8 +1,11 @@
 import logging
 logging.basicConfig(format='%(asctime)s\t%(levelname)s:\t%(message)s', level=logging.DEBUG, datefmt='%Y-%m-%dT%I:%M:%S')
 
+import os
+import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi import FileResponse
 from strawberry.fastapi import GraphQLRouter
 
 from GQLs import schema
@@ -36,9 +39,7 @@ logging.info("All initialization is done ")
 def hello():
    return {'hello': 'world'}
 
-graphql_app = GraphQLRouter(
-    schema
-)
+graphql_app = GraphQLRouter(schema)
 
 app.include_router(graphql_app, prefix="/gql")
 
