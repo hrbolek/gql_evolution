@@ -5,8 +5,8 @@ import os
 import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from fastapi import FileResponse
 from strawberry.fastapi import GraphQLRouter
+from fastapi.responses import FileResponse
 
 from GQLs import schema
 
@@ -43,3 +43,7 @@ graphql_app = GraphQLRouter(schema)
 
 app.include_router(graphql_app, prefix="/gql")
 
+@app.get("/voyager", response_class=FileResponse)
+async def graphiql():
+    realpath = os.path.realpath("./voyager.html")
+    return realpath

@@ -11,6 +11,9 @@ class Query:
         info: strawberry.types.Info,
     ) -> str:
         return "hello world"
+    
+    from .ResultGQLModel import result_by_id
+
 
 # Define the root mutation type with a description
 @strawberry.type(description="Type for mutation root")

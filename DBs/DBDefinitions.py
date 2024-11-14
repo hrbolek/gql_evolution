@@ -1,5 +1,6 @@
 import sqlalchemy
 import datetime
+import json
 from sqlalchemy import (
     Column,
     String,
@@ -68,7 +69,7 @@ class ResultTemplateModel(BaseModel):
     id = UUIDColumn()
     discipline_id = UUIDFKey(ForeignKey("tv_discipline.id"), comment="id disciplíny")
     discipline_set_id = UUIDFKey(ForeignKey("tv_discipline_set.id"), comment="id souboru disciplín")
-    effective_date = Column(DateTime, comment="datum účinnosti")
+    effective_date = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="datum účinnosti")
     expiry_date = Column(DateTime, nullable=True, comment="datum zániku")
     point_range = Column(String, comment="rozsah bodů")
     point_type = Column(String, comment="typ bodů")

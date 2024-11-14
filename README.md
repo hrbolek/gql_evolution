@@ -19,7 +19,7 @@ Mezi požadavky tohoto systému patří:
 - záznam a historie editace disciplín a výsledků (řešeno skrze UOIS)
 
 ## Struktura systému
-žlutě znázorněné databáze jsou základ systému pro CTVS
+Žlutě znázorněné databáze jsou základ systému pro CTVS.
 
 <img src="database-structure.png" alt="Chyba">
 
