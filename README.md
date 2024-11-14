@@ -19,9 +19,11 @@ Mezi požadavky tohoto systému patří:
 - záznam a historie editace disciplín a výsledků (řešeno skrze UOIS)
 
 ## Struktura systému
-    - žlutě znázorněné databáze jsou základem systému pro CTVS
+žlutě znázorněné databáze jsou základ systému pro CTVS
 
 <img src="database-structure.png" alt="Chyba">
+
+Zdroj: RÁČIL, Tomáš. IS pro sběr a vyhodnocení vybraných anatomicko- fyziologických dat a výzkumů. DIPLOMOVÁ PRÁCE. BRNO: UNIVERZITA OBRANY V BRNĚ, 2020.
 
 ## Úkoly
 
