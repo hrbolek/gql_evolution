@@ -1,94 +1,71 @@
 {
-    "events": [
-        {
-            "id": "2ce31150-1757-4c5b-8626-f745bf6ae079",
-            "name": "corrupted event",
-            "startdate": "2021-14-01 00:00:00"
-        },
-        {
-            "id": "45b2df80-ae0f-11ed-9bd8-0242ac110002" , 
-            "name": "Zkouška", 
-            "name_en": "Exam", 
-            "eventtype_id": "b87d3ff0-8fd4-11ed-a6d4-0242ac110002",
-            
-            "startdate": "2023-04-19T08:00:00", 
-            "enddate": "2023-04-19T09:00:00",
-            "_chunk": 2
-        },
-        {
-            "id": "4dccf52f-4117-403c-932a-5691c0d020b1" , 
-            "name": "2021/22", 
-            "name_en": "2021/22", 
-            "eventtype_id": "a517c2fd-8dc7-4a2e-a107-cbdb88ba2aa5",
-            
-            "startdate": "2021-09-01T00:00:00", 
-            "enddate": "2022-09-01T00:00:00",
-            "_chunk": 0
-        },
-        {
-            "id": "5194663f-11aa-4775-91ed-5f3d79269fed" , 
-            "name": "2022/23", 
-            "name_en": "2022/23", 
-            "eventtype_id": "a517c2fd-8dc7-4a2e-a107-cbdb88ba2aa5",
-            
-            "startdate": "2022-09-01T00:00:00", 
-            "enddate": "2023-09-01T00:00:00",
-            "_chunk": 0
-        },
-        {
-            "id": "a64871f8-2308-48ff-adb2-33fb0b0741f1" , 
-            "name": "2023/24", 
-            "name_en": "2023/24", 
-            "eventtype_id": "a517c2fd-8dc7-4a2e-a107-cbdb88ba2aa5",
-            
-            "startdate": "2023-09-01T00:00:00", 
-            "enddate": "2024-09-01T00:00:00",
-            "_chunk": 0
-        },
-        {
-            "id": "9d05f000-7a9d-495d-9257-b597c5c6cb6a" , 
-            "name": "2024/25", 
-            "name_en": "2024/25", 
-            "eventtype_id": "a517c2fd-8dc7-4a2e-a107-cbdb88ba2aa5",
-            
-            "startdate": "2024-09-01T00:00:00", 
-            "enddate": "2025-09-01T00:00:00",
-            "_chunk": 0
-        },
-        {
-            "id": "08ff1c5d-9891-41f6-a824-fc6272adc189" , 
-            "name": "2022/23 ZS", 
-            "name_en": "2022/23 WS", 
-            "eventtype_id": "69ec2b0b-a39d-40df-9cea-e295b36749c9",
-            "masterevent_id": "5194663f-11aa-4775-91ed-5f3d79269fed",
-
-            "startdate": "2022-09-01T00:00:00", 
-            "enddate": "2023-03-01T00:00:00",
-            "_chunk": 1
-        },
-        {
-            "id": "0945ad17-3a36-4d33-b849-ad88144415ba" , 
-            "name": "2022/23 LS", 
-            "name_en": "2022/23 SS", 
-            "eventtype_id": "69ec2b0b-a39d-40df-9cea-e295b36749c9",
-            "masterevent_id": "5194663f-11aa-4775-91ed-5f3d79269fed",
-            
-            "startdate": "2023-03-01T00:00:00", 
-            "enddate": "2023-09-01T00:00:00",
-            "_chunk": 1
-        }
-    ],
-
-    "events_users": [
-        {
-            "id": "89d1e684-ae0f-11ed-9bd8-0242ac110002", 
-            "user_id": "89d1e724-ae0f-11ed-9bd8-0242ac110002", 
-            "event_id": "45b2df80-ae0f-11ed-9bd8-0242ac110002"
-        },
-        {
-            "id": "89d1f2d2-ae0f-11ed-9bd8-0242ac110002", 
-            "user_id": "89d1f34a-ae0f-11ed-9bd8-0242ac110002", 
-            "event_id": "45b2df80-ae0f-11ed-9bd8-0242ac110002"
-        }
-    ]    
+  "disciplines": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "name": "Sprint",
+      "nameEn": "Sprint",
+      "description": "Běh na vzdálenost 100 metrů"
+    },
+    {
+      "id": "234e5678-e89b-12d3-a456-426614174001",
+      "name": "Skok daleký",
+      "nameEn": "Long jump",
+      "description": "Skok do dálky do pískového lože"
+    }
+  ],
+  "discipline_sets": [
+    {
+      "id": "345e6789-e89b-12d3-a456-426614174002",
+      "name": "1. ročník ZS",
+      "nameEn": "1. year WS",
+      "description": "Disciplíny pro 1. ročník zimního semestru",
+      "minimumPoints": 10
+    }
+  ],
+  "summaries": [
+    {
+      "id": "456e7890-e89b-12d3-a456-426614174003",
+      "discipline_id": "123e4567-e89b-12d3-a456-426614174000",
+      "discipline_set_id": "345e6789-e89b-12d3-a456-426614174002",
+      "effective_date": "2024-09-15T00:00:00Z",
+      "expiration_date": "2025-3-31T23:59:59Z",
+      "point_range": "0-20",
+      "point_type": "zápočet"
+    }
+  ],
+  "results": [
+    {
+      "id": "567e8901-e89b-12d3-a456-426614174004",
+      "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
+      "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
+      "discipline_id": "123e4567-e89b-12d3-a456-426614174000",
+      "datetime": "2025-03-15T14:00:00Z",
+      "result": "6",
+      "note": "Dobré"
+    },
+    {
+      "id": "2fe93aa9-30bc-4961-b358-53a2d7e7a2a1",
+      "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
+      "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
+      "discipline_id": "234e5678-e89b-12d3-a456-426614174001",
+      "datetime": "2025-03-16T10:00:00Z",
+      "result": "1",
+      "note": "Dostačující"
+    }
+  ],
+  "norms": [
+    {
+      "id": "b6dd8c86-499f-49a6-9913-bac9e802409c",
+      "discipline_set_id": "345e6789-e89b-12d3-a456-426614174002",
+      "effective_date": "2020-01-01T09:00:00Z",
+      "expiry_date": "2024-12-31T23:59:59Z",
+      "male": true,
+      "female": false,
+      "age_minimal": 18,
+      "age_maximal": 24,
+      "result_minimal_value": 10,
+      "result_maximal_value": 20,
+      "points": 10
+    }
+  ]
 }

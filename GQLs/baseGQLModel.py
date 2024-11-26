@@ -26,3 +26,13 @@ class BaseGQLModel:
         loader = cls.getloader(info=info)
         db_row = await loader.load(id)
         return cls.from_sqlalchemy(db_row=db_row)
+    
+    @classmethod
+    async def resolve_reference(cls, info: strawberry.types.Info, id: uuid.UUID):
+        if id is None: return None
+        loader = cls.getloader(info)
+        if isinstance(id, str): id = uuid.UUID(id)
+        result = await loader.load(id)
+        if result is not None:
+            result.__strawberry_definition__ = cls.__strawberry_definition__
+        return result

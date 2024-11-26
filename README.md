@@ -25,18 +25,23 @@ Mezi požadavky tohoto systému patří:
 
 Zdroj: RÁČIL, Tomáš. IS pro sběr a vyhodnocení vybraných anatomicko- fyziologických dat a výzkumů. DIPLOMOVÁ PRÁCE. BRNO: UNIVERZITA OBRANY V BRNĚ, 2020.
 
+Zde bude umístěná aktualizovaná struktura systému:
+
 ## Úkoly
 
-- něco
+- udělat návrh databází = hotovo
+- vytvořit tabulky databází = hotovo
+- vytvořit GQL modely databází = hotovo
+- odstranit chyby v propojení GQL modelů = hotovo
+- předělat systemadata.json (jeden uživatel s jedním výsledkem) = hotovo
 
 ________________________________________________________________________
 
 ## Záznamy
 
-- něco
-
+- 25.11 = vytvoření systemdata.json a odstranění chyb v rámci propojení GQL modelů
 ________________________________________________________________________
 
 ## Poznámky
 
-- něco
+- dodělat README.md
