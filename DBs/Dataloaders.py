@@ -1,5 +1,5 @@
 from uoishelpers.dataloaders import createLoadersAuto
-from DBs.baseDBModel import BaseModel
+from DBs.BaseDBModel import BaseModel
 
 def createLoadersContext(asyncSessionMaker):
     return {

@@ -8,7 +8,7 @@ from sqlalchemy.engine import row
 
 from uoishelpers.resolvers import getLoadersFromInfo
 
-from .baseGQLModel import BaseGQLModel
+from .BaseGQLModel import BaseGQLModel
 
 UserGQLModel = typing.Annotated["UserGQLModel", strawberry.lazy(".UserGQLModel")]
 DisciplineGQLModel = typing.Annotated["DisciplineGQLModel", strawberry.lazy(".DisciplineGQLModel")]
@@ -64,19 +64,9 @@ class ResultGQLModel(BaseGQLModel):
         result = await ResultGQLModel.load_with_loader(info=info, id=id)
         return result
     
-    @strawberry.field(description="Returns a type of the discipline which the result is about")
-    async def discipline(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[DisciplineGQLModel]:
-        result = await ResultGQLModel.load_with_loader(info=info, id=id)
-        return result
-    
-    @strawberry.field(description="Returns a result template for the result")
-    async def template(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:
+    @strawberry.field(description="Returns a summaries for the result")
+    async def summaries(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.List[SummaryGQLModel]:
         result = await SummaryGQLModel.load_with_loader(info=info, id=id)
-        return result
-    
-    @strawberry.field(description="Returns a norm for the result")
-    async def norm(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[NormGQLModel]:
-        result = await NormGQLModel.load_with_loader(info=info, id=id)
         return result
 
 @strawberry.field(description="Returns a result by id")

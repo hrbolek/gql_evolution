@@ -17,7 +17,7 @@ from uoishelpers.resolvers import putSingleEntityToDb
 from DBs.DBDefinitions import (
     DisciplineModel,
     DisciplineSetModel,
-    ResultTemplateModel,
+    SummaryModel,
     ResultModel,
     NormModel,
 )
@@ -30,7 +30,7 @@ resolveDisciplineSetsForUser = create1NGetter(
     DisciplineSetModel, foreignKeyName="user_id"
 )
 resolveResultTemplatesForUser = create1NGetter(
-    ResultTemplateModel, foreignKeyName="user_id"
+    SummaryModel, foreignKeyName="user_id"
 )
 resolveResultsForUser = create1NGetter(
     ResultModel, foreignKeyName="user_id"
@@ -52,10 +52,10 @@ resolverUpdateDisciplineSet = createUpdateResolver(DisciplineSetModel)
 resolveInsertDisciplineSet = createInsertResolver(DisciplineSetModel)
 
 # ResultTemplate resolvers
-resolveResultTemplateById = createEntityByIdGetter(ResultTemplateModel)
-resolveResultTemplateAll = createEntityGetter(ResultTemplateModel)
-resolverUpdateResultTemplate = createUpdateResolver(ResultTemplateModel)
-resolveInsertResultTemplate = createInsertResolver(ResultTemplateModel)
+resolveResultTemplateById = createEntityByIdGetter(SummaryModel)
+resolveResultTemplateAll = createEntityGetter(SummaryModel)
+resolverUpdateResultTemplate = createUpdateResolver(SummaryModel)
+resolveInsertResultTemplate = createInsertResolver(SummaryModel)
 
 # Result resolvers
 resolveResultById = createEntityByIdGetter(ResultModel)
@@ -88,12 +88,12 @@ async def resolveDisciplineSetByThreeLetters(session: AsyncSession, letters: str
     dbSet = await session.execute(stmt)
     return dbSet.scalars()
 
-async def resolveResultTemplateByThreeLetters(session: AsyncSession, letters: str = "") -> List[ResultTemplateModel]:
+async def resolveResultTemplateByThreeLetters(session: AsyncSession, letters: str = "") -> List[SummaryModel]:
     # If the length of the input is less than 3, return an empty list
     if len(letters) < 3:
         return []
     # Query to search for result templates whose name contains the letters
-    stmt = select(ResultTemplateModel).where(ResultTemplateModel.name.like(f"%{letters}%"))
+    stmt = select(SummaryModel).where(SummaryModel.name.like(f"%{letters}%"))
     dbSet = await session.execute(stmt)
     return dbSet.scalars()
 

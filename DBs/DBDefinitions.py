@@ -10,7 +10,7 @@ from sqlalchemy import (
     Boolean
 )
 from sqlalchemy.dialects.postgresql import UUID
-from .baseDBModel import BaseModel
+from .BaseDBModel import BaseModel
 from sqlalchemy.orm import relationship, validates
 import uuid
 
@@ -47,10 +47,7 @@ class DisciplineModel(BaseModel):
     nameEn = Column(String, nullable=True, comment="název disciplíny v ENG")
     description = Column(String, nullable=True, comment="popis disciplíny")
 
-    sets = relationship("DisciplineSetModel", back_populates="disciplines")
-    results = relationship("ResultModel", back_populates="discipline")
-    templates = relationship("SummaryModel", back_populates="disciplines")
-    norms = relationship("NormModel", back_populates="discipline")
+    summary = relationship("SummaryModel", back_populates="disciplines")
 
 # Discipline set model
 class DisciplineSetModel(BaseModel):
@@ -62,8 +59,7 @@ class DisciplineSetModel(BaseModel):
     description = Column(String, nullable=True, comment="popis souboru disciplín")
     minimumPoints = Column(Integer, nullable=True, comment="minimální počet bodů")
 
-    disciplines = relationship("DisciplineModel", back_populates="sets")
-    templates = relationship("SummaryModel", back_populates="set")
+    summary = relationship("SummaryModel", back_populates="sets")
 
 # Summary model
 class SummaryModel(BaseModel):
@@ -77,10 +73,10 @@ class SummaryModel(BaseModel):
     point_range = Column(String, comment="rozsah bodů")
     point_type = Column(String, comment="typ bodů")
 
-    disciplines = relationship("DisciplineModel", back_populates="templates")
-    set = relationship("DisciplineSetModel", back_populates="templates")
-    results = relationship("ResultModel", back_populates="template")
-    norms = relationship("NormModel", back_populates="template")
+    disciplines = relationship("DisciplineModel", back_populates="summary")
+    sets = relationship("DisciplineSetModel", back_populates="summary")
+    result = relationship("ResultModel", back_populates="summaries")
+    norm = relationship("NormModel", back_populates="summaries")
 
 # Result model
 class ResultModel(BaseModel):
@@ -89,23 +85,21 @@ class ResultModel(BaseModel):
     id = UUIDColumn()
     tested_person_id = UUIDFKey(comment="id testované osoby")
     examiner_person_id = UUIDFKey(comment="id zkoušející osoby")
-    discipline_id = UUIDFKey(ForeignKey("tv_disciplines.id"), comment="id disciplíny")
+    discipline_set_id = UUIDFKey(ForeignKey("tv_disciplines.id"), comment="id disciplíny")
     datetime = Column(DateTime, comment="datum a čas výsledku")
     result = Column(String, comment="výsledek")
     note = Column(String, nullable=True, comment="poznámka")
 
     testedPerson = relationship("UserModel", foreign_keys=[tested_person_id])
     examinerPerson = relationship("UserModel", foreign_keys=[examiner_person_id])
-    discipline = relationship("DisciplineModel", back_populates="results")
-    template = relationship("SummaryModel", back_populates="results")
-    norm = relationship("NormModel", back_populates="results")
+    summaries = relationship("SummaryModel", back_populates="result")
 
 # Norm model
 class NormModel(BaseModel):
     __tablename__ = "tv_norms"
 
     id = UUIDColumn()
-    discipline_set_id = UUIDFKey(ForeignKey("tv_discipline_sets.id"), comment="id souboru disciplín")
+    discipline_id = UUIDFKey(ForeignKey("tv_disciplines.id"), comment="id disciplíny")
     effective_date = Column(DateTime, comment="datum účinnosti")
     expiry_date = Column(DateTime, nullable=True, comment="datum zániku")
     male = Column(Boolean, default=False, comment="muž")
@@ -116,9 +110,7 @@ class NormModel(BaseModel):
     result_maximal_value = Column(Integer, comment="maximální hodnota výsledku")
     points = Column(Integer, comment="body")
 
-    discipline = relationship("DisciplineModel", back_populates="norms")
-    results = relationship("ResultModel", back_populates="norm")
-    template = relationship("SummaryModel", back_populates="norms")
+    summaries = relationship("SummaryModel", back_populates="norm")
 
     # Validation of gender by allowing only one gender to be true
     @validates('male', 'female')

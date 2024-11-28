@@ -56,7 +56,20 @@
   "norms": [
     {
       "id": "b6dd8c86-499f-49a6-9913-bac9e802409c",
-      "discipline_set_id": "345e6789-e89b-12d3-a456-426614174002",
+      "discipline_id": "123e4567-e89b-12d3-a456-426614174000",
+      "effective_date": "2020-01-01T09:00:00Z",
+      "expiry_date": "2024-12-31T23:59:59Z",
+      "male": true,
+      "female": false,
+      "age_minimal": 18,
+      "age_maximal": 24,
+      "result_minimal_value": 10,
+      "result_maximal_value": 20,
+      "points": 10
+    },
+    {
+      "id": "b6dd8c86-499f-49a6-9913-bac9e802409d",
+      "discipline_id": "234e5678-e89b-12d3-a456-426614174001",
       "effective_date": "2020-01-01T09:00:00Z",
       "expiry_date": "2024-12-31T23:59:59Z",
       "male": true,

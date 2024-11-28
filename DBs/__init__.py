@@ -2,7 +2,7 @@ import logging
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from .baseDBModel import BaseModel
+from .BaseDBModel import BaseModel
 from .DBDefinitions import DisciplineModel, DisciplineSetModel, ResultModel, SummaryModel, NormModel
 
 # Performs necessary operations and returns an asynchronous SessionMaker.

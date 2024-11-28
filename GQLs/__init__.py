@@ -4,7 +4,7 @@ import strawberry
 from .ResultGQLModel import result_by_id, result_page
 from .DisciplineGQLModel import discipline_by_id, discipline_page
 from .DisciplineSetGQLModel import discipline_set_by_id, discipline_set_page
-from .SummaryGQLModel import template_by_id, template_page
+from .SummaryGQLModel import summary_by_id, summary_page
 from .NormGQLModel import norm_by_id, norm_page
 
 # Define the root query type with a description
@@ -21,8 +21,8 @@ class Query:
     discipline_page = discipline_page
     discipline_set_by_id = discipline_set_by_id
     discipline_set_page = discipline_set_page
-    template_by_id = template_by_id
-    template_page = template_page
+    summary_by_id = summary_by_id
+    summary_page = summary_page
     norm_by_id = norm_by_id
     norm_page = norm_page
 

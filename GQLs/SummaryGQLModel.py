@@ -8,7 +8,7 @@ from sqlalchemy.engine import row
 
 from uoishelpers.resolvers import getLoadersFromInfo
 
-from .baseGQLModel import BaseGQLModel
+from .BaseGQLModel import BaseGQLModel
 
 DisciplineGQLModel = typing.Annotated["DisciplineGQLModel", strawberry.lazy(".DisciplineGQLModel")]
 DisciplineSetGQLModel = typing.Annotated["DisciplineSetGQLModel", strawberry.lazy(".DisciplineSetGQLModel")]
@@ -38,7 +38,7 @@ class SummaryGQLModel(BaseGQLModel):
     
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
-        return getLoadersFromInfo(info).ResultTemplateModel
+        return getLoadersFromInfo(info).SummaryModel
     
     id: uuid.UUID = strawberry.field()
     effective_date: dt.datetime = strawberry.field(description="Date when the result is effective")
@@ -51,36 +51,36 @@ class SummaryGQLModel(BaseGQLModel):
     changedby_id: uuid.UUID = strawberry.field(description="ID of the last changer")
     rbaobject_id: uuid.UUID = strawberry.field(description="ID of the RBA object")
 
-    @strawberry.field(description="Returns a discipline for the result template")
+    @strawberry.field(description="Returns a discipline for the summary")
     async def disciplines(self, info: strawberry.types.Info) -> typing.List[DisciplineGQLModel]:
         from .DisciplineGQLModel import DisciplineGQLModel
         result = await DisciplineGQLModel.load_with_loader(info=info, id=self.discipline_id)
         return result
 
-    @strawberry.field(description="Returns a discipline set for the result template")
-    async def set(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[DisciplineSetGQLModel]:
+    @strawberry.field(description="Returns a discipline sets for the summary")
+    async def sets(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.List[DisciplineSetGQLModel]:
         result = await DisciplineSetGQLModel.load_with_loader(info=info, id=id)
         return result
     
-    @strawberry.field(description="Returns results for the result template")
-    async def results(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.List[ResultGQLModel]:
+    @strawberry.field(description="Returns result for the summary")
+    async def result(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[ResultGQLModel]:
         from .ResultGQLModel import ResultGQLModel
         result = await ResultGQLModel.load_with_loader(info=info, id=id)
         return result
     
-    @strawberry.field(description="Returns a norms for the result template")
-    async def norms(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.List[NormGQLModel]:
+    @strawberry.field(description="Returns a norm for the summary")
+    async def norm(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[NormGQLModel]:
         from .NormGQLModel import NormGQLModel
         result = await NormGQLModel.load_with_loader(info=info, id=id)
         return result
 
-@strawberry.field(description="Returns a result template by id")
-async def template_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:
+@strawberry.field(description="Returns a sumamry by id")
+async def summary_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:
     result = await SummaryGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of result templates")
-async def template_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[SummaryGQLModel]:
-    loader = getLoadersFromInfo(info).resultTemplates
+@strawberry.field(description="Returns a list of summaries")
+async def summary_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[SummaryGQLModel]:
+    loader = getLoadersFromInfo(info).summaries
     rows = await loader.page(skip, limit)
     return [SummaryGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []

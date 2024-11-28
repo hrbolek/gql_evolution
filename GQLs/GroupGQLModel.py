@@ -8,7 +8,7 @@ from sqlalchemy.engine import row
 
 from uoishelpers.resolvers import getLoadersFromInfo
 
-from .baseGQLModel import BaseGQLModel
+from .BaseGQLModel import BaseGQLModel
 
 DisciplineSetGQLModel = typing.Annotated["DisciplineSetGQLModel", strawberry.lazy(".DisciplineSetGQLModel")]
 ResultGQLModel = typing.Annotated["ResultGQLModel", strawberry.lazy(".ResultGQLModel")]

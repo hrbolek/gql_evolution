@@ -34,6 +34,7 @@ Zde bude umístěná aktualizovaná struktura systému:
 - vytvořit GQL modely databází = hotovo
 - odstranit chyby v propojení GQL modelů = hotovo
 - předělat systemadata.json (jeden uživatel s jedním výsledkem) = hotovo
+- zprovoznit READ operace pro jedotlivé GQL modely
 
 ________________________________________________________________________
 

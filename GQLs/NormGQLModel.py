@@ -8,7 +8,7 @@ from sqlalchemy.engine import row
 
 from uoishelpers.resolvers import getLoadersFromInfo
 
-from .baseGQLModel import BaseGQLModel
+from .BaseGQLModel import BaseGQLModel
 
 DisciplineGQLModel = typing.Annotated["DisciplineGQLModel", strawberry.lazy(".DisciplineGQLModel")]
 ResultGQLModel = typing.Annotated["ResultGQLModel", strawberry.lazy(".ResultGQLModel")]
@@ -22,7 +22,7 @@ class NormGQLModel(BaseGQLModel):
     def get_table_resolvers(cls):
         return {
             "id": lambda row: row.id,
-            "discipline_set_id": lambda row: row.discipline_set_id,
+            "discipline_id": lambda row: row.discipline_id,
             "effective_date": lambda row: row.effective_date,
             "expiration_date": lambda row: row.expiration_date,
             "male": lambda row: row.male,
@@ -44,7 +44,7 @@ class NormGQLModel(BaseGQLModel):
         return getLoadersFromInfo(info).NormModel
     
     id: uuid.UUID = strawberry.field()
-    discipline_set_id: uuid.UUID = strawberry.field(description="ID of the discipline set")
+    discipline_id: uuid.UUID = strawberry.field(description="ID of the discipline")
     effective_date: dt.datetime = strawberry.field(description="Date when the norm is effective")
     expiration_date: dt.datetime = strawberry.field(description="Date when the norm expires")
     male: bool = strawberry.field(description="True if the norm is for male")
@@ -54,23 +54,11 @@ class NormGQLModel(BaseGQLModel):
     result_minimal_value: float = strawberry.field(description="Minimal value of the result")
     result_maximal_value: float = strawberry.field(description="Maximal value of the result")
     points: int = strawberry.field(description="Points")
-
-    @strawberry.field(description="Returns a discipline for the norm")
-    async def discipline(self, info: strawberry.types.Info) -> typing.Optional[DisciplineGQLModel]:
-        from .DisciplineGQLModel import DisciplineGQLModel
-        result = await DisciplineGQLModel.load_with_loader(info=info, id=self.discipline_set_id)
-        return result
     
-    @strawberry.field(description="Returns results for the norm")
-    async def results(self, info: strawberry.types.Info) -> typing.List[ResultGQLModel]:
-        from .ResultGQLModel import ResultGQLModel
-        result = await ResultGQLModel.load_with_loader(info=info, id=self.discipline_set_id)
-        return
-    
-    @strawberry.field(description="Returns a result template for the norm")
-    async def template(self, info: strawberry.types.Info) -> typing.Optional[SummaryGQLModel]:
+    @strawberry.field(description="Returns a summaries for the norm")
+    async def summaries(self, info: strawberry.types.Info) -> typing.List[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
-        result = await SummaryGQLModel.load_with_loader(info=info, id=self.discipline_set_id)
+        result = await SummaryGQLModel.load_with_loader(info=info, id=self.discipline_id)
         return result
 
 @strawberry.field(description="Returns a norm by id")

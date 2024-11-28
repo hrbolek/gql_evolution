@@ -9,7 +9,7 @@ from sqlalchemy.future import select
 from DBs.DBDefinitions import (
     DisciplineModel,
     DisciplineSetModel,
-    ResultTemplateModel,
+    SummaryModel,
     ResultModel,
     NormModel
 )
@@ -75,14 +75,14 @@ async def fill_result_templates(asyncSessionMaker):
                 # Add more result templates here
             ]
             for result_template in result_templates:
-                session.add(ResultTemplateModel(**result_template))
+                session.add(SummaryModel(**result_template))
 
 # Async function to fill the results table with predefined data
 @singleCall
 async def fill_results(asyncSessionMaker):
     async with asyncSessionMaker() as session:
         async with session.begin():
-            result_template_id = await session.scalar(select(ResultTemplateModel.id).limit(1))
+            result_template_id = await session.scalar(select(SummaryModel.id).limit(1))
             results = [
                 {
                     "tested_person_id": "1", 
@@ -148,7 +148,7 @@ async def initDB(asyncSessionMaker):
         dbModels = [
             DisciplineModel,
             DisciplineSetModel,
-            ResultTemplateModel,
+            SummaryModel,
             ResultModel,
             NormModel
         ]
@@ -156,7 +156,7 @@ async def initDB(asyncSessionMaker):
         dbModels = [
             DisciplineModel,
             DisciplineSetModel,
-            ResultTemplateModel,
+            SummaryModel,
             ResultModel,
             NormModel
         ]
