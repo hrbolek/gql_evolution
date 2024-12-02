@@ -2,12 +2,14 @@
   "disciplines": [
     {
       "id": "123e4567-e89b-12d3-a456-426614174000",
+      "summary_id": "456e7890-e89b-12d3-a456-426614174003",
       "name": "Sprint",
       "nameEn": "Sprint",
       "description": "Běh na vzdálenost 100 metrů"
     },
     {
       "id": "234e5678-e89b-12d3-a456-426614174001",
+      "summary_id": "456e7890-e89b-12d3-a456-426614174003",
       "name": "Skok daleký",
       "nameEn": "Long jump",
       "description": "Skok do dálky do pískového lože"
@@ -16,6 +18,7 @@
   "discipline_sets": [
     {
       "id": "345e6789-e89b-12d3-a456-426614174002",
+      "summary_id": "456e7890-e89b-12d3-a456-426614174003",
       "name": "1. ročník ZS",
       "nameEn": "1. year WS",
       "description": "Disciplíny pro 1. ročník zimního semestru",
@@ -25,8 +28,8 @@
   "summaries": [
     {
       "id": "456e7890-e89b-12d3-a456-426614174003",
-      "discipline_id": "123e4567-e89b-12d3-a456-426614174000",
-      "discipline_set_id": "345e6789-e89b-12d3-a456-426614174002",
+      "result_id": "567e8901-e89b-12d3-a456-426614174004",
+      "norm_id": "b6dd8c86-499f-49a6-9913-bac9e802409c",
       "effective_date": "2024-09-15T00:00:00Z",
       "expiration_date": "2025-3-31T23:59:59Z",
       "point_range": "0-20",
@@ -38,7 +41,6 @@
       "id": "567e8901-e89b-12d3-a456-426614174004",
       "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
       "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
-      "discipline_id": "123e4567-e89b-12d3-a456-426614174000",
       "datetime": "2025-03-15T14:00:00Z",
       "result": "6",
       "note": "Dobré"
@@ -47,7 +49,6 @@
       "id": "2fe93aa9-30bc-4961-b358-53a2d7e7a2a1",
       "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
       "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
-      "discipline_id": "234e5678-e89b-12d3-a456-426614174001",
       "datetime": "2025-03-16T10:00:00Z",
       "result": "1",
       "note": "Dostačující"
@@ -56,7 +57,6 @@
   "norms": [
     {
       "id": "b6dd8c86-499f-49a6-9913-bac9e802409c",
-      "discipline_id": "123e4567-e89b-12d3-a456-426614174000",
       "effective_date": "2020-01-01T09:00:00Z",
       "expiry_date": "2024-12-31T23:59:59Z",
       "male": true,
@@ -69,7 +69,6 @@
     },
     {
       "id": "b6dd8c86-499f-49a6-9913-bac9e802409d",
-      "discipline_id": "234e5678-e89b-12d3-a456-426614174001",
       "effective_date": "2020-01-01T09:00:00Z",
       "expiry_date": "2024-12-31T23:59:59Z",
       "male": true,

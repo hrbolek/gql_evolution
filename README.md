@@ -46,3 +46,6 @@ ________________________________________________________________________
 ## Poznámky
 
 - dodělat README.md
+
+## Poznámky pro spuštění
+- uvicorn main:app --env-file enviroment.txt --reload

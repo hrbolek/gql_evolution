@@ -10,7 +10,6 @@ from uoishelpers.resolvers import getLoadersFromInfo
 
 from .BaseGQLModel import BaseGQLModel
 
-DisciplineGQLModel = typing.Annotated["DisciplineGQLModel", strawberry.lazy(".DisciplineGQLModel")]
 SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryGQLModel")]
 
 @strawberry.type(description="Model representing a set of discipline")

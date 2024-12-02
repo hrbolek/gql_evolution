@@ -23,8 +23,6 @@ class SummaryGQLModel(BaseGQLModel):
     def get_table_resolvers(cls):
         return {
             "id": lambda row: row.id,
-            "discipline_id": lambda row: row.discipline_id,
-            "discipline_set_id": lambda row: row.discipline_set_id,
             "effective_date": lambda row: row.effective_date,
             "expiration_date": lambda row: row.expiration_date,
             "point_range": lambda row: row.point_range,
@@ -59,6 +57,7 @@ class SummaryGQLModel(BaseGQLModel):
 
     @strawberry.field(description="Returns a discipline sets for the summary")
     async def sets(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.List[DisciplineSetGQLModel]:
+        from .DisciplineSetGQLModel import DisciplineSetGQLModel
         result = await DisciplineSetGQLModel.load_with_loader(info=info, id=id)
         return result
     

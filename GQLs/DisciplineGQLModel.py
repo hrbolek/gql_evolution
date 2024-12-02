@@ -10,10 +10,7 @@ from uoishelpers.resolvers import getLoadersFromInfo
 
 from .BaseGQLModel import BaseGQLModel
 
-DisciplineSetGQLModel = typing.Annotated["DisciplineSetGQLModel", strawberry.lazy(".DisciplineSetGQLModel")]
-ResultGQLModel = typing.Annotated["ResultGQLModel", strawberry.lazy(".ResultGQLModel")]
 SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryGQLModel")]
-NormGQLModel = typing.Annotated["NormGQLModel", strawberry.lazy(".NormGQLModel")]
 
 @strawberry.type(description="Model representing a single discipline")
 
@@ -60,6 +57,6 @@ async def discipline_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> 
 
 @strawberry.field(description="Returns a list of disciplines")
 async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineGQLModel]:
-    loader = getLoadersFromInfo(info).disciplines
+    loader = DisciplineGQLModel.getloader(info)  
     rows = await loader.page(skip, limit)
     return [DisciplineGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []

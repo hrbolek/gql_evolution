@@ -10,8 +10,6 @@ from uoishelpers.resolvers import getLoadersFromInfo
 
 from .BaseGQLModel import BaseGQLModel
 
-DisciplineGQLModel = typing.Annotated["DisciplineGQLModel", strawberry.lazy(".DisciplineGQLModel")]
-ResultGQLModel = typing.Annotated["ResultGQLModel", strawberry.lazy(".ResultGQLModel")]
 SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryGQLModel")]
 
 @strawberry.type(description="Model representing a norm")
@@ -22,7 +20,6 @@ class NormGQLModel(BaseGQLModel):
     def get_table_resolvers(cls):
         return {
             "id": lambda row: row.id,
-            "discipline_id": lambda row: row.discipline_id,
             "effective_date": lambda row: row.effective_date,
             "expiration_date": lambda row: row.expiration_date,
             "male": lambda row: row.male,
@@ -44,7 +41,6 @@ class NormGQLModel(BaseGQLModel):
         return getLoadersFromInfo(info).NormModel
     
     id: uuid.UUID = strawberry.field()
-    discipline_id: uuid.UUID = strawberry.field(description="ID of the discipline")
     effective_date: dt.datetime = strawberry.field(description="Date when the norm is effective")
     expiration_date: dt.datetime = strawberry.field(description="Date when the norm expires")
     male: bool = strawberry.field(description="True if the norm is for male")

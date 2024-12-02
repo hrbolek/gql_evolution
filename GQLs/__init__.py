@@ -1,6 +1,12 @@
 import strawberry
 
 # Import the required models
+from .DisciplineGQLModel import DisciplineGQLModel
+from .DisciplineSetGQLModel import DisciplineSetGQLModel
+from .ResultGQLModel import ResultGQLModel
+from .SummaryGQLModel import SummaryGQLModel
+from .NormGQLModel import NormGQLModel
+
 from .ResultGQLModel import result_by_id, result_page
 from .DisciplineGQLModel import discipline_by_id, discipline_page
 from .DisciplineSetGQLModel import discipline_set_by_id, discipline_set_page
@@ -35,9 +41,12 @@ class Mutation:
     
     # Include other mutations
 
+from uoishelpers.schema import WhoAmIExtension
 
 # Create the GraphQL schema with the defined query and mutation types
 schema = strawberry.federation.Schema(
     query=Query,
-    mutation=Mutation
+    mutation=Mutation,
+    types = [DisciplineGQLModel, DisciplineSetGQLModel, ResultGQLModel, SummaryGQLModel, NormGQLModel],
+    extensions = [WhoAmIExtension]
 )

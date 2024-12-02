@@ -43,31 +43,33 @@ class DisciplineModel(BaseModel):
     __tablename__ = "tv_disciplines"
    
     id = UUIDColumn()
+    summary_id = UUIDFKey(ForeignKey("tv_summaries.id"), comment="id sumáře")
     name = Column(String, comment="název disciplíny")
     nameEn = Column(String, nullable=True, comment="název disciplíny v ENG")
     description = Column(String, nullable=True, comment="popis disciplíny")
 
-    summary = relationship("SummaryModel", back_populates="disciplines")
+    summary = relationship("SummaryModel", foreign_keys=[], back_populates="disciplines")
 
 # Discipline set model
 class DisciplineSetModel(BaseModel):
     __tablename__ = "tv_discipline_sets"
    
     id = UUIDColumn()
+    summary_id = UUIDFKey(ForeignKey("tv_summaries.id"), comment="id sumáře")
     name = Column(String, comment="název souboru disciplín")
     nameEn = Column(String, nullable=True, comment="název souboru disciplín v ENG")
     description = Column(String, nullable=True, comment="popis souboru disciplín")
     minimumPoints = Column(Integer, nullable=True, comment="minimální počet bodů")
 
-    summary = relationship("SummaryModel", back_populates="sets")
+    summary = relationship("SummaryModel", foreign_keys=[summary_id], back_populates="sets")
 
 # Summary model
 class SummaryModel(BaseModel):
-    __tablename__ = "tv_result_templates"
+    __tablename__ = "tv_summaries"
    
     id = UUIDColumn()
-    discipline_id = UUIDFKey(ForeignKey("tv_disciplines.id"), comment="id disciplíny")
-    discipline_set_id = UUIDFKey(ForeignKey("tv_discipline_sets.id"), comment="id souboru disciplín")
+    result_id = UUIDFKey(ForeignKey("tv_results.id"), comment="id výsledku")
+    norm_id = UUIDFKey(ForeignKey("tv_norms.id"), comment="id normy")
     effective_date = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="datum účinnosti")
     expiration_date = Column(DateTime, nullable=True, comment="datum zániku")
     point_range = Column(String, comment="rozsah bodů")
@@ -75,8 +77,8 @@ class SummaryModel(BaseModel):
 
     disciplines = relationship("DisciplineModel", back_populates="summary")
     sets = relationship("DisciplineSetModel", back_populates="summary")
-    result = relationship("ResultModel", back_populates="summaries")
-    norm = relationship("NormModel", back_populates="summaries")
+    result = relationship("ResultModel", foreign_keys=[result_id], back_populates="summaries")
+    norm = relationship("NormModel", foreign_keys=[norm_id], back_populates="summaries")
 
 # Result model
 class ResultModel(BaseModel):
@@ -85,7 +87,6 @@ class ResultModel(BaseModel):
     id = UUIDColumn()
     tested_person_id = UUIDFKey(comment="id testované osoby")
     examiner_person_id = UUIDFKey(comment="id zkoušející osoby")
-    discipline_set_id = UUIDFKey(ForeignKey("tv_disciplines.id"), comment="id disciplíny")
     datetime = Column(DateTime, comment="datum a čas výsledku")
     result = Column(String, comment="výsledek")
     note = Column(String, nullable=True, comment="poznámka")
@@ -99,7 +100,6 @@ class NormModel(BaseModel):
     __tablename__ = "tv_norms"
 
     id = UUIDColumn()
-    discipline_id = UUIDFKey(ForeignKey("tv_disciplines.id"), comment="id disciplíny")
     effective_date = Column(DateTime, comment="datum účinnosti")
     expiry_date = Column(DateTime, nullable=True, comment="datum zániku")
     male = Column(Boolean, default=False, comment="muž")
