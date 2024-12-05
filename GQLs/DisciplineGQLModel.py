@@ -13,7 +13,6 @@ from .BaseGQLModel import BaseGQLModel
 SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryGQLModel")]
 
 @strawberry.type(description="Model representing a single discipline")
-
 class DisciplineGQLModel(BaseGQLModel):
 
     @classmethod
@@ -21,28 +20,22 @@ class DisciplineGQLModel(BaseGQLModel):
         return {
             "id": lambda row: row.id,
             "name": lambda row: row.name,
-            "nameEn": lambda row: row.nameEn,
+            "name_en": lambda row: row.name_en,
             "description": lambda row: row.description,
             "lastchange": lambda row: row.lastchange,
             "created": lambda row: row.created,
             "createdby_id": lambda row: row.createdby_id,
             "changedby_id": lambda row: row.changedby_id,
-            "rbaobject_id": lambda row: row.rbaobject_id,
+            "rbacobject_id": lambda row: row.rbacobject_id,
         }
     
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).DisciplineModel
-    
-    id: uuid.UUID = strawberry.field()
-    name: str = strawberry.field(description="Name of the discipline")
-    nameEn: str = strawberry.field(description="Name of the discipline in English")
-    description: str = strawberry.field(description="Description of the discipline")
-    lastchange: dt.datetime = strawberry.field(description="Last change")
-    created: dt.datetime = strawberry.field(description="Created")
-    createdby_id: uuid.UUID = strawberry.field(description="ID of the creator")
-    changedby_id: uuid.UUID = strawberry.field(description="ID of the last changer")
-    rbaobject_id: uuid.UUID = strawberry.field(description="ID of the RBA object")
+
+    name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default = None)
+    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default = None)
+    description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default = None)
     
     @strawberry.field(description="Returns a summary of the discipline")
     async def summary(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:

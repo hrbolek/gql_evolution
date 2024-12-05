@@ -13,7 +13,6 @@ from .BaseGQLModel import BaseGQLModel
 SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryGQLModel")]
 
 @strawberry.type(description="Model representing a set of discipline")
-
 class DisciplineSetGQLModel(BaseGQLModel):
 
     @classmethod
@@ -21,30 +20,24 @@ class DisciplineSetGQLModel(BaseGQLModel):
         return {
             "id": lambda row: row.id,
             "name": lambda row: row.name,
-            "nameEn": lambda row: row.nameEn,
+            "name_en": lambda row: row.name_en,
             "description": lambda row: row.description,
-            "minimumPoints": lambda row: row.minimumPoints,
+            "minimum_points": lambda row: row.minimum_points,
             "lastchange": lambda row: row.lastchange,
             "created": lambda row: row.created,
             "createdby_id": lambda row: row.createdby_id,
             "changedby_id": lambda row: row.changedby_id,
-            "rbaobject_id": lambda row: row.rbaobject_id,
+            "rbacobject_id": lambda row: row.rbacobject_id,
         }
     
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).DisciplineSetModel
     
-    id: uuid.UUID = strawberry.field()
-    name: str = strawberry.field(description="Name of the discipline set")
-    nameEn: str = strawberry.field(description="Name of the discipline set in English")
-    description: str = strawberry.field(description="Description of the discipline set")
-    minimumPoints: int = strawberry.field(description="Minimum points to pass the discipline set")
-    lastchange: dt.datetime = strawberry.field(description="Last change")
-    created: dt.datetime = strawberry.field(description="Created")
-    createdby_id: uuid.UUID = strawberry.field(description="ID of the creator")
-    changedby_id: uuid.UUID = strawberry.field(description="ID of the last changer")
-    rbaobject_id: uuid.UUID = strawberry.field(description="ID of the RBA object")
+    name: typing.Optional[str] = strawberry.field(description="Name of the discipline set", default = None)
+    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default = None)
+    description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default = None)
+    minimum_points: typing.Optional[int] = strawberry.field(description="Minimum points to pass the discipline set", default = None)
     
     @strawberry.field(description="Returns a summary of the discipline set")
     async def summary(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:
@@ -59,6 +52,6 @@ async def discipline_set_by_id(self, info: strawberry.types.Info, id: uuid.UUID)
 
 @strawberry.field(description="Returns a list of discipline sets")
 async def discipline_set_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineSetGQLModel]:
-    loader = getLoadersFromInfo(info).disciplineSets
+    loader = DisciplineSetGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [DisciplineSetGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []

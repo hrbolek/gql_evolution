@@ -1,5 +1,5 @@
 {
-  "disciplines": [
+  "tv_disciplines": [
     {
       "id": "123e4567-e89b-12d3-a456-426614174000",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
@@ -15,7 +15,7 @@
       "description": "Skok do dálky do pískového lože"
     }
   ],
-  "discipline_sets": [
+  "tv_discipline_sets": [
     {
       "id": "345e6789-e89b-12d3-a456-426614174002",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
@@ -25,23 +25,23 @@
       "minimumPoints": 10
     }
   ],
-  "summaries": [
+  "tv_summaries": [
     {
       "id": "456e7890-e89b-12d3-a456-426614174003",
       "result_id": "567e8901-e89b-12d3-a456-426614174004",
       "norm_id": "b6dd8c86-499f-49a6-9913-bac9e802409c",
-      "effective_date": "2024-09-15T00:00:00Z",
-      "expiration_date": "2025-3-31T23:59:59Z",
+      "effective_date": "2024-09-15T00:00:00",
+      "expiration_date": "2025-03-31T23:59:59",
       "point_range": "0-20",
       "point_type": "zápočet"
     }
   ],
-  "results": [
+  "tv_results": [
     {
       "id": "567e8901-e89b-12d3-a456-426614174004",
       "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
       "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
-      "datetime": "2025-03-15T14:00:00Z",
+      "evaluation_date": "2025-03-15T14:00:00",
       "result": "6",
       "note": "Dobré"
     },
@@ -49,16 +49,16 @@
       "id": "2fe93aa9-30bc-4961-b358-53a2d7e7a2a1",
       "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
       "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
-      "datetime": "2025-03-16T10:00:00Z",
+      "evaluation_date": "2025-03-16T10:00:00",
       "result": "1",
       "note": "Dostačující"
     }
   ],
-  "norms": [
+  "tv_norms": [
     {
       "id": "b6dd8c86-499f-49a6-9913-bac9e802409c",
-      "effective_date": "2020-01-01T09:00:00Z",
-      "expiry_date": "2024-12-31T23:59:59Z",
+      "effective_date": "2020-01-01T09:00:00",
+      "expiration_date": "2024-12-31T23:59:59",
       "male": true,
       "female": false,
       "age_minimal": 18,
@@ -69,8 +69,8 @@
     },
     {
       "id": "b6dd8c86-499f-49a6-9913-bac9e802409d",
-      "effective_date": "2020-01-01T09:00:00Z",
-      "expiry_date": "2024-12-31T23:59:59Z",
+      "effective_date": "2020-01-01T09:00:00",
+      "expiration_date": "2024-12-31T23:59:59",
       "male": true,
       "female": false,
       "age_minimal": 18,

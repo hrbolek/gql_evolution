@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from strawberry.fastapi import GraphQLRouter
 from fastapi.responses import FileResponse
 from DBs.Dataloaders import createLoadersContext
+from DBs.DBFeeder import initDB
 
 from GQLs import schema
 
@@ -26,8 +27,15 @@ async def initEngine(app: FastAPI):
     )
 
     appcontext["asyncSessionMaker"] = asyncSessionMaker
+    async def initwithmessage():
+        await initDB(asyncSessionMaker)
+        logging.info("DB initialized")
+        print("DB initialized")
+    #task = asyncio.create_task(initwithmessage())
+    await initwithmessage()
 
     logging.info("engine started")
+    print("engine started")
     
     yield
 

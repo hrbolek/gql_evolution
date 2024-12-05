@@ -1,6 +1,9 @@
 import uuid
 import strawberry
+import typing
+import datetime as dt
 
+@strawberry.interface(description="Base interface for all GQL models")
 class BaseGQLModel:
     @classmethod
     def get_table_resolvers(cls):
@@ -36,3 +39,11 @@ class BaseGQLModel:
         if result is not None:
             result.__strawberry_definition__ = cls.__strawberry_definition__
         return result
+    
+    
+    id: typing.Optional[uuid.UUID] = strawberry.field(default = None)
+    lastchange: typing.Optional[dt.datetime] = strawberry.field(description="Last change", default = None)
+    created: typing.Optional[dt.datetime] = strawberry.field(description="Created", default = None)
+    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the creator", default = None)
+    changedby_id: typing.Optional[uuid.UUID]= strawberry.field(description="ID of the last changer", default = None)
+    rbacobject_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the RBA object", default = None)

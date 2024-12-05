@@ -41,6 +41,7 @@ def UUIDFKey(ForeignKey=None, nullable=False, **kwargs):
 # Base model for all database models
 class BaseModel(DeclarativeBase):
 
+    id = UUIDColumn()
     created = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="tvorba záznamu")
     lastchange = Column(DateTime, server_default=sqlalchemy.sql.func.now(), onupdate=sqlalchemy.sql.func.now(), comment="poslední změna")
     changedby_id = UUIDFKey(nullable=True, comment = "změnil/a")

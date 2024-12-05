@@ -16,7 +16,6 @@ SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryG
 NormGQLModel = typing.Annotated["NormGQLModel", strawberry.lazy(".NormGQLModel")]
 
 @strawberry.type(description="Model representing a group")
-
 class GroupGQLModel(BaseGQLModel):
 
     def get_table_resolvers(cls):
@@ -27,8 +26,6 @@ class GroupGQLModel(BaseGQLModel):
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).GroupModel
-    
-    id: uuid.UUID = strawberry.field()
 
     @strawberry.field(description="Returns discipline sets for the group")
     async def sets(self, info: strawberry.types.Info) -> typing.List[DisciplineSetGQLModel]:

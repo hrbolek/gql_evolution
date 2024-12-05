@@ -16,7 +16,6 @@ ResultGQLModel = typing.Annotated["ResultGQLModel", strawberry.lazy(".ResultGQLM
 NormGQLModel = typing.Annotated["NormGQLModel", strawberry.lazy(".NormGQLModel")]
 
 @strawberry.type(description="Model representing a summary of results for a person or a group of persons")
-
 class SummaryGQLModel(BaseGQLModel):
 
     @classmethod
@@ -31,23 +30,17 @@ class SummaryGQLModel(BaseGQLModel):
             "created": lambda row: row.created,
             "createdby_id": lambda row: row.createdby_id,
             "changedby_id": lambda row: row.changedby_id,
-            "rbaobject_id": lambda row: row.rbaobject_id,
+            "rbacobject_id": lambda row: row.rbacobject_id,
         }
     
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).SummaryModel
     
-    id: uuid.UUID = strawberry.field()
-    effective_date: dt.datetime = strawberry.field(description="Date when the result is effective")
-    expiration_date: dt.datetime = strawberry.field(description="Date when the result expires")
-    point_range: str = strawberry.field(description="Range of points")
-    point_type: str = strawberry.field(description="Type of points")
-    lastchange: dt.datetime = strawberry.field(description="Last change")
-    created: dt.datetime = strawberry.field(description="Created")
-    createdby_id: uuid.UUID = strawberry.field(description="ID of the creator")
-    changedby_id: uuid.UUID = strawberry.field(description="ID of the last changer")
-    rbaobject_id: uuid.UUID = strawberry.field(description="ID of the RBA object")
+    effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default = None)
+    expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default = None)
+    point_range: typing.Optional[str] = strawberry.field(description="Range of points", default = None)
+    point_type: typing.Optional[str] = strawberry.field(description="Type of points", default = None)
 
     @strawberry.field(description="Returns a discipline for the summary")
     async def disciplines(self, info: strawberry.types.Info) -> typing.List[DisciplineGQLModel]:
@@ -80,6 +73,6 @@ async def summary_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typ
 
 @strawberry.field(description="Returns a list of summaries")
 async def summary_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[SummaryGQLModel]:
-    loader = getLoadersFromInfo(info).summaries
+    loader = SummaryGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [SummaryGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []

@@ -17,7 +17,6 @@ SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryG
 NormGQLModel = typing.Annotated["NormGQLModel", strawberry.lazy(".NormGQLModel")]
 
 @strawberry.type(description="Model representing a user")
-
 class UserGQLModel(BaseGQLModel):
 
     @classmethod
@@ -30,9 +29,8 @@ class UserGQLModel(BaseGQLModel):
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).UserModel
     
-    id: uuid.UUID = strawberry.field()
-    male: bool = strawberry.field(description="User is male true")
-    female: bool = strawberry.field(description="User is female if true")
+    male: typing.Optional[bool] = strawberry.field(description="User is male true", default = None)
+    female: typing.Optional[bool] = strawberry.field(description="User is female if true", default = None)
 
     @strawberry.field(description="Returns result of the user")
     async def result(self,info: strawberry.types.Info,) -> typing.Optional[ResultGQLModel]:

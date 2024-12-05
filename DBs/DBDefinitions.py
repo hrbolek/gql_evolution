@@ -7,9 +7,10 @@ from sqlalchemy import (
     Integer,
     DateTime,
     ForeignKey,
-    Boolean
+    Boolean,
+    UUID
 )
-from sqlalchemy.dialects.postgresql import UUID
+# from sqlalchemy.dialects.postgresql import UUID
 from .BaseDBModel import BaseModel
 from sqlalchemy.orm import relationship, validates
 import uuid
@@ -21,17 +22,17 @@ def newUuidAsString():
 # Function to create a UUID column with optional name
 def UUIDColumn(name=None):
     if name is None:
-        return Column(String, primary_key=True, unique=True, default=newUuidAsString)
+        return Column(UUID, primary_key=True, unique=True, default=uuid.uuid4)
     else:
         return Column(
-            name, String, primary_key=True, unique=True, default=newUuidAsString
+            name, UUID, primary_key=True, unique=True, default=uuid.uuid4
         )
 
 # Function to create a foreign key column with UUID type
 def UUIDFKey(ForeignKey=None, nullable=False, **kwargs):
     if ForeignKey is None:
         return Column(
-            String, index=True, nullable=nullable, **kwargs
+            UUID, index=True, nullable=nullable, **kwargs
         )
     else:
         return Column(
@@ -45,7 +46,7 @@ class DisciplineModel(BaseModel):
     id = UUIDColumn()
     summary_id = UUIDFKey(ForeignKey("tv_summaries.id"), comment="id sumáře")
     name = Column(String, comment="název disciplíny")
-    nameEn = Column(String, nullable=True, comment="název disciplíny v ENG")
+    name_en = Column(String, nullable=True, comment="název disciplíny v ENG")
     description = Column(String, nullable=True, comment="popis disciplíny")
 
     summary = relationship("SummaryModel", foreign_keys=[], back_populates="disciplines")
@@ -55,13 +56,13 @@ class DisciplineSetModel(BaseModel):
     __tablename__ = "tv_discipline_sets"
    
     id = UUIDColumn()
-    summary_id = UUIDFKey(ForeignKey("tv_summaries.id"), comment="id sumáře")
+    summary_id = Column(ForeignKey("tv_summaries.id"), comment="id sumáře")
     name = Column(String, comment="název souboru disciplín")
-    nameEn = Column(String, nullable=True, comment="název souboru disciplín v ENG")
+    name_en = Column(String, nullable=True, comment="název souboru disciplín v ENG")
     description = Column(String, nullable=True, comment="popis souboru disciplín")
-    minimumPoints = Column(Integer, nullable=True, comment="minimální počet bodů")
+    minimum_points = Column(Integer, nullable=True, comment="minimální počet bodů")
 
-    summary = relationship("SummaryModel", foreign_keys=[summary_id], back_populates="sets")
+    summary = relationship("SummaryModel", back_populates="sets")
 
 # Summary model
 class SummaryModel(BaseModel):
@@ -87,12 +88,12 @@ class ResultModel(BaseModel):
     id = UUIDColumn()
     tested_person_id = UUIDFKey(comment="id testované osoby")
     examiner_person_id = UUIDFKey(comment="id zkoušející osoby")
-    datetime = Column(DateTime, comment="datum a čas výsledku")
+    evaluation_date = Column(DateTime, comment="datum a čas výsledku")
     result = Column(String, comment="výsledek")
     note = Column(String, nullable=True, comment="poznámka")
 
-    testedPerson = relationship("UserModel", foreign_keys=[tested_person_id])
-    examinerPerson = relationship("UserModel", foreign_keys=[examiner_person_id])
+    """testedPerson = relationship("UserModel", foreign_keys=[tested_person_id])""
+    ""examinerPerson = relationship("UserModel", foreign_keys=[examiner_person_id])"""
     summaries = relationship("SummaryModel", back_populates="result")
 
 # Norm model
@@ -101,7 +102,7 @@ class NormModel(BaseModel):
 
     id = UUIDColumn()
     effective_date = Column(DateTime, comment="datum účinnosti")
-    expiry_date = Column(DateTime, nullable=True, comment="datum zániku")
+    expiration_date = Column(DateTime, nullable=True, comment="datum zániku")
     male = Column(Boolean, default=False, comment="muž")
     female = Column(Boolean, default=False, comment="žena")
     age_minimal = Column(Integer, comment="minimální věk")

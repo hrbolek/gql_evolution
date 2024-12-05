@@ -14,7 +14,6 @@ UserGQLModel = typing.Annotated["UserGQLModel", strawberry.lazy(".UserGQLModel")
 SummaryGQLModel = typing.Annotated["SummaryGQLModel", strawberry.lazy(".SummaryGQLModel")]
 
 @strawberry.type(description="Model representing a result of an examination")
-
 class ResultGQLModel(BaseGQLModel):
 
     @classmethod
@@ -23,31 +22,25 @@ class ResultGQLModel(BaseGQLModel):
             "id": lambda row: row.id,
             "tested_person_id": lambda row: row.tested_person_id,
             "examiner_person_id": lambda row: row.examiner_person_id,
-            "datetime": lambda row: row.datetime,
+            "evaluation_date": lambda row: row.evaluation_date,
             "result": lambda row: row.result,
             "note": lambda row: row.note,
             "lastchange": lambda row: row.lastchange,
             "created": lambda row: row.created,
             "createdby_id": lambda row: row.createdby_id,
             "changedby_id": lambda row: row.changedby_id,
-            "rbaobject_id": lambda row: row.rbaobject_id,
+            "rbacobject_id": lambda row: row.rbacobject_id,
         }
 
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).ResultModel
 
-    id: uuid.UUID = strawberry.field()
-    tested_person_id: uuid.UUID = strawberry.field(description="ID of the tested person")
-    examiner_person_id: uuid.UUID = strawberry.field(description="ID of the examiner person")
-    datetime: dt.datetime = strawberry.field(description="Date and time of the result")
-    result: str = strawberry.field(description="Result of the test")
+    tested_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the tested person", default = None)
+    examiner_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the examiner person", default = None)
+    evaluation_date: typing.Optional[dt.datetime] = strawberry.field(description="Date and time of the result", default = None)
+    result: typing.Optional[str] = strawberry.field(description="Result of the test", default = None)
     note: typing.Optional[str] = strawberry.field(description="Additional note", default=None)
-    lastchange: dt.datetime = strawberry.field(description="Last change")
-    created: dt.datetime = strawberry.field(description="Created")
-    createdby_id: uuid.UUID = strawberry.field(description="ID of the creator")
-    changedby_id: uuid.UUID = strawberry.field(description="ID of the last changer")
-    rbaobject_id: uuid.UUID = strawberry.field(description="ID of the RBA object")
 
 
     @strawberry.field(description="Returns an id of the tested person")
@@ -74,7 +67,7 @@ async def result_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typi
 
 @strawberry.field(description="Returns a list of results")
 async def result_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[ResultGQLModel]:
-    loader = getLoadersFromInfo(info).results
+    loader = ResultGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [ResultGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
    
