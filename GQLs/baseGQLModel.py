@@ -2,6 +2,7 @@ import uuid
 import strawberry
 import typing
 import datetime as dt
+from uoishelpers.resolvers import encapsulateInsert, encapsulateUpdate, encapsulateDelete
 
 @strawberry.interface(description="Base interface for all GQL models")
 class BaseGQLModel:
@@ -40,7 +41,7 @@ class BaseGQLModel:
             result.__strawberry_definition__ = cls.__strawberry_definition__
         return result
     
-    
+
     id: typing.Optional[uuid.UUID] = strawberry.field(default = None)
     lastchange: typing.Optional[dt.datetime] = strawberry.field(description="Last change", default = None)
     created: typing.Optional[dt.datetime] = strawberry.field(description="Created", default = None)

@@ -34,18 +34,26 @@ Zde bude umístěná aktualizovaná struktura systému:
 - vytvořit GQL modely databází = hotovo
 - odstranit chyby v propojení GQL modelů = hotovo
 - předělat systemadata.json (jeden uživatel s jedním výsledkem) = hotovo
-- zprovoznit READ operace pro jedotlivé GQL modely
+- vytvořit a zprovoznit READ operace pro jedotlivé GQL modely = hotovo
+- vytvořit a zprovoznit CUD operace pro jednotlivé GQL modely
 
 ________________________________________________________________________
 
 ## Záznamy
 
-- 25.11 = vytvoření systemdata.json a odstranění chyb v rámci propojení GQL modelů
+- 25.11. = vytvoření systemdata.json a odstranění chyb v rámci propojení GQL modelů
+- 5.12. = zprovnění READ operací pro každý GQL model
 ________________________________________________________________________
 
 ## Poznámky
 
-- dodělat README.md
+Důležité termíny
+
+- 7.10.2024 vybraná témata, publikované repositories
+- 7.11.2024 1. projektový den, doložení kompletních descriptions (gql modely)
+- 9.12.2024 2. projektový den, doložení funkcionality (crud)
+- 29.1.2025 3. projektový den, doložení testů
 
 ## Poznámky pro spuštění
+
 - uvicorn main:app --env-file enviroment.txt --reload

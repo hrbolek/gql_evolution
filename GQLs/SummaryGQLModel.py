@@ -1,7 +1,7 @@
 import strawberry
 import uuid
-import datetime as dt
 import typing
+import datetime as dt
 
 import strawberry.types
 from sqlalchemy.engine import row
@@ -65,6 +65,8 @@ class SummaryGQLModel(BaseGQLModel):
         from .NormGQLModel import NormGQLModel
         result = await NormGQLModel.load_with_loader(info=info, id=id)
         return result
+    
+# Queries
 
 @strawberry.field(description="Returns a sumamry by id")
 async def summary_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:
@@ -76,3 +78,56 @@ async def summary_page(self, info: strawberry.types.Info, skip: int = 0, limit: 
     loader = SummaryGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [SummaryGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+
+# Mutations
+
+@strawberry.input(description="Definition of a summary used for insert")
+class SummaryInsertGQLModel:
+    id: uuid.UUID = strawberry.field(description="ID of the summary")
+    effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default=None)
+    expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default=None)
+    point_range: typing.Optional[str] = strawberry.field(description="Range of points", default=None)
+    point_type: typing.Optional[str] = strawberry.field(description="Type of points", default=None)
+
+@strawberry.input(description="Definition of a summary used for update")
+class SummaryUpdateGQLModel:
+    lastchange: dt.datetime = strawberry.field(description="Last change of the record")
+    id: uuid.UUID = strawberry.field(description="ID of the summary")
+    effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default=None)
+    expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default=None)
+    point_range: typing.Optional[str] = strawberry.field(description="Range of points", default=None)
+    point_type: typing.Optional[str] = strawberry.field(description="Type of points", default=None)
+
+@strawberry.input(description="Definition of a summary used for delete")
+class SummaryDeleteGQLModel:
+    lastchange: dt.datetime = strawberry.field(description="Last change of the record")
+    id: uuid.UUID = strawberry.field(description="ID of the summary")
+
+#####
+
+@strawberry.type(description="Result of a mutation for a summary")
+class SummaryMutationResultGQLModel:
+    id: uuid.UUID = strawberry.field(description="ID of the summary", default=None)
+    msg: str = strawberry.field(description="Result of the operation (OK / FAIL)", default=None)
+
+    @strawberry.field(description="Returns the summary")
+    async def summary(self, info: strawberry.types.Info) -> typing.Optional[SummaryGQLModel]:
+        summary = await SummaryGQLModel.load_with_loader(info=info, id=self.id)
+        return summary
+
+from uoishelpers.resolvers import Insert, InsertError, Update, UpdateError, Delete, DeleteError
+
+@strawberry.mutation(description="Creates a new summary")
+async def summary_insert(self, info: strawberry.types.Info, summary: SummaryInsertGQLModel) -> typing.Union[SummaryGQLModel, InsertError[SummaryGQLModel]]:
+    result = await Insert[SummaryGQLModel].DoItSafeWay(info=info, entity=summary)
+    return result
+
+@strawberry.mutation(description="Updates an existing summary")
+async def summary_update(self, info: strawberry.types.Info, summary: SummaryUpdateGQLModel) -> typing.Union[SummaryGQLModel, UpdateError[SummaryGQLModel]]:
+    result = await Update[SummaryGQLModel].DoItSafeWay(info=info, entity=summary)
+    return result
+
+@strawberry.mutation(description="Deletes a summary")
+async def summary_delete(self, info: strawberry.types.Info, summary: SummaryDeleteGQLModel) -> typing.Optional[DeleteError[SummaryGQLModel]]:
+    result = await Delete[SummaryGQLModel].DoItSafeWay(info=info, entity=summary)
+    return result

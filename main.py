@@ -39,7 +39,6 @@ async def initEngine(app: FastAPI):
     
     yield
 
-
 app = FastAPI(lifespan=initEngine)
 
 logging.info("All initialization is done ")
