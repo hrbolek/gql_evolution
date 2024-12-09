@@ -30,7 +30,7 @@ class DisciplineGQLModel(BaseGQLModel):
         }
     
     @classmethod
-    def getLoader(cls, info: strawberry.types.Info):
+    def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).DisciplineModel
 
     name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default=None)
@@ -52,7 +52,7 @@ async def discipline_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> 
 
 @strawberry.field(description="Returns a list of disciplines")
 async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineGQLModel]:
-    loader = DisciplineGQLModel.getLoader(info)
+    loader = DisciplineGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [DisciplineGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
 
