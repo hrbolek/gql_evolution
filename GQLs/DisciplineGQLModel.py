@@ -27,20 +27,26 @@ class DisciplineGQLModel(BaseGQLModel):
             "createdby_id": lambda row: row.createdby_id,
             "changedby_id": lambda row: row.changedby_id,
             "rbacobject_id": lambda row: row.rbacobject_id,
+            "summary_id": lambda row: row.summary_id,
         }
     
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).DisciplineModel
+    
+    @classmethod
+    def getLoader(cls, info: strawberry.types.Info):
+        return getLoadersFromInfo(info).DisciplineModel
 
     name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default=None)
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default=None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default=None)
+    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
     
     @strawberry.field(description="Returns a summary of the discipline")
-    async def summary(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:
+    async def summary(self, info: strawberry.types.Info) -> typing.Optional[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
-        result = await DisciplineGQLModel.load_with_loader(info=info, id=id)
+        result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
 
 # Queries
@@ -61,9 +67,9 @@ async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limi
 @strawberry.input(description="Definition of a discipline used for insert")
 class DisciplineInsertGQLModel:
     id: uuid.UUID = strawberry.field(description="ID of the discipline")
-    name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default="")
-    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default="")
-    description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default="")
+    name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default=None)
+    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default=None)
+    description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default=None)
 
 @strawberry.input(description="Definition of a discipline used for update")
 class DisciplineUpdateGQLModel:

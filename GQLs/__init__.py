@@ -1,11 +1,11 @@
 import strawberry
 
 # Import the required models
-from .DisciplineGQLModel import DisciplineGQLModel, DisciplineInsertGQLModel, DisciplineUpdateGQLModel, DisciplineDeleteGQLModel, DisciplineMutationResultGQLModel
-from .DisciplineSetGQLModel import DisciplineSetGQLModel, DisciplineSetInsertGQLModel, DisciplineSetUpdateGQLModel, DisciplineSetDeleteGQLModel, DisciplineSetMutationResultGQLModel
-from .ResultGQLModel import ResultGQLModel, ResultInsertGQLModel, ResultUpdateGQLModel, ResultDeleteGQLModel, ResultMutationResultGQLModel
-from .SummaryGQLModel import SummaryGQLModel, SummaryInsertGQLModel, SummaryUpdateGQLModel, SummaryDeleteGQLModel, SummaryMutationResultGQLModel
-from .NormGQLModel import NormGQLModel, NormInsertGQLModel, NormUpdateGQLModel, NormDeleteGQLModel, NormMutationResultGQLModel
+from .DisciplineGQLModel import DisciplineGQLModel
+from .DisciplineSetGQLModel import DisciplineSetGQLModel
+from .ResultGQLModel import ResultGQLModel
+from .SummaryGQLModel import SummaryGQLModel
+from .NormGQLModel import NormGQLModel
 
 from .ResultGQLModel import result_by_id, result_page
 from .DisciplineGQLModel import discipline_by_id, discipline_page

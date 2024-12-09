@@ -42,7 +42,6 @@ class ResultGQLModel(BaseGQLModel):
     result: typing.Optional[str] = strawberry.field(description="Result of the test", default = None)
     note: typing.Optional[str] = strawberry.field(description="Additional note", default=None)
 
-
     @strawberry.field(description="Returns an id of the tested person")
     async def tested_person(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[UserGQLModel]:
         from .UserGQLModel import UserGQLModel
@@ -56,8 +55,9 @@ class ResultGQLModel(BaseGQLModel):
         return result
     
     @strawberry.field(description="Returns a summaries for the result")
-    async def summaries(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.List[SummaryGQLModel]:
-        result = await SummaryGQLModel.load_with_loader(info=info, id=id)
+    async def summaries(self, info: strawberry.types.Info) -> typing.List[SummaryGQLModel]:
+        from .SummaryGQLModel import SummaryGQLModel
+        result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
     
 # Queries

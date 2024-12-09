@@ -52,7 +52,7 @@ class NormGQLModel(BaseGQLModel):
     @strawberry.field(description="Returns a summaries for the norm")
     async def summaries(self, info: strawberry.types.Info) -> typing.List[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
-        result = await SummaryGQLModel.load_with_loader(info=info, id=self.discipline_id)
+        result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
     
 # Queries

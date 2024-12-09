@@ -28,6 +28,7 @@ class DisciplineSetGQLModel(BaseGQLModel):
             "createdby_id": lambda row: row.createdby_id,
             "changedby_id": lambda row: row.changedby_id,
             "rbacobject_id": lambda row: row.rbacobject_id,
+            "summary_id": lambda row: row.summary_id,
         }
     
     @classmethod
@@ -38,11 +39,12 @@ class DisciplineSetGQLModel(BaseGQLModel):
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default = None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default = None)
     minimum_points: typing.Optional[int] = strawberry.field(description="Minimum points to pass the discipline set", default = None)
+    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default = None)
     
     @strawberry.field(description="Returns a summary of the discipline set")
-    async def summary(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[SummaryGQLModel]:
+    async def summary(self, info: strawberry.types.Info) -> typing.Optional[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
-        result = await SummaryGQLModel.load_with_loader(info=info, id=id)
+        result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
     
 # Queries
@@ -63,9 +65,9 @@ async def discipline_set_page(self, info: strawberry.types.Info, skip: int = 0, 
 @strawberry.input(description="Definition of a discipline set used for insert")
 class DisciplineSetInsertGQLModel:
     id: uuid.UUID = strawberry.field(description="ID of the discipline set")
-    name: typing.Optional[str] = strawberry.field(description="Name of the discipline set", default="")
-    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default="")
-    description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default="")
+    name: typing.Optional[str] = strawberry.field(description="Name of the discipline set", default=None)
+    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default=None)
+    description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default=None)
     minimum_points: typing.Optional[int] = strawberry.field(description="Minimum points to pass the discipline set", default=None)
 
 @strawberry.input(description="Definition of a discipline set used for update")

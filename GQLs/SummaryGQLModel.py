@@ -31,6 +31,8 @@ class SummaryGQLModel(BaseGQLModel):
             "createdby_id": lambda row: row.createdby_id,
             "changedby_id": lambda row: row.changedby_id,
             "rbacobject_id": lambda row: row.rbacobject_id,
+            "result_id": lambda row: row.result_id,
+            "norm_id": lambda row: row.norm_id,
         }
     
     @classmethod
@@ -41,6 +43,8 @@ class SummaryGQLModel(BaseGQLModel):
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default = None)
     point_range: typing.Optional[str] = strawberry.field(description="Range of points", default = None)
     point_type: typing.Optional[str] = strawberry.field(description="Type of points", default = None)
+    result_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the result", default = None)
+    norm_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the norm", default = None)
 
     @strawberry.field(description="Returns a discipline for the summary")
     async def disciplines(self, info: strawberry.types.Info) -> typing.List[DisciplineGQLModel]:
@@ -49,21 +53,21 @@ class SummaryGQLModel(BaseGQLModel):
         return result
 
     @strawberry.field(description="Returns a discipline sets for the summary")
-    async def sets(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.List[DisciplineSetGQLModel]:
+    async def sets(self, info: strawberry.types.Info) -> typing.List[DisciplineSetGQLModel]:
         from .DisciplineSetGQLModel import DisciplineSetGQLModel
-        result = await DisciplineSetGQLModel.load_with_loader(info=info, id=id)
+        result = await DisciplineSetGQLModel.load_with_loader(info=info, id=self.disciplineSet_id)
         return result
     
     @strawberry.field(description="Returns result for the summary")
-    async def result(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[ResultGQLModel]:
+    async def result(self, info: strawberry.types.Info) -> typing.Optional[ResultGQLModel]:
         from .ResultGQLModel import ResultGQLModel
-        result = await ResultGQLModel.load_with_loader(info=info, id=id)
+        result = await ResultGQLModel.load_with_loader(info=info, id=self.result_id)
         return result
     
     @strawberry.field(description="Returns a norm for the summary")
-    async def norm(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[NormGQLModel]:
+    async def norm(self, info: strawberry.types.Info) -> typing.Optional[NormGQLModel]:
         from .NormGQLModel import NormGQLModel
-        result = await NormGQLModel.load_with_loader(info=info, id=id)
+        result = await NormGQLModel.load_with_loader(info=info, id=self.norm_id)
         return result
     
 # Queries
