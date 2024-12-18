@@ -20,17 +20,17 @@ def newUuidAsString():
 # Function to create a UUID column with optional name
 def UUIDColumn(name=None):
     if name is None:
-        return Column(String, primary_key=True, unique=True, default=newUuidAsString)
+        return Column(UUID, primary_key=True, unique=True, default=uuid.uuid4)
     else:
         return Column(
-            name, String, primary_key=True, unique=True, default=newUuidAsString
+            name, UUID, primary_key=True, unique=True, default=uuid.uuid4
         )
 
 # Function to create a foreign key column with UUID type
 def UUIDFKey(ForeignKey=None, nullable=False, **kwargs):
     if ForeignKey is None:
         return Column(
-            String, index=True, nullable=nullable, **kwargs
+            UUID, index=True, nullable=nullable, **kwargs
         )
     else:
         return Column(

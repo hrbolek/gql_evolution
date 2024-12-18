@@ -3,16 +3,23 @@
     {
       "id": "123e4567-e89b-12d3-a456-426614174000",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
-      "name": "Sprint",
-      "nameEn": "Sprint",
-      "description": "Běh na vzdálenost 100 metrů"
+      "name": "1 km běh",
+      "nameEn": "1 km run",
+      "description": "Běh na vzdálenost 1000 metrů"
     },
     {
       "id": "234e5678-e89b-12d3-a456-426614174001",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
-      "name": "Skok daleký",
-      "nameEn": "Long jump",
-      "description": "Skok do dálky do pískového lože"
+      "name": "SAC",
+      "nameEn": "SAC",
+      "description": "Soubor atletických cviků"
+    },
+    {
+      "id": "234e5678-e89b-12d3-a456-426614174002",
+      "summary_id": "456e7890-e89b-12d3-a456-426614174003",
+      "name": "Shyby",
+      "nameEn": "Push-ups",
+      "description": "Shyby s nadhmatem"
     }
   ],
   "tv_discipline_sets": [
@@ -22,7 +29,7 @@
       "name": "1. ročník ZS",
       "nameEn": "1. year WS",
       "description": "Disciplíny pro 1. ročník zimního semestru",
-      "minimumPoints": 10
+      "minimumPoints": 9
     }
   ],
   "tv_summaries": [
@@ -32,8 +39,7 @@
       "norm_id": "b6dd8c86-499f-49a6-9913-bac9e802409c",
       "effective_date": "2024-09-15T00:00:00",
       "expiration_date": "2025-03-31T23:59:59",
-      "point_range": "0-20",
-      "point_type": "zápočet"
+      "point_range": "0-36"
     }
   ],
   "tv_results": [
@@ -42,15 +48,15 @@
       "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
       "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
       "evaluation_date": "2025-03-15T14:00:00",
-      "result": "6",
-      "note": "Dobré"
+      "result": "250",
+      "note": "Nedostačující"
     },
     {
       "id": "2fe93aa9-30bc-4961-b358-53a2d7e7a2a1",
       "tested_person_id": "678e9012-e89b-12d3-a456-426614174005",
       "examiner_person_id": "789e0123-e89b-12d3-a456-426614174006",
       "evaluation_date": "2025-03-16T10:00:00",
-      "result": "1",
+      "result": "225",
       "note": "Dostačující"
     }
   ],
@@ -63,9 +69,9 @@
       "female": false,
       "age_minimal": 18,
       "age_maximal": 24,
-      "result_minimal_value": 10,
-      "result_maximal_value": 20,
-      "points": 10
+      "result_minimal_value": 230,
+      "result_maximal_value": 221,
+      "points": 1
     },
     {
       "id": "b6dd8c86-499f-49a6-9913-bac9e802409d",
@@ -75,9 +81,9 @@
       "female": false,
       "age_minimal": 18,
       "age_maximal": 24,
-      "result_minimal_value": 10,
-      "result_maximal_value": 20,
-      "points": 10
+      "result_minimal_value": 220,
+      "result_maximal_value": 211,
+      "points": 2
     }
   ]
 }

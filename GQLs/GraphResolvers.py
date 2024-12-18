@@ -52,10 +52,10 @@ resolverUpdateDisciplineSet = createUpdateResolver(DisciplineSetModel)
 resolveInsertDisciplineSet = createInsertResolver(DisciplineSetModel)
 
 # ResultTemplate resolvers
-resolveResultTemplateById = createEntityByIdGetter(SummaryModel)
-resolveResultTemplateAll = createEntityGetter(SummaryModel)
-resolverUpdateResultTemplate = createUpdateResolver(SummaryModel)
-resolveInsertResultTemplate = createInsertResolver(SummaryModel)
+resolveSummaryById = createEntityByIdGetter(SummaryModel)
+resolveSummaryAll = createEntityGetter(SummaryModel)
+resolverUpdateSummary = createUpdateResolver(SummaryModel)
+resolveInsertSummary = createInsertResolver(SummaryModel)
 
 # Result resolvers
 resolveResultById = createEntityByIdGetter(ResultModel)
@@ -88,7 +88,7 @@ async def resolveDisciplineSetByThreeLetters(session: AsyncSession, letters: str
     dbSet = await session.execute(stmt)
     return dbSet.scalars()
 
-async def resolveResultTemplateByThreeLetters(session: AsyncSession, letters: str = "") -> List[SummaryModel]:
+async def resolveSummaryByThreeLetters(session: AsyncSession, letters: str = "") -> List[SummaryModel]:
     # If the length of the input is less than 3, return an empty list
     if len(letters) < 3:
         return []

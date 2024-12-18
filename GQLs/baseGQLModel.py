@@ -39,6 +39,7 @@ class BaseGQLModel:
         result = await loader.load(id)
         if result is not None:
             result.__strawberry_definition__ = cls.__strawberry_definition__
+        result = cls.from_sqlalchemy(result)
         return result
     
 

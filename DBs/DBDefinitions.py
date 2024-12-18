@@ -11,33 +11,13 @@ from sqlalchemy import (
     UUID
 )
 # from sqlalchemy.dialects.postgresql import UUID
-from .BaseDBModel import BaseModel
+from .BaseDBModel import BaseModel, UUIDColumn, UUIDFKey
 from sqlalchemy.orm import relationship, validates
 import uuid
 
 # Helper function to generate a new UUID as a string
 def newUuidAsString():
     return f"{uuid.uuid1()}"
-
-# Function to create a UUID column with optional name
-def UUIDColumn(name=None):
-    if name is None:
-        return Column(UUID, primary_key=True, unique=True, default=uuid.uuid4)
-    else:
-        return Column(
-            name, UUID, primary_key=True, unique=True, default=uuid.uuid4
-        )
-
-# Function to create a foreign key column with UUID type
-def UUIDFKey(ForeignKey=None, nullable=False, **kwargs):
-    if ForeignKey is None:
-        return Column(
-            UUID, index=True, nullable=nullable, **kwargs
-        )
-    else:
-        return Column(
-            ForeignKey, index=True, nullable=nullable, **kwargs
-        )
 
 # Discipline model
 class DisciplineModel(BaseModel):
@@ -74,7 +54,7 @@ class SummaryModel(BaseModel):
     effective_date = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="datum účinnosti")
     expiration_date = Column(DateTime, nullable=True, comment="datum zániku")
     point_range = Column(String, comment="rozsah bodů")
-    point_type = Column(String, comment="typ bodů")
+    #point_type = Column(String, comment="typ bodů")
 
     disciplines = relationship("DisciplineModel", foreign_keys=[], back_populates="summary")
     sets = relationship("DisciplineSetModel", foreign_keys=[], back_populates="summary")
@@ -105,11 +85,11 @@ class NormModel(BaseModel):
     expiration_date = Column(DateTime, nullable=True, comment="datum zániku")
     male = Column(Boolean, nullable=True, default=False, comment="muž")
     female = Column(Boolean, nullable=True, default=False, comment="žena")
-    age_minimal = Column(Integer, comment="minimální věk")
-    age_maximal = Column(Integer, comment="maximální věk")
-    result_minimal_value = Column(Integer, comment="minimální hodnota výsledku")
+    age_minimal = Column(Integer, nullable=True, comment="minimální věk")
+    age_maximal = Column(Integer, nullable=True, comment="maximální věk")
+    result_minimal_value = Column(Integer, nullable=True, comment="minimální hodnota výsledku")
     result_maximal_value = Column(Integer, comment="maximální hodnota výsledku")
-    points = Column(Integer, comment="body")
+    points = Column(Integer, nullable=True, comment="body") # Počet bodů za danou normu pro výsledek
 
     summaries = relationship("SummaryModel", foreign_keys=[], back_populates="norm")
 

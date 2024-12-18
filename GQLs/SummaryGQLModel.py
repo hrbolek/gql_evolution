@@ -25,7 +25,6 @@ class SummaryGQLModel(BaseGQLModel):
             "effective_date": lambda row: row.effective_date,
             "expiration_date": lambda row: row.expiration_date,
             "point_range": lambda row: row.point_range,
-            "point_type": lambda row: row.point_type,
             "lastchange": lambda row: row.lastchange,
             "created": lambda row: row.created,
             "createdby_id": lambda row: row.createdby_id,
@@ -39,10 +38,13 @@ class SummaryGQLModel(BaseGQLModel):
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).SummaryModel
     
+    @classmethod
+    def getLoader(cls, info: strawberry.types.Info):
+        return getLoadersFromInfo(info).SummaryModel
+    
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default = None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default = None)
     point_range: typing.Optional[str] = strawberry.field(description="Range of points", default = None)
-    point_type: typing.Optional[str] = strawberry.field(description="Type of points", default = None)
     result_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the result", default = None)
     norm_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the norm", default = None)
 
@@ -91,7 +93,6 @@ class SummaryInsertGQLModel:
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default=None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default=None)
     point_range: typing.Optional[str] = strawberry.field(description="Range of points", default=None)
-    point_type: typing.Optional[str] = strawberry.field(description="Type of points", default=None)
 
 @strawberry.input(description="Definition of a summary used for update")
 class SummaryUpdateGQLModel:
@@ -100,7 +101,6 @@ class SummaryUpdateGQLModel:
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default=None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default=None)
     point_range: typing.Optional[str] = strawberry.field(description="Range of points", default=None)
-    point_type: typing.Optional[str] = strawberry.field(description="Type of points", default=None)
 
 @strawberry.input(description="Definition of a summary used for delete")
 class SummaryDeleteGQLModel:

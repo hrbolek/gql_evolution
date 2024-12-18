@@ -39,6 +39,10 @@ class NormGQLModel(BaseGQLModel):
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).NormModel
     
+    @classmethod
+    def getLoader(cls, info: strawberry.types.Info):
+        return getLoadersFromInfo(info).NormModel
+    
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm is effective", default = None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm expires", default = None)
     male: typing.Optional[bool] = strawberry.field(description="True if the norm is for male", default = None)

@@ -35,6 +35,10 @@ class DisciplineSetGQLModel(BaseGQLModel):
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).DisciplineSetModel
     
+    @classmethod
+    def getLoader(cls, info: strawberry.types.Info):
+        return getLoadersFromInfo(info).DisciplineSetModel
+    
     name: typing.Optional[str] = strawberry.field(description="Name of the discipline set", default = None)
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default = None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default = None)

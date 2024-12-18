@@ -43,6 +43,7 @@ ________________________________________________________________________
 
 - 25.11. = vytvoření systemdata.json a odstranění chyb v rámci propojení GQL modelů
 - 5.12. = zprovnění READ operací pro každý GQL model
+- 18.12. = zprovoznění CUD operací pro každý GQL model
 ________________________________________________________________________
 
 ## Poznámky

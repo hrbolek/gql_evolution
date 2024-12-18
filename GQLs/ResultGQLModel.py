@@ -35,6 +35,10 @@ class ResultGQLModel(BaseGQLModel):
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).ResultModel
+    
+    @classmethod
+    def getLoader(cls, info: strawberry.types.Info):
+        return getLoadersFromInfo(info).ResultModel
 
     tested_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the tested person", default = None)
     examiner_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the examiner person", default = None)
