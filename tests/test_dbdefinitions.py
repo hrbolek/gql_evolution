@@ -47,7 +47,7 @@ async def test_table_start_engine():
     assert async_session_maker is not None
 
 
-from utils.DBFeeder import initDB
+from DBs.DBFeeder import initDB
 
 
 @pytest.mark.asyncio
