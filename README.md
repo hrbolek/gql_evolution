@@ -27,15 +27,41 @@ Zdroj: RÁČIL, Tomáš. IS pro sběr a vyhodnocení vybraných anatomicko- fyzi
 
 Zde bude umístěná aktualizovaná struktura systému:
 
+## Požadavky
+
+
+- všechny typy, input typy (s vyjímkou filtrů), mají description = **splněno**
+- všechny GQL typy mají private attribut _data, což je odpovídající db řádek (neplatí pro extended types) = **nesplněno**
+- všechny GQL typy a odpovídající DB modely mají atributy = **splněno**
+    lastchange
+    created
+    changedby_id
+    createby_id
+    rbacobject_id
+- vektorové atributy mají volitelné parametry where, limit a skip (je možné se domluvit na výjimce) a mají alternativu podle standardu relay connection = **chybí where a alternativa**
+- součástí filtrů (where) bude primární klíč i cizí klíče = **potřeba vysvětlit**
+- počáteční import dat je realizován jako asynchronní task:
+task = asyncio.create_task(initDB(asyncSessionMaker)) = **splněno**
+- mutace upravit tak, aby používaly
+from uoishelpers.resolvers import encapsulateInsert, encapsulateUpdate, encapsulateDelete
+(je možné se domluvit na výjimce) = **splněno?**
+- všechny typy, inputs, apod. mají description = **splněno**
+- všechny atributy mají anotace, např. Annotated[Optional[str], strawberry.argument(description="")]="0" = **splněno**
+- u všech fields jsou permission classes a v komentáři uvedeno, kdo má k atributu či funkcionalitě přístup = **nesplněno**
+- testy s alespoň 90% pokrytím pomocí dotazů, ty jsou uloženy v systému souborů (read.gql, create.gql, …) = **nesplněno**
+
+________________________________________________________________________
+
 ## Úkoly
 
-- udělat návrh databází = hotovo
-- vytvořit tabulky databází = hotovo
-- vytvořit GQL modely databází = hotovo
-- odstranit chyby v propojení GQL modelů = hotovo
-- předělat systemadata.json (jeden uživatel s jedním výsledkem) = hotovo
-- vytvořit a zprovoznit READ operace pro jedotlivé GQL modely = hotovo
-- vytvořit a zprovoznit CUD operace pro jednotlivé GQL modely
+- udělat návrh databází = **hotovo**
+- vytvořit tabulky databází = **hotovo**
+- vytvořit GQL modely databází = **hotovo**
+- odstranit chyby v propojení GQL modelů = **hotovo**
+- předělat systemadata.json (jeden uživatel s jedním výsledkem) = **hotovo**
+- vytvořit a zprovoznit READ operace pro jedotlivé GQL modely = **hotovo**
+- vytvořit a zprovoznit CUD operace pro jednotlivé GQL modely = **hotovo**
+- vytvořit a zprovoznit testy s minimálním 90 % pokrytím dotazů = **nesplněno**
 
 ________________________________________________________________________
 
