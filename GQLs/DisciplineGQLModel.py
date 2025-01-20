@@ -7,6 +7,7 @@ import strawberry.types
 from sqlalchemy.engine import row
 
 from uoishelpers.resolvers import getLoadersFromInfo
+from uoishelpers.gqlpermissions import OnlyForAuthentized
 
 from .BaseGQLModel import BaseGQLModel
 
@@ -56,7 +57,7 @@ async def discipline_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> 
     result = await DisciplineGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of disciplines")
+@strawberry.field(description="Returns a list of disciplines", permission_classes=[OnlyForAuthentized])
 async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineGQLModel]:
     loader = DisciplineGQLModel.getloader(info)
     rows = await loader.page(skip, limit)

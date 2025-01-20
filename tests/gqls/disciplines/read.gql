@@ -1,0 +1,18 @@
+query ($id: UUID!) {
+  result: disciplineById(id: $id) {
+    __typename
+    ...Discipline
+  }
+}
+
+fragment Discipline on DisciplineGQLModel {
+    id
+    lastchange
+    name
+    name_en
+    description
+    summary { id }
+    createdby { id }
+    changedby { id }
+    rbacobject { id }
+}

@@ -32,12 +32,12 @@ Zde bude umístěná aktualizovaná struktura systému:
 
 - všechny typy, input typy (s vyjímkou filtrů), mají description = **splněno**
 - všechny GQL typy mají private attribut _data, což je odpovídající db řádek (neplatí pro extended types) = **nesplněno**
-- všechny GQL typy a odpovídající DB modely mají atributy = **splněno**
+- všechny GQL typy a odpovídající DB modely mají atributy 
     lastchange
     created
     changedby_id
     createby_id
-    rbacobject_id
+    rbacobject_id = **splněno**
 - vektorové atributy mají volitelné parametry where, limit a skip (je možné se domluvit na výjimce) a mají alternativu podle standardu relay connection = **chybí where a alternativa**
 - součástí filtrů (where) bude primární klíč i cizí klíče = **potřeba vysvětlit**
 - počáteční import dat je realizován jako asynchronní task:
@@ -84,3 +84,5 @@ Důležité termíny
 ## Poznámky pro spuštění
 
 - uvicorn main:app --env-file enviroment.txt --reload
+
+- pytest --cov-report term-missing --cov=src --log-cli-level=INFO -x (pro spuštění testů)

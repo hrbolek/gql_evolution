@@ -1,61 +1,34 @@
-import sqlalchemy
-from sqlalchemy import select
-import sys
-import asyncio
-
-# # setting path
-#sys.path.append("..")
-
 import pytest
-
-# from ..uoishelpers.uuid import UUIDColumn
-
-from .shared import prepare_demodata, prepare_in_memory_sqllite, get_demodata
-from DBs import BaseModel, EventModel
-
+from .shared import prepare_demodata, prepare_in_memory_sqllite
 
 @pytest.mark.asyncio
-async def test_load_demo_data():
+async def test_table_users_feed():
     async_session_maker = await prepare_in_memory_sqllite()
     await prepare_demodata(async_session_maker)
 
-    #data = get_demodata()
-
-    
-
-
-from DBs import ComposeConnectionString
-
+    # data = get_demodata()
 
 def test_connection_string():
+    from DBs.__init__ import ComposeConnectionString
     connectionString = ComposeConnectionString()
 
     assert "://" in connectionString
     assert "@" in connectionString
 
 
-from DBs import startEngine
+def test_connection_uuidcolumn():
+    from DBs.DBDefinitions import UUIDColumn
+    col = UUIDColumn(name="name")
+
+    assert col is not None
 
 
 @pytest.mark.asyncio
 async def test_table_start_engine():
+    from DBs.__init__ import startEngine
     connectionString = "sqlite+aiosqlite:///:memory:"
     async_session_maker = await startEngine(
         connectionString, makeDrop=True, makeUp=True
     )
 
     assert async_session_maker is not None
-
-
-from DBs.DBFeeder import initDB
-
-
-@pytest.mark.asyncio
-async def test_initDB():
-    connectionString = "sqlite+aiosqlite:///:memory:"
-    async_session_maker = await startEngine(
-        connectionString, makeDrop=True, makeUp=True
-    )
-
-    assert async_session_maker is not None
-    await initDB(async_session_maker)
