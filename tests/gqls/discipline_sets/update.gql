@@ -1,0 +1,23 @@
+mutation ($id: UUID, $summary_id: UUID, $name: String!, $valid: Boolean) {
+  result: disciplineSetUpdate(
+    disciplineSet: {id: $id, name: $name, summaryId: $summary_id, valid: $valid}
+  ) {
+    __typename
+    ...Error
+    ...DisciplineSet
+  }
+}
+
+fragment Error on DisciplineSetGQLModelUpdateError {
+	failed
+}
+
+fragment DisciplineSet on DisciplineSetGQLModel {
+    id
+    lastchange
+    name
+    name_en
+    description
+    minimum_points
+    summary { id }
+}

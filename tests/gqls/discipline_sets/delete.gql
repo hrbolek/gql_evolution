@@ -1,0 +1,15 @@
+mutation ($id: UUID!, $lastchange: DateTime!) {
+  result: disciplineSetDelete(
+    disciplineSet: {id: $id, lastchange: $lastchange}
+  ) {
+    __typename
+    ...Error
+  }
+}
+
+
+fragment Error on DisciplineSetGQLModelDeleteError {
+  __typename
+  failed
+  msg
+}

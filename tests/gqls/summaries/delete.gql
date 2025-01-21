@@ -1,0 +1,15 @@
+mutation ($id: UUID!, $lastchange: DateTime!) {
+  result: summaryDelete(
+    summary: {id: $id, lastchange: $lastchange}
+  ) {
+    __typename
+    ...Error
+  }
+}
+
+
+fragment Error on SummaryGQLModelDeleteError {
+  __typename
+  failed
+  msg
+}

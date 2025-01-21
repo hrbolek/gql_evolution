@@ -1,0 +1,7 @@
+query($skip: Int, $limit: Int, $where: ResultInputFilter) {
+    result: resultPage(skip: $skip, limit: $limit, where: $where) {
+      id
+      name
+      lastchange
+    }
+}

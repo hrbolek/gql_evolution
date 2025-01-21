@@ -1,0 +1,19 @@
+query ($id: UUID!) {
+  result: summaryById(id: $id) {
+    __typename
+    ...Summary
+  }
+}
+
+fragment Summary on SummaryGQLModel {
+    id
+    lastchange
+    effective_date
+    expiration_date
+    point_range
+    result { id }
+    norm { id }
+    createdby { id }
+    changedby { id }
+    rbacobject { id }
+}

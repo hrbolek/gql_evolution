@@ -1,0 +1,23 @@
+mutation ($id: UUID, $tested_person_id: UUID, $examiner_person_id: UUID, $name: String!, $valid: Boolean) {
+  result: resultInsert(
+    result: {id: $id, name: $name, testedPersonId: $tested_person_id, examinerPersonId: $examiner_person_id, valid: $valid}
+  ) {
+    __typename
+    ...Error
+    ...Result
+  }
+}
+
+fragment Error on ResultGQLModelInsertError {
+	__typename
+}
+
+fragment Result on ResultGQLModel {
+    id
+    lastchange
+    evaluation_date
+    result
+    note
+    tested_person { id }
+    examiner_person { id }
+}

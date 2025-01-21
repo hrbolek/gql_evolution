@@ -1,0 +1,23 @@
+mutation ($id: UUID, $result_id: UUID, $norm_id: UUID, $name: String!, $valid: Boolean) {
+  result: summaryInsert(
+    summary: {id: $id, name: $name, resultId: $result_id, normId: $norm_id, valid: $valid}
+  ) {
+    __typename
+    ...Error
+    ...Summary
+  }
+}
+
+fragment Error on SummaryGQLModelInsertError {
+	__typename
+}
+
+fragment Summary on SummaryGQLModel {
+    id
+    lastchange
+    effective_date
+    expiration_date
+    point_range
+    result { id }
+    norm { id }
+}

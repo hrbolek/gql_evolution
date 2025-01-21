@@ -1,0 +1,15 @@
+mutation ($id: UUID!, $lastchange: DateTime!) {
+  result: resultDelete(
+    result: {id: $id, lastchange: $lastchange}
+  ) {
+    __typename
+    ...Error
+  }
+}
+
+
+fragment Error on ResultGQLModelDeleteError {
+  __typename
+  failed
+  msg
+}

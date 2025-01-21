@@ -1,0 +1,23 @@
+query ($id: UUID!) {
+  result: normById(id: $id) {
+    __typename
+    ...Norm
+  }
+}
+
+fragment Norm on NormGQLModel {
+    id
+    lastchange
+    effective_date
+    expiration_date
+    male
+    female
+    age_minimal
+    age_maximal
+    result_minimal_value
+    result_maximal_value
+    points
+    createdby { id }
+    changedby { id }
+    rbacobject { id }
+}

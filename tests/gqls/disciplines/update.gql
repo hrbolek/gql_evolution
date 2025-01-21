@@ -9,7 +9,7 @@ mutation ($id: UUID, $summary_id: UUID, $name: String!, $valid: Boolean) {
 }
 
 fragment Error on DisciplineGQLModelUpdateError {
-	__typename
+	failed
 }
 
 fragment Discipline on DisciplineGQLModel {

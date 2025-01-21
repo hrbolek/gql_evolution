@@ -1,0 +1,27 @@
+mutation ($id: UUID, $name: String!, $valid: Boolean) {
+  result: normInsert(
+    norm: {id: $id, name: $name, valid: $valid}
+  ) {
+    __typename
+    ...Error
+    ...Norm
+  }
+}
+
+fragment Error on NormGQLModelInsertError {
+	__typename
+}
+
+fragment Norm on NormGQLModel {
+    id
+    lastchange
+    effective_date
+    expiration_date
+    male
+    female
+    age_minimal
+    age_maximal
+    result_minimal_value
+    result_maximal_value
+    points
+}

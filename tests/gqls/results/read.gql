@@ -1,0 +1,19 @@
+query ($id: UUID!) {
+  result: resultById(id: $id) {
+    __typename
+    ...Result
+  }
+}
+
+fragment Result on ResultGQLModel {
+    id
+    lastchange
+    evaluation_date
+    result
+    note
+    tested_person { id }
+    examiner_person { id }
+    createdby { id }
+    changedby { id }
+    rbacobject { id }
+}

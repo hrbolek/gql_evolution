@@ -1,0 +1,15 @@
+mutation ($id: UUID!, $lastchange: DateTime!) {
+  result: normDelete(
+    norm: {id: $id, lastchange: $lastchange}
+  ) {
+    __typename
+    ...Error
+  }
+}
+
+
+fragment Error on NormGQLModelDeleteError {
+  __typename
+  failed
+  msg
+}
