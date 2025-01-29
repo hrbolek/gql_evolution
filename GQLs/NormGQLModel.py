@@ -2,11 +2,33 @@ import strawberry
 import uuid
 import typing
 import datetime as dt
+import dataclasses
 
 import strawberry.types
 from sqlalchemy.engine import row
 
-from uoishelpers.resolvers import getLoadersFromInfo
+from uoishelpers.gqlpermissions import (
+    OnlyForAuthentized,
+    SimpleInsertPermission, 
+    SimpleUpdatePermission, 
+    SimpleDeletePermission
+)
+
+from uoishelpers.resolvers import (
+    getLoadersFromInfo, 
+    createInputs,
+
+    InsertError, 
+    Insert, 
+    UpdateError, 
+    Update, 
+    DeleteError, 
+    Delete,
+
+    PageResolver,
+    VectorResolver,
+    ScalarResolver
+)
 
 from .BaseGQLModel import BaseGQLModel
 
@@ -43,34 +65,53 @@ class NormGQLModel(BaseGQLModel):
     def getLoader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).NormModel
     
-    effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm is effective", default = None)
-    expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm expires", default = None)
-    male: typing.Optional[bool] = strawberry.field(description="True if the norm is for male", default = None)
-    female: typing.Optional[bool] = strawberry.field(description="True if the norm is for female", default = None)
-    age_minimal: typing.Optional[int] = strawberry.field(description="Minimal age", default = None)
-    age_maximal: typing.Optional[int] = strawberry.field(description="Maximal age", default = None)
-    result_minimal_value: typing.Optional[float] = strawberry.field(description="Minimal value of the result", default = None)
-    result_maximal_value: typing.Optional[float] = strawberry.field(description="Maximal value of the result", default = None)
-    points: typing.Optional[int] = strawberry.field(description="Points", default = None)
+    effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm is effective", default = None, permission_classes=[OnlyForAuthentized])
+    expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm expires", default = None, permission_classes=[OnlyForAuthentized])
+    male: typing.Optional[bool] = strawberry.field(description="True if the norm is for male", default = None, permission_classes=[OnlyForAuthentized])
+    female: typing.Optional[bool] = strawberry.field(description="True if the norm is for female", default = None, permission_classes=[OnlyForAuthentized])
+    age_minimal: typing.Optional[int] = strawberry.field(description="Minimal age", default = None, permission_classes=[OnlyForAuthentized])
+    age_maximal: typing.Optional[int] = strawberry.field(description="Maximal age", default = None, permission_classes=[OnlyForAuthentized])
+    result_minimal_value: typing.Optional[float] = strawberry.field(description="Minimal value of the result", default = None, permission_classes=[OnlyForAuthentized])
+    result_maximal_value: typing.Optional[float] = strawberry.field(description="Maximal value of the result", default = None, permission_classes=[OnlyForAuthentized])
+    points: typing.Optional[int] = strawberry.field(description="Points", default = None, permission_classes=[OnlyForAuthentized])
     
-    @strawberry.field(description="Returns a summaries for the norm")
+    @strawberry.field(description="Returns a summaries for the norm", permission_classes=[OnlyForAuthentized])
     async def summaries(self, info: strawberry.types.Info) -> typing.List[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
         result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
     
+@createInputs
+@dataclasses.dataclass
+class NormInputFilter:
+    effective_date: dt.datetime
+    expiration_date: dt.datetime
+    male: bool
+    female: bool
+    age_minimal: int
+    age_maximal: int
+    result_minimal_value: float
+    result_maximal_value: float
+    points: int
+
 # Queries
 
-@strawberry.field(description="Returns a norm by id")
+@strawberry.field(description="Returns a norm by id", permission_classes=[OnlyForAuthentized])
 async def norm_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[NormGQLModel]:
     result = await NormGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of norms")
+@strawberry.field(description="Returns a list of norms", permission_classes=[OnlyForAuthentized])
 async def norm_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[NormGQLModel]:
     loader = NormGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [NormGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+
+norm_page = strawberry.field(
+        description="""Finds paged norms""",
+        permission_classes=[OnlyForAuthentized],
+        resolver=PageResolver[NormGQLModel](whereType=NormInputFilter)
+        ) 
 
 # Mutations
 
@@ -118,19 +159,17 @@ class NormMutationResultGQLModel:
         result = await NormGQLModel.load_with_loader(info=info, id=self.id)
         return result
 
-from uoishelpers.resolvers import Insert, InsertError, Update, UpdateError, Delete, DeleteError
-
-@strawberry.mutation(description="Creates a new norm")
+@strawberry.mutation(description="Creates a new norm", permission_classes=[OnlyForAuthentized])
 async def norm_insert(self, info: strawberry.types.Info, norm: NormInsertGQLModel) -> typing.Union[NormGQLModel, InsertError[NormGQLModel]]:
     result = await Insert[NormGQLModel].DoItSafeWay(info=info, entity=norm)
     return result
 
-@strawberry.mutation(description="Updates an existing norm")
+@strawberry.mutation(description="Updates an existing norm", permission_classes=[OnlyForAuthentized])
 async def norm_update(self, info: strawberry.types.Info, norm: NormUpdateGQLModel) -> typing.Union[NormGQLModel, UpdateError[NormGQLModel]]:
     result = await Update[NormGQLModel].DoItSafeWay(info=info, entity=norm)
     return result
 
-@strawberry.mutation(description="Deletes a norm")
+@strawberry.mutation(description="Deletes a norm", permission_classes=[OnlyForAuthentized])
 async def norm_delete(self, info: strawberry.types.Info, norm: NormDeleteGQLModel) -> typing.Optional[DeleteError[NormGQLModel]]:
     result = await Delete[NormGQLModel].DoItSafeWay(info=info, entity=norm)
     return result

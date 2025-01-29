@@ -2,11 +2,33 @@ import strawberry
 import uuid
 import typing
 import datetime as dt
+import dataclasses
 
 import strawberry.types
 from sqlalchemy.engine import row
 
-from uoishelpers.resolvers import getLoadersFromInfo
+from uoishelpers.gqlpermissions import (
+    OnlyForAuthentized,
+    SimpleInsertPermission, 
+    SimpleUpdatePermission, 
+    SimpleDeletePermission
+)
+
+from uoishelpers.resolvers import (
+    getLoadersFromInfo, 
+    createInputs,
+
+    InsertError, 
+    Insert, 
+    UpdateError, 
+    Update, 
+    DeleteError, 
+    Delete,
+
+    PageResolver,
+    VectorResolver,
+    ScalarResolver
+)
 
 from .BaseGQLModel import BaseGQLModel
 
@@ -40,42 +62,57 @@ class ResultGQLModel(BaseGQLModel):
     def getLoader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).ResultModel
 
-    tested_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the tested person", default = None)
-    examiner_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the examiner person", default = None)
-    evaluation_date: typing.Optional[dt.datetime] = strawberry.field(description="Date and time of the result", default = None)
-    result: typing.Optional[str] = strawberry.field(description="Result of the test", default = None)
-    note: typing.Optional[str] = strawberry.field(description="Additional note", default=None)
+    tested_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the tested person", default = None, permission_classes=[OnlyForAuthentized])
+    examiner_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the examiner person", default = None, permission_classes=[OnlyForAuthentized])
+    evaluation_date: typing.Optional[dt.datetime] = strawberry.field(description="Date and time of the result", default = None, permission_classes=[OnlyForAuthentized])
+    result: typing.Optional[str] = strawberry.field(description="Result of the test", default = None, permission_classes=[OnlyForAuthentized])
+    note: typing.Optional[str] = strawberry.field(description="Additional note", default=None, permission_classes=[OnlyForAuthentized])
 
-    @strawberry.field(description="Returns an id of the tested person")
+    @strawberry.field(description="Returns an id of the tested person", permission_classes=[OnlyForAuthentized])
     async def tested_person(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[UserGQLModel]:
         from .UserGQLModel import UserGQLModel
         result = await ResultGQLModel.load_with_loader(info=info, id=id)
         return result
     
-    @strawberry.field(description="Returns an id of the examiner person")
+    @strawberry.field(description="Returns an id of the examiner person", permission_classes=[OnlyForAuthentized])
     async def examiner_person(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[UserGQLModel]:
         from .UserGQLModel import UserGQLModel
         result = await ResultGQLModel.load_with_loader(info=info, id=id)
         return result
     
-    @strawberry.field(description="Returns a summaries for the result")
+    @strawberry.field(description="Returns a summaries for the result", permission_classes=[OnlyForAuthentized])
     async def summaries(self, info: strawberry.types.Info) -> typing.List[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
         result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
     
+@createInputs
+@dataclasses.dataclass
+class ResultInputFilter:
+    tested_person_id: uuid.UUID
+    examiner_person_id: uuid.UUID
+    evaluation_date: dt.datetime
+    result: str
+    note: str
+
 # Queries
 
-@strawberry.field(description="Returns a result by id")
+@strawberry.field(description="Returns a result by id", permission_classes=[OnlyForAuthentized])
 async def result_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[ResultGQLModel]:
     result = await ResultGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of results")
+@strawberry.field(description="Returns a list of results", permission_classes=[OnlyForAuthentized])
 async def result_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[ResultGQLModel]:
     loader = ResultGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [ResultGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+
+result_page = strawberry.field(
+        description="""Finds paged results""",
+        permission_classes=[OnlyForAuthentized],
+        resolver=PageResolver[ResultGQLModel](whereType=ResultInputFilter)
+        ) 
    
 # Mutations
 
@@ -114,20 +151,18 @@ class ResultMutationResultGQLModel:
     async def result(self, info: strawberry.types.Info) -> typing.Union[ResultGQLModel, None]:
         result = await ResultGQLModel.load_with_loader(info=info, id=self.id)
         return result
-    
-from uoishelpers.resolvers import Insert, InsertError, Update, UpdateError, Delete, DeleteError
 
-@strawberry.mutation(description="Creates a new result")
+@strawberry.mutation(description="Creates a new result", permission_classes=[OnlyForAuthentized])
 async def result_insert(self, info: strawberry.types.Info, result: ResultInsertGQLModel) -> typing.Union[ResultGQLModel, InsertError[ResultGQLModel]]:
     result = await Insert[ResultGQLModel].DoItSafeWay(info=info, entity=result)
     return result
 
-@strawberry.mutation(description="Updates an existing result")
+@strawberry.mutation(description="Updates an existing result", permission_classes=[OnlyForAuthentized])
 async def result_update(self, info: strawberry.types.Info, result: ResultUpdateGQLModel) -> typing.Union[ResultGQLModel, UpdateError[ResultGQLModel]]:
     result = await Update[ResultGQLModel].DoItSafeWay(info=info, entity=result)
     return result
 
-@strawberry.mutation(description="Deletes a result")
+@strawberry.mutation(description="Deletes a result", permission_classes=[OnlyForAuthentized])
 async def result_delete(self, info: strawberry.types.Info, result: ResultDeleteGQLModel) -> typing.Optional[DeleteError[ResultGQLModel]]:
     result = await Delete[ResultGQLModel].DoItSafeWay(info=info, entity=result)
     return result

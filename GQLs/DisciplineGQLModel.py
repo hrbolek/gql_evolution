@@ -2,12 +2,33 @@ import strawberry
 import uuid
 import typing
 import datetime as dt
+import dataclasses
 
 import strawberry.types
 from sqlalchemy.engine import row
 
-from uoishelpers.resolvers import getLoadersFromInfo
-from uoishelpers.gqlpermissions import OnlyForAuthentized
+from uoishelpers.gqlpermissions import (
+    OnlyForAuthentized,
+    SimpleInsertPermission, 
+    SimpleUpdatePermission, 
+    SimpleDeletePermission
+)
+
+from uoishelpers.resolvers import (
+    getLoadersFromInfo, 
+    createInputs,
+
+    InsertError, 
+    Insert, 
+    UpdateError, 
+    Update, 
+    DeleteError, 
+    Delete,
+
+    PageResolver,
+    VectorResolver,
+    ScalarResolver
+)
 
 from .BaseGQLModel import BaseGQLModel
 
@@ -39,20 +60,28 @@ class DisciplineGQLModel(BaseGQLModel):
     def getLoader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).DisciplineModel
 
-    name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default=None)
-    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default=None)
-    description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default=None)
-    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
+    name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default=None, permission_classes=[OnlyForAuthentized])
+    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default=None, permission_classes=[OnlyForAuthentized])
+    description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default=None, permission_classes=[OnlyForAuthentized])
+    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None, permission_classes=[OnlyForAuthentized])
     
-    @strawberry.field(description="Returns a summary of the discipline")
+    @strawberry.field(description="Returns a summary of the discipline", permission_classes=[OnlyForAuthentized])
     async def summary(self, info: strawberry.types.Info) -> typing.Optional[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
         result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
+    
+@createInputs
+@dataclasses.dataclass
+class DisciplineInputFilter:
+    name: str
+    name_en: str
+    description: str
+    summary_id: uuid.UUID
 
 # Queries
 
-@strawberry.field(description="Returns a discipline by id")
+@strawberry.field(description="Returns a discipline by id", permission_classes=[OnlyForAuthentized])
 async def discipline_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[DisciplineGQLModel]:
     result = await DisciplineGQLModel.load_with_loader(info=info, id=id)
     return result
@@ -62,6 +91,12 @@ async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limi
     loader = DisciplineGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [DisciplineGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+
+discipline_page = strawberry.field(
+        description="""Finds paged disciplines""",
+        permission_classes=[OnlyForAuthentized],
+        resolver=PageResolver[DisciplineGQLModel](whereType=DisciplineInputFilter)
+        )    
 
 # Mutations
 
@@ -97,19 +132,17 @@ class DisciplineMutationResultGQLModel:
         result = await DisciplineGQLModel.load_with_loader(info=info, id=self.id)
         return result
 
-from uoishelpers.resolvers import Insert, InsertError, Update, UpdateError, Delete, DeleteError
-
-@strawberry.mutation(description="Creates a new discipline")
+@strawberry.mutation(description="Creates a new discipline", permission_classes=[OnlyForAuthentized])
 async def discipline_insert(self, info: strawberry.types.Info, discipline: DisciplineInsertGQLModel) -> typing.Union[DisciplineGQLModel, InsertError[DisciplineGQLModel]]:
     result = await Insert[DisciplineGQLModel].DoItSafeWay(info=info, entity=discipline)
     return result
 
-@strawberry.mutation(description="Updates an existing discipline")
+@strawberry.mutation(description="Updates an existing discipline", permission_classes=[OnlyForAuthentized])
 async def discipline_update(self, info: strawberry.types.Info, discipline: DisciplineUpdateGQLModel) -> typing.Union[DisciplineGQLModel, UpdateError[DisciplineGQLModel]]:
     result = await Update[DisciplineGQLModel].DoItSafeWay(info=info, entity=discipline)
     return result
 
-@strawberry.mutation(description="Deletes a discipline")
+@strawberry.mutation(description="Deletes a discipline", permission_classes=[OnlyForAuthentized])
 async def discipline_delete(self, info: strawberry.types.Info, discipline: DisciplineDeleteGQLModel) -> typing.Optional[DeleteError[DisciplineGQLModel]]:
     result = await Delete[DisciplineGQLModel].DoItSafeWay(info=info, entity=discipline)
     return result

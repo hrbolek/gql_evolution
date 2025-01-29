@@ -2,11 +2,33 @@ import strawberry
 import uuid
 import typing
 import datetime as dt
+import dataclasses
 
 import strawberry.types
 from sqlalchemy.engine import row
 
-from uoishelpers.resolvers import getLoadersFromInfo
+from uoishelpers.gqlpermissions import (
+    OnlyForAuthentized,
+    SimpleInsertPermission, 
+    SimpleUpdatePermission, 
+    SimpleDeletePermission
+)
+
+from uoishelpers.resolvers import (
+    getLoadersFromInfo, 
+    createInputs,
+
+    InsertError, 
+    Insert, 
+    UpdateError, 
+    Update, 
+    DeleteError, 
+    Delete,
+
+    PageResolver,
+    VectorResolver,
+    ScalarResolver
+)
 
 from .BaseGQLModel import BaseGQLModel
 
@@ -39,30 +61,45 @@ class DisciplineSetGQLModel(BaseGQLModel):
     def getLoader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).DisciplineSetModel
     
-    name: typing.Optional[str] = strawberry.field(description="Name of the discipline set", default = None)
-    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default = None)
-    description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default = None)
-    minimum_points: typing.Optional[int] = strawberry.field(description="Minimum points to pass the discipline set", default = None)
-    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default = None)
+    name: typing.Optional[str] = strawberry.field(description="Name of the discipline set", default = None, permission_classes=[OnlyForAuthentized])
+    name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default = None, permission_classes=[OnlyForAuthentized])
+    description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default = None, permission_classes=[OnlyForAuthentized])
+    minimum_points: typing.Optional[int] = strawberry.field(description="Minimum points to pass the discipline set", default = None, permission_classes=[OnlyForAuthentized])
+    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default = None, permission_classes=[OnlyForAuthentized])
     
-    @strawberry.field(description="Returns a summary of the discipline set")
+    @strawberry.field(description="Returns a summary of the discipline set", permission_classes=[OnlyForAuthentized])
     async def summary(self, info: strawberry.types.Info) -> typing.Optional[SummaryGQLModel]:
         from .SummaryGQLModel import SummaryGQLModel
         result = await SummaryGQLModel.load_with_loader(info=info, id=self.summary_id)
         return result
-    
+
+@createInputs
+@dataclasses.dataclass
+class DisciplineSetInputFilter:
+    name: str
+    name_en: str
+    description: str
+    minimum_points: int
+    summary_id: uuid.UUID
+
 # Queries
 
-@strawberry.field(description="Returns a discipline set by id")
+@strawberry.field(description="Returns a discipline set by id", permission_classes=[OnlyForAuthentized])
 async def discipline_set_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing.Optional[DisciplineSetGQLModel]:
     result = await DisciplineSetGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of discipline sets")
+@strawberry.field(description="Returns a list of discipline sets", permission_classes=[OnlyForAuthentized])
 async def discipline_set_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineSetGQLModel]:
     loader = DisciplineSetGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
     return [DisciplineSetGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+
+discipline_set_page = strawberry.field(
+        description="""Finds paged discipline sets""",
+        permission_classes=[OnlyForAuthentized],
+        resolver=PageResolver[DisciplineSetGQLModel](whereType=DisciplineSetInputFilter)
+        )
 
 # Mutations
 
@@ -99,20 +136,18 @@ class DisciplineSetMutationResultGQLModel:
     async def discipline_set(self, info: strawberry.types.Info) -> typing.Union[DisciplineSetGQLModel, None]:
         result = await DisciplineSetGQLModel.load_with_loader(info=info, id=self.id)
         return result
-    
-from uoishelpers.resolvers import Insert, InsertError, Update, UpdateError, Delete, DeleteError
 
-@strawberry.mutation(description="Creates a new discipline set")
+@strawberry.mutation(description="Creates a new discipline set", permission_classes=[OnlyForAuthentized])
 async def discipline_set_insert(self, info: strawberry.types.Info, discipline_set: DisciplineSetInsertGQLModel) -> typing.Union[DisciplineSetGQLModel, InsertError[DisciplineSetGQLModel]]:
     result = await Insert[DisciplineSetGQLModel].DoItSafeWay(info=info, entity=discipline_set)
     return result
 
-@strawberry.mutation(description="Updates an existing discipline set")
+@strawberry.mutation(description="Updates an existing discipline set", permission_classes=[OnlyForAuthentized])
 async def discipline_set_update(self, info: strawberry.types.Info, discipline_set: DisciplineSetUpdateGQLModel) -> typing.Union[DisciplineSetGQLModel, UpdateError[DisciplineSetGQLModel]]:
     result = await Update[DisciplineSetGQLModel].DoItSafeWay(info=info, entity=discipline_set)
     return result
 
-@strawberry.mutation(description="Deletes a discipline set")
+@strawberry.mutation(description="Deletes a discipline set", permission_classes=[OnlyForAuthentized])
 async def discipline_set_delete(self, info: strawberry.types.Info, discipline_set: DisciplineSetDeleteGQLModel) -> typing.Optional[DeleteError[DisciplineSetGQLModel]]:
     result = await Delete[DisciplineSetGQLModel].DoItSafeWay(info=info, entity=discipline_set)
     return result

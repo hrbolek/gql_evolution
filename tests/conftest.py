@@ -34,7 +34,7 @@ def runOauth(port, resolvers):
     
     _api_process = Process(target=runOAuthServer, daemon=True, kwargs={"port": port, "resolvers": resolvers})
     _api_process.start()
-    # time.sleep(2)
+    time.sleep(5)
     logging.info(f"OAuthServer started at {port}")
     
     yield _api_process

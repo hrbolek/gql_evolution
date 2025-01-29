@@ -15,7 +15,7 @@ from DBs.DBDefinitions import (
 )
 
 # Function to load demo data from a JSON file
-def get_demodata():
+def get_demodata(filename="./systemdata.json"):
     def datetime_parser(json_dict):
         for (key, value) in json_dict.items():
             if (key in ["startdate", "enddate", "lastchange", "created"]) or (key.endswith("_date")):
@@ -42,13 +42,13 @@ def get_demodata():
         return json_dict
 
     # Load data from 'systemdata.json' and parse datetime fields
-    with open("./systemdata.json", "r", encoding="utf-8") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         jsonData = json.load(f, object_hook=datetime_parser)
 
     return jsonData
 
 # Async function to initialize the database with demo data or predefined models
-async def initDB(asyncSessionMaker):
+async def initDB(asyncSessionMaker, filename="./systemdata.json"):
     defaultNoDemo = "False"
     if defaultNoDemo == os.environ.get("DEMO", defaultNoDemo):
         dbModels = [
@@ -67,6 +67,6 @@ async def initDB(asyncSessionMaker):
             DisciplineModel
         ]
 
-    jsonData = get_demodata()
+    jsonData = get_demodata(filename)
     await ImportModels(asyncSessionMaker, dbModels, jsonData)
     pass

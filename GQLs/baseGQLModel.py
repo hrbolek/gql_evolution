@@ -2,7 +2,10 @@ import uuid
 import strawberry
 import typing
 import datetime as dt
-from uoishelpers.resolvers import encapsulateInsert, encapsulateUpdate, encapsulateDelete
+import dataclasses
+from uoishelpers.gqlpermissions import OnlyForAuthentized, RBACObjectGQLModel
+
+UserGQLModel = typing.Annotated["UserGQLModel", strawberry.lazy(".UserGQLModel")]
 
 @strawberry.interface(description="Base interface for all GQL models")
 class BaseGQLModel:
@@ -13,6 +16,12 @@ class BaseGQLModel:
     @classmethod
     def getloader(cls, info: strawberry.types.Info):
         raise NotImplementedError()
+    
+    @classmethod
+    def from_dataclass(cls, db_row):
+        db_row_dict = dataclasses.asdict(db_row)
+        instance = cls(**db_row_dict)
+        return instance
 
     @classmethod
     def from_sqlalchemy(cls, db_row):
@@ -43,9 +52,32 @@ class BaseGQLModel:
         return result
     
 
-    id: typing.Optional[uuid.UUID] = strawberry.field(default = None)
-    lastchange: typing.Optional[dt.datetime] = strawberry.field(description="Last change", default = None)
-    created: typing.Optional[dt.datetime] = strawberry.field(description="Created", default = None)
-    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the creator", default = None)
-    changedby_id: typing.Optional[uuid.UUID]= strawberry.field(description="ID of the last changer", default = None)
-    rbacobject_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the RBA object", default = None)
+    id: typing.Optional[uuid.UUID] = strawberry.field(description="Primary key", default = None, permission_classes= [OnlyForAuthentized])
+    lastchange: typing.Optional[dt.datetime] = strawberry.field(description="Last change", default = None, permission_classes= [OnlyForAuthentized])
+    created: typing.Optional[dt.datetime] = strawberry.field(description="Created", default = None, permission_classes= [OnlyForAuthentized])
+    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the creator", default = None, permission_classes= [OnlyForAuthentized])
+    changedby_id: typing.Optional[uuid.UUID]= strawberry.field(description="ID of the last changer", default = None, permission_classes= [OnlyForAuthentized])
+    rbacobject_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the RBA object", default = None, permission_classes= [OnlyForAuthentized])
+
+    @strawberry.field(
+        description="who created this entity",
+        permission_classes=[OnlyForAuthentized]
+    )
+    async def createdby(self) -> typing.Optional["UserGQLModel"]:
+        from .UserGQLModel import UserGQLModel
+        return None if self.changedby_id is None else UserGQLModel(id=self.createdby_id)
+
+    @strawberry.field(
+        description="who created this entity",
+        permission_classes=[OnlyForAuthentized]
+        )
+    async def changedby(self) -> typing.Optional["UserGQLModel"]:
+        from .UserGQLModel import UserGQLModel
+        return None if self.changedby_id is None else UserGQLModel(id=self.changedby_id)
+    
+    @strawberry.field(
+        description="rbac holds relations of user",
+        permission_classes=[OnlyForAuthentized]
+        )
+    async def rbacobject(self) -> typing.Optional["RBACObjectGQLModel"]:
+        return None if self.rbacobject_id is None else RBACObjectGQLModel(id=self.rbacobject_id)
