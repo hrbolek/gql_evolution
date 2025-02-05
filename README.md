@@ -83,6 +83,6 @@ Důležité termíny
 
 ## Poznámky pro spuštění
 
-- uvicorn main:app --env-file enviroment.txt --reload
+- uvicorn main:app --env-file enviroment.txt --reload (pro spuštění GQL modelů)
 
-- pytest --cov-report term-missing --cov=src --log-cli-level=INFO -x (pro spuštění testů)
+- pytest --cov=DBs --cov=GQLs --cov-report term-missing --log-cli-level=INFO -x (pro spuštění testů)

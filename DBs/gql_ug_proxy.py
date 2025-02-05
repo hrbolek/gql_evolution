@@ -33,8 +33,6 @@ def createProxy(url):
 
     return Proxy()
 
-
-
 def get_ug_connection(request: Request):
     GQLUG_ENDPOINT_URL = os.environ.get("GQLUG_ENDPOINT_URL", None)
     gqlproxy = createProxy(GQLUG_ENDPOINT_URL)

@@ -8,14 +8,14 @@ query ($id: UUID!) {
 fragment Norm on NormGQLModel {
     id
     lastchange
-    effective_date
-    expiration_date
+    effectiveDate
+    expirationDate
     male
     female
-    age_minimal
-    age_maximal
-    result_minimal_value
-    result_maximal_value
+    ageMinimal
+    ageMaximal
+    resultMinimalValue
+    resultMaximalValue
     points
     createdby { id }
     changedby { id }

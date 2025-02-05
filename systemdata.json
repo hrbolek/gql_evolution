@@ -4,21 +4,21 @@
       "id": "123e4567-e89b-12d3-a456-426614174000",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
       "name": "1 km běh",
-      "nameEn": "1 km run",
+      "name_en": "1 km run",
       "description": "Běh na vzdálenost 1000 metrů"
     },
     {
       "id": "234e5678-e89b-12d3-a456-426614174001",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
       "name": "SAC",
-      "nameEn": "SAC",
-      "description": "Soubor atletických cviků"
+      "name_en": "SAC",
+      "description": "Skokansko akrobatické cvičení"
     },
     {
       "id": "234e5678-e89b-12d3-a456-426614174002",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
       "name": "Shyby",
-      "nameEn": "Push-ups",
+      "name_en": "Push-ups",
       "description": "Shyby s nadhmatem"
     }
   ],
@@ -27,7 +27,7 @@
       "id": "345e6789-e89b-12d3-a456-426614174002",
       "summary_id": "456e7890-e89b-12d3-a456-426614174003",
       "name": "1. ročník ZS",
-      "nameEn": "1. year WS",
+      "name_en": "1. year WS",
       "description": "Disciplíny pro 1. ročník zimního semestru",
       "minimumPoints": 9
     }

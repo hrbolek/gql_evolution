@@ -9,7 +9,7 @@ fragment Discipline on DisciplineGQLModel {
     id
     lastchange
     name
-    name_en
+    nameEn
     description
     summary { id }
     createdby { id }

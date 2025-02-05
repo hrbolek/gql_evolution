@@ -8,11 +8,9 @@ query ($id: UUID!) {
 fragment Result on ResultGQLModel {
     id
     lastchange
-    evaluation_date
+    evaluationDate
     result
     note
-    tested_person { id }
-    examiner_person { id }
     createdby { id }
     changedby { id }
     rbacobject { id }

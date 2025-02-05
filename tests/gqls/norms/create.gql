@@ -1,6 +1,6 @@
-mutation ($id: UUID, $name: String!, $valid: Boolean) {
+mutation ($id: UUID) {
   result: normInsert(
-    norm: {id: $id, name: $name, valid: $valid}
+    norm: {id: $id}
   ) {
     __typename
     ...Error
@@ -15,13 +15,13 @@ fragment Error on NormGQLModelInsertError {
 fragment Norm on NormGQLModel {
     id
     lastchange
-    effective_date
-    expiration_date
+    effectiveDate
+    expirationDate
     male
     female
-    age_minimal
-    age_maximal
-    result_minimal_value
-    result_maximal_value
+    ageMinimal
+    ageMaximal
+    resultMinimalValue
+    resultMaximalValue
     points
 }

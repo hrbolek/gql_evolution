@@ -1,103 +1,244 @@
-import sqlalchemy
 import datetime
-import json
-from sqlalchemy import (
-    Column,
-    String,
-    Integer,
-    DateTime,
-    ForeignKey,
-    Boolean,
-    UUID
-)
-# from sqlalchemy.dialects.postgresql import UUID
-from .BaseDBModel import BaseModel, UUIDColumn, UUIDFKey
-from sqlalchemy.orm import relationship, validates
 import uuid
+import sqlalchemy
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship, Mapped, mapped_column, validates
+from .BaseDBModel import BaseModel, UUIDFKey, UUIDColumn
 
-# Helper function to generate a new UUID as a string
-def newUuidAsString():
-    return f"{uuid.uuid1()}"
-
-# Discipline model
 class DisciplineModel(BaseModel):
+    """Represents a discipline in the system."""
+
     __tablename__ = "tv_disciplines"
-   
-    id = UUIDColumn()
-    summary_id = Column(ForeignKey("tv_summaries.id"), index=True, nullable=True, comment="id sumáře")
-    name = Column(String, comment="název disciplíny")
-    name_en = Column(String, nullable=True, comment="název disciplíny v ENG")
-    description = Column(String, nullable=True, comment="popis disciplíny")
 
-    summary = relationship("SummaryModel", foreign_keys=[], back_populates="disciplines")
+    id: Mapped[uuid.UUID] = UUIDColumn()
 
-# Discipline set model
+    summary_id: Mapped[uuid.UUID] = UUIDFKey(
+        "tv_summaries.id",
+        nullable=True,
+        default=None,
+        comment="ID of the related summary"
+    )
+
+    name: Mapped[str] = mapped_column(
+        nullable=False,
+        default="",
+        comment="Name of the discipline"
+    )
+    name_en: Mapped[str] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Name of the discipline in English"
+    )
+    description: Mapped[str] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Description of the discipline"
+    )
+
+    summary = relationship(
+        "SummaryModel",
+        back_populates="disciplines"
+    )
+
+
 class DisciplineSetModel(BaseModel):
+    """Represents a set of disciplines."""
+
     __tablename__ = "tv_discipline_sets"
-   
-    id = UUIDColumn()
-    summary_id = Column(ForeignKey("tv_summaries.id"), index=True, nullable=True, comment="id sumáře")
-    name = Column(String, comment="název souboru disciplín")
-    name_en = Column(String, nullable=True, comment="název souboru disciplín v ENG")
-    description = Column(String, nullable=True, comment="popis souboru disciplín")
-    minimum_points = Column(Integer, nullable=True, comment="minimální počet bodů")
 
-    summary = relationship("SummaryModel", foreign_keys=[], back_populates="sets")
+    id: Mapped[uuid.UUID] = UUIDColumn()
 
-# Summary model
+    summary_id: Mapped[uuid.UUID] = UUIDFKey(
+        "tv_summaries.id",
+        nullable=True,
+        default=None,
+        comment="ID of the related summary"
+    )
+
+    name: Mapped[str] = mapped_column(
+        nullable=False,
+        default="",
+        comment="Name of the discipline set"
+    )
+    name_en: Mapped[str] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Name of the discipline set in English"
+    )
+    description: Mapped[str] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Description of the discipline set"
+    )
+    minimum_points: Mapped[int] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Minimum points required"
+    )
+
+    summary = relationship(
+        "SummaryModel",
+        back_populates="sets"
+    )
+
+
 class SummaryModel(BaseModel):
+    """Represents a summary of disciplines and sets."""
+
     __tablename__ = "tv_summaries"
-   
-    id = UUIDColumn()
-    result_id = Column(ForeignKey("tv_results.id"), index=True, nullable=True, comment="id výsledku")
-    norm_id = Column(ForeignKey("tv_norms.id"), index=True, nullable=True, comment="id normy")
-    effective_date = Column(DateTime, server_default=sqlalchemy.sql.func.now(), comment="datum účinnosti")
-    expiration_date = Column(DateTime, nullable=True, comment="datum zániku")
-    point_range = Column(String, comment="rozsah bodů")
-    #point_type = Column(String, comment="typ bodů")
 
-    disciplines = relationship("DisciplineModel", foreign_keys=[], back_populates="summary")
-    sets = relationship("DisciplineSetModel", foreign_keys=[], back_populates="summary")
-    result = relationship("ResultModel", foreign_keys=[], back_populates="summaries")
-    norm = relationship("NormModel", foreign_keys=[], back_populates="summaries")
+    id: Mapped[uuid.UUID] = UUIDColumn()
 
-# Result model
+    result_id: Mapped[uuid.UUID] = UUIDFKey(
+        "tv_results.id",
+        nullable=True,
+        default=None,
+        comment="ID of the related result"
+    )
+    norm_id: Mapped[uuid.UUID] = UUIDFKey(
+        "tv_norms.id",
+        nullable=True,
+        default=None,
+        comment="ID of the related norm"
+    )
+
+    effective_date: Mapped[datetime.datetime] = mapped_column(
+        nullable=False,
+        server_default=sqlalchemy.sql.func.now(),
+        default=datetime.datetime.now,
+        comment="Effective date of the summary"
+    )
+    expiration_date: Mapped[datetime.datetime] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Expiration date of the summary"
+    )
+    point_range: Mapped[str] = mapped_column(
+        nullable=False,
+        default="",
+        comment="Range of points"
+    )
+
+    disciplines = relationship(
+        "DisciplineModel",
+        back_populates="summary"
+    )
+    sets = relationship(
+        "DisciplineSetModel",
+        back_populates="summary"
+    )
+    result = relationship(
+        "ResultModel",
+        back_populates="summaries"
+    )
+    norm = relationship(
+        "NormModel",
+        back_populates="summaries"
+    )
+
+
 class ResultModel(BaseModel):
+    """Represents a test result."""
+
     __tablename__ = "tv_results"
 
-    id = UUIDColumn()
-    tested_person_id = UUIDFKey(nullable=True, comment="id testované osoby")
-    examiner_person_id = UUIDFKey(nullable=True, comment="id zkoušející osoby")
-    evaluation_date = Column(DateTime, comment="datum a čas výsledku")
-    result = Column(String, comment="výsledek")
-    note = Column(String, nullable=True, comment="poznámka")
+    id: Mapped[uuid.UUID] = UUIDColumn()
 
-    """testedPerson = relationship("UserModel", foreign_keys=[tested_person_id])""
-    ""examinerPerson = relationship("UserModel", foreign_keys=[examiner_person_id])"""
-    summaries = relationship("SummaryModel", foreign_keys=[], back_populates="result")
+    tested_person_id: Mapped[uuid.UUID] = UUIDFKey(
+        nullable=True,
+        default=None,
+        comment="ID of the tested person"
+    )
+    examiner_person_id: Mapped[uuid.UUID] = UUIDFKey(
+        nullable=True,
+        default=None,
+        comment="ID of the examiner"
+    )
 
-# Norm model
+    evaluation_date: Mapped[datetime.datetime] = mapped_column(
+        nullable=False,
+        default=datetime.datetime.now,
+        comment="Date and time of the evaluation"
+    )
+    result: Mapped[str] = mapped_column(
+        nullable=False,
+        default="",
+        comment="Result of the test"
+    )
+    note: Mapped[str] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Additional notes"
+    )
+
+    summaries = relationship(
+        "SummaryModel",
+        back_populates="result"
+    )
+
+
 class NormModel(BaseModel):
+    """Represents a norm for test results."""
+
     __tablename__ = "tv_norms"
 
-    id = UUIDColumn()
-    effective_date = Column(DateTime, nullable=True, comment="datum účinnosti")
-    expiration_date = Column(DateTime, nullable=True, comment="datum zániku")
-    male = Column(Boolean, nullable=True, default=False, comment="muž")
-    female = Column(Boolean, nullable=True, default=False, comment="žena")
-    age_minimal = Column(Integer, nullable=True, comment="minimální věk")
-    age_maximal = Column(Integer, nullable=True, comment="maximální věk")
-    result_minimal_value = Column(Integer, nullable=True, comment="minimální hodnota výsledku")
-    result_maximal_value = Column(Integer, comment="maximální hodnota výsledku")
-    points = Column(Integer, nullable=True, comment="body") # Počet bodů za danou normu pro výsledek
+    id: Mapped[uuid.UUID] = UUIDColumn()
 
-    summaries = relationship("SummaryModel", foreign_keys=[], back_populates="norm")
+    effective_date: Mapped[datetime.datetime] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Effective date of the norm"
+    )
+    expiration_date: Mapped[datetime.datetime] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Expiration date of the norm"
+    )
+    male: Mapped[bool] = mapped_column(
+        nullable=True,
+        default=False,
+        comment="Indicates if the norm is for males"
+    )
+    female: Mapped[bool] = mapped_column(
+        nullable=True,
+        default=False,
+        comment="Indicates if the norm is for females"
+    )
+    age_minimal: Mapped[int] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Minimum age"
+    )
+    age_maximal: Mapped[int] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Maximum age"
+    )
+    result_minimal_value: Mapped[int] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Minimum value for the result"
+    )
+    result_maximal_value: Mapped[int] = mapped_column(
+        nullable=False,
+        default=0,
+        comment="Maximum value for the result"
+    )
+    points: Mapped[int] = mapped_column(
+        nullable=True,
+        default=None,
+        comment="Points for the norm"
+    )
 
-    # Validation of gender by allowing only one gender to be true
-    @validates('male', 'female')
+    summaries = relationship(
+        "SummaryModel",
+        back_populates="norm"
+    )
+
+    @validates("male", "female")
     def validate_gender(self, key, value):
-        if key == 'male' and value:
-            assert not self.female, "nemůže být zároveň muž a žena"
-        if key == 'female' and value:
-            assert not self.male, "nemůže být zároveň muž a žena"
+        if key == "male" and value:
+            assert not self.female, "Cannot be both male and female"
+        if key == "female" and value:
+            assert not self.male, "Cannot be both male and female"
         return value

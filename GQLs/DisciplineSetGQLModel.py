@@ -105,11 +105,13 @@ discipline_set_page = strawberry.field(
 
 @strawberry.input(description="Definition of a discipline set used for insert")
 class DisciplineSetInsertGQLModel:
-    id: uuid.UUID = strawberry.field(description="ID of the discipline set")
+    id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the discipline set", default=None)
     name: typing.Optional[str] = strawberry.field(description="Name of the discipline set", default=None)
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default=None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default=None)
     minimum_points: typing.Optional[int] = strawberry.field(description="Minimum points to pass the discipline set", default=None)
+    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
+    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who created this record", default=None)
 
 @strawberry.input(description="Definition of a discipline set used for update")
 class DisciplineSetUpdateGQLModel:
@@ -119,6 +121,8 @@ class DisciplineSetUpdateGQLModel:
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline set in English", default=None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline set", default=None)
     minimum_points: typing.Optional[int] = strawberry.field(description="Minimum points to pass the discipline set", default=None)
+    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
+    changedby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who last modified this record", default=None)
 
 @strawberry.input(description="Definition of a discipline set used for delete")
 class DisciplineSetDeleteGQLModel:

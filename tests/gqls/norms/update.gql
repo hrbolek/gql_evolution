@@ -1,10 +1,10 @@
-mutation ($id: UUID, $name: String!, $valid: Boolean) {
+mutation ($id: UUID!, $lastchange: DateTime!, $effective_date: DateTime) {
   result: normUpdate(
-    norm: {id: $id, name: $name, valid: $valid}
+    norm: {id: $id, lastchange: $lastchange, effectiveDate: $effective_date}
   ) {
     __typename
-    ...Error
     ...Norm
+    ...Error
   }
 }
 
@@ -15,13 +15,13 @@ fragment Error on NormGQLModelUpdateError {
 fragment Norm on NormGQLModel {
     id
     lastchange
-    effective_date
-    expiration_date
+    effectiveDate
+    expirationDate
     male
     female
-    age_minimal
-    age_maximal
-    result_minimal_value
-    result_maximal_value
+    ageMinimal
+    ageMaximal
+    resultMinimalValue
+    resultMaximalValue
     points
 }

@@ -117,7 +117,7 @@ norm_page = strawberry.field(
 
 @strawberry.input(description="Definition of a norm used for insert")
 class NormInsertGQLModel:
-    id: uuid.UUID = strawberry.field(description="ID of the norm")
+    id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the norm", default=None)
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm is effective", default=None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the norm expires", default=None)
     male: typing.Optional[bool] = strawberry.field(description="True if the norm is for male", default=None)
@@ -127,6 +127,7 @@ class NormInsertGQLModel:
     result_minimal_value: typing.Optional[float] = strawberry.field(description="Minimal value of the result", default=None)
     result_maximal_value: typing.Optional[float] = strawberry.field(description="Maximal value of the result", default=None)
     points: typing.Optional[int] = strawberry.field(description="Points", default=None)
+    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who created this record", default=None)
 
 @strawberry.input(description="Definition of a norm used for update")
 class NormUpdateGQLModel:
@@ -141,6 +142,7 @@ class NormUpdateGQLModel:
     result_minimal_value: typing.Optional[float] = strawberry.field(description="Minimal value of the result", default=None)
     result_maximal_value: typing.Optional[float] = strawberry.field(description="Maximal value of the result", default=None)
     points: typing.Optional[int] = strawberry.field(description="Points", default=None)
+    changedby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who last modified this record", default=None)
 
 @strawberry.input(description="Definition of a norm used for delete")
 class NormDeleteGQLModel:

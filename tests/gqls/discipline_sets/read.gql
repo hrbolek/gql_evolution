@@ -9,9 +9,9 @@ fragment DisciplineSet on DisciplineSetGQLModel {
     id
     lastchange
     name
-    name_en
+    nameEn
     description
-    minimum_points
+    minimumPoints
     summary { id }
     createdby { id }
     changedby { id }

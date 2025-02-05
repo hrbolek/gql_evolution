@@ -126,10 +126,13 @@ summary_page = strawberry.field(
 
 @strawberry.input(description="Definition of a summary used for insert")
 class SummaryInsertGQLModel:
-    id: uuid.UUID = strawberry.field(description="ID of the summary")
+    id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default=None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default=None)
     point_range: typing.Optional[str] = strawberry.field(description="Range of points", default=None)
+    result_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the result", default=None)
+    norm_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the norm", default=None)
+    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who created this record", default=None)
 
 @strawberry.input(description="Definition of a summary used for update")
 class SummaryUpdateGQLModel:
@@ -138,6 +141,9 @@ class SummaryUpdateGQLModel:
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default=None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default=None)
     point_range: typing.Optional[str] = strawberry.field(description="Range of points", default=None)
+    result_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the result", default=None)
+    norm_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the norm", default=None)
+    changedby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who last modified this record", default=None)
 
 @strawberry.input(description="Definition of a summary used for delete")
 class SummaryDeleteGQLModel:

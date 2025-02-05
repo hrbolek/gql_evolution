@@ -118,12 +118,13 @@ result_page = strawberry.field(
 
 @strawberry.input(description="Definition of a result used for insert")
 class ResultInsertGQLModel:
-    id: uuid.UUID = strawberry.field(description="ID of the result")
+    id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the result", default=None)
     tested_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the tested person", default=None)
     examiner_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the examiner person", default=None)
     evaluation_date: typing.Optional[dt.datetime] = strawberry.field(description="Date and time of the result", default=None)
     result: typing.Optional[str] = strawberry.field(description="Result of the test", default=None)
     note: typing.Optional[str] = strawberry.field(description="Additional note", default=None)
+    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who created this record", default=None)
 
 @strawberry.input(description="Definition of a result used for update")
 class ResultUpdateGQLModel:
@@ -134,6 +135,7 @@ class ResultUpdateGQLModel:
     evaluation_date: typing.Optional[dt.datetime] = strawberry.field(description="Date and time of the result", default=None)
     result: typing.Optional[str] = strawberry.field(description="Result of the test", default=None)
     note: typing.Optional[str] = strawberry.field(description="Additional note", default=None)
+    changedby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who last modified this record", default=None)
 
 @strawberry.input(description="Definition of a result used for delete")
 class ResultDeleteGQLModel:

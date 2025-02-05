@@ -8,11 +8,9 @@ query ($id: UUID!) {
 fragment Summary on SummaryGQLModel {
     id
     lastchange
-    effective_date
-    expiration_date
-    point_range
-    result { id }
-    norm { id }
+    effectiveDate
+    expirationDate
+    pointRange
     createdby { id }
     changedby { id }
     rbacobject { id }

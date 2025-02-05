@@ -1,10 +1,10 @@
-mutation ($id: UUID, $result_id: UUID, $norm_id: UUID, $name: String!, $valid: Boolean) {
-  result: summaryInsert(
-    summary: {id: $id, name: $name, resultId: $result_id, normId: $norm_id, valid: $valid}
+mutation ($id: UUID!, $lastchange: DateTime!, $effective_date: DateTime) {
+  result: summaryUpdate(
+    summary: {id: $id, lastchange: $lastchange, effectiveDate: $effective_date}
   ) {
     __typename
-    ...Error
     ...Summary
+    ...Error
   }
 }
 
@@ -15,9 +15,7 @@ fragment Error on SummaryGQLModelUpdateError {
 fragment Summary on SummaryGQLModel {
     id
     lastchange
-    effective_date
-    expiration_date
-    point_range
-    result { id }
-    norm { id }
+    effectiveDate
+    expirationDate
+    pointRange
 }
