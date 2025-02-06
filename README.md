@@ -29,7 +29,6 @@ Zde bude umístěná aktualizovaná struktura systému:
 
 ## Požadavky
 
-
 - všechny typy, input typy (s vyjímkou filtrů), mají description = **splněno**
 - všechny GQL typy mají private attribut _data, což je odpovídající db řádek (neplatí pro extended types) = **nesplněno**
 - všechny GQL typy a odpovídající DB modely mají atributy 
@@ -67,9 +66,14 @@ ________________________________________________________________________
 
 ## Záznamy
 
+- 4.11. = základní návrh databáze
+- 14.11. = zprovoznění GQL, Voyageru, drobné úpravy v kódu
 - 25.11. = vytvoření systemdata.json a odstranění chyb v rámci propojení GQL modelů
 - 5.12. = zprovnění READ operací pro každý GQL model
 - 18.12. = zprovoznění CUD operací pro každý GQL model
+- 6.1. = počátek vytváření testů
+- 29.1. = první pokus o test
+- 5.2. = zprovoznění testů (77%)
 ________________________________________________________________________
 
 ## Poznámky

@@ -107,7 +107,6 @@ class DisciplineInsertGQLModel:
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default=None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default=None)
     summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
-    createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who created this record", default=None)
 
 @strawberry.input(description="Definition of a discipline used for update")
 class DisciplineUpdateGQLModel:
@@ -117,7 +116,6 @@ class DisciplineUpdateGQLModel:
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default=None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default=None)
     summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
-    changedby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the user who last modified this record", default=None)
 
 @strawberry.input(description="Definition of a discipline used for delete")
 class DisciplineDeleteGQLModel:

@@ -1,9 +1,15 @@
 import pytest
+import asyncio
 import logging
 import uuid
 import sqlalchemy
 import json
 import datetime
+from unittest.mock import AsyncMock, MagicMock
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from DBs.DBDefinitions import DisciplineModel, DisciplineSetModel, SummaryModel, ResultModel, NormModel
+
 
 myquery = """
 {
@@ -32,6 +38,36 @@ from .gt_utils import (
     createUpdateTest2,
     createTest2,
     createDeleteTest2
+)
+
+from GQLs.GraphResolvers import (
+    resolveDisciplineById,
+    resolveDisciplineAll,
+    resolveInsertDiscipline,
+    resolveUpdateDiscipline,
+    resolveDisciplineSetById,
+    resolveDisciplineSetAll,
+    resolveInsertDisciplineSet,
+    resolveUpdateDisciplineSet,
+    resolveSummaryById,
+    resolveSummaryAll,
+    resolveInsertSummary,
+    resolveUpdateSummary,
+    resolveResultById,
+    resolveResultAll,
+    resolveInsertResult,
+    resolveUpdateResult,
+    resolveNormById,
+    resolveNormAll,
+    resolveInsertNorm,
+    resolveUpdateNorm,
+)
+
+from GQLs.GraphPermissions import (
+    BasePermission,
+    GroupEditorPermission,
+    UserEditorPermission,
+    UserGDPRPermission,
 )
 
 test_discipline_by_id = createByIdTest2(tableName="disciplines")
@@ -63,3 +99,4 @@ test_summary_by_id = createByIdTest2(tableName="summaries")
 test_summary_update = createUpdateTest2(tableName="summaries", variables={"effective_date": "2025-02-05T00:00:02"})
 test_summary_create = createTest2(tableName="summaries", queryName="create", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463537"})
 #test_summary_delete = createDeleteTest2(tableName="summaries", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463537"})
+
