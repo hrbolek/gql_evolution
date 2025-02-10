@@ -30,7 +30,7 @@ Zde bude umístěná aktualizovaná struktura systému:
 ## Požadavky
 
 - všechny typy, input typy (s vyjímkou filtrů), mají description = **splněno**
-- všechny GQL typy mají private attribut _data, což je odpovídající db řádek (neplatí pro extended types) = **nesplněno**
+- všechny GQL typy mají private attribut _data, což je odpovídající db řádek (neplatí pro extended types) = **splněno**
 - všechny GQL typy a odpovídající DB modely mají atributy 
     lastchange
     created
@@ -38,7 +38,7 @@ Zde bude umístěná aktualizovaná struktura systému:
     createby_id
     rbacobject_id = **splněno**
 - vektorové atributy mají volitelné parametry where, limit a skip (je možné se domluvit na výjimce) a mají alternativu podle standardu relay connection = **chybí where a alternativa**
-- součástí filtrů (where) bude primární klíč i cizí klíče = **potřeba vysvětlit**
+- součástí filtrů (where) bude primární klíč i cizí klíče = **splněno?**
 - počáteční import dat je realizován jako asynchronní task:
 task = asyncio.create_task(initDB(asyncSessionMaker)) = **splněno**
 - mutace upravit tak, aby používaly
@@ -74,6 +74,7 @@ ________________________________________________________________________
 - 6.1. = počátek vytváření testů
 - 29.1. = první pokus o test
 - 5.2. = zprovoznění testů (77%)
+- 6.2. = 89 % pokrytí testů
 ________________________________________________________________________
 
 ## Poznámky

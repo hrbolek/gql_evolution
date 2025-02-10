@@ -110,11 +110,11 @@ async def summary_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typ
     result = await SummaryGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of summaries", permission_classes=[OnlyForAuthentized])
+'''@strawberry.field(description="Returns a list of summaries", permission_classes=[OnlyForAuthentized])
 async def summary_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[SummaryGQLModel]:
     loader = SummaryGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
-    return [SummaryGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+    return [SummaryGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []'''
 
 summary_page = strawberry.field(
         description="""Finds paged summaries""",

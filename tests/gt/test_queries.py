@@ -7,7 +7,7 @@ import json
 import datetime
 from unittest.mock import AsyncMock, MagicMock
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from GQLs.BaseGQLModel import BaseGQLModel
 from DBs.DBDefinitions import DisciplineModel, DisciplineSetModel, SummaryModel, ResultModel, NormModel
 
 
@@ -68,6 +68,8 @@ from GQLs.GraphPermissions import (
     GroupEditorPermission,
     UserEditorPermission,
     UserGDPRPermission,
+    AsyncSessionFromInfo,
+    UserFromInfo
 )
 
 test_discipline_by_id = createByIdTest2(tableName="disciplines")
@@ -92,11 +94,14 @@ test_result_by_id = createByIdTest2(tableName="results")
 #test_result_coverage = createByIdTest2(tableName="results", queryName="coverage")
 test_result_update = createUpdateTest2(tableName="results", variables={"evaluation_date": "2025-02-05T00:00:01"})
 test_result_create = createTest2(tableName="results", queryName="create", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463536"})
-#test_result_delete = createDeleteTest2(tableName="results", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463536"})
+test_result_delete = createDeleteTest2(tableName="results", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463536"})
 
 test_summary_by_id = createByIdTest2(tableName="summaries")
 #test_summary_coverage = createByIdTest2(tableName="summaries", queryName="coverage")
 test_summary_update = createUpdateTest2(tableName="summaries", variables={"effective_date": "2025-02-05T00:00:02"})
 test_summary_create = createTest2(tableName="summaries", queryName="create", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463537"})
-#test_summary_delete = createDeleteTest2(tableName="summaries", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463537"})
+test_summary_delete = createDeleteTest2(tableName="summaries", variables={"id": "18375c23-767c-4c1e-adb6-9b2beb463537"})
 
+def test_get_table_resolvers_not_implemented():
+    with pytest.raises(NotImplementedError):
+        BaseGQLModel.get_table_resolvers()

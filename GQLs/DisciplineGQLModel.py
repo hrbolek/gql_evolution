@@ -86,11 +86,11 @@ async def discipline_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> 
     result = await DisciplineGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of disciplines", permission_classes=[OnlyForAuthentized])
+'''@strawberry.field(description="Returns a list of disciplines", permission_classes=[OnlyForAuthentized])
 async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineGQLModel]:
     loader = DisciplineGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
-    return [DisciplineGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+    return [DisciplineGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []'''
 
 discipline_page = strawberry.field(
         description="""Finds paged disciplines""",

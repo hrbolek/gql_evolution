@@ -10,8 +10,6 @@ class DisciplineModel(BaseModel):
 
     __tablename__ = "tv_disciplines"
 
-    id: Mapped[uuid.UUID] = UUIDColumn()
-
     summary_id: Mapped[uuid.UUID] = UUIDFKey(
         "tv_summaries.id",
         nullable=True,
@@ -40,13 +38,10 @@ class DisciplineModel(BaseModel):
         back_populates="disciplines"
     )
 
-
 class DisciplineSetModel(BaseModel):
     """Represents a set of disciplines."""
 
     __tablename__ = "tv_discipline_sets"
-
-    id: Mapped[uuid.UUID] = UUIDColumn()
 
     summary_id: Mapped[uuid.UUID] = UUIDFKey(
         "tv_summaries.id",
@@ -81,13 +76,10 @@ class DisciplineSetModel(BaseModel):
         back_populates="sets"
     )
 
-
 class SummaryModel(BaseModel):
     """Represents a summary of disciplines and sets."""
 
     __tablename__ = "tv_summaries"
-
-    id: Mapped[uuid.UUID] = UUIDColumn()
 
     result_id: Mapped[uuid.UUID] = UUIDFKey(
         "tv_results.id",
@@ -103,9 +95,8 @@ class SummaryModel(BaseModel):
     )
 
     effective_date: Mapped[datetime.datetime] = mapped_column(
-        nullable=False,
-        server_default=sqlalchemy.sql.func.now(),
-        default=datetime.datetime.now,
+        nullable=True,
+        default=None,
         comment="Effective date of the summary"
     )
     expiration_date: Mapped[datetime.datetime] = mapped_column(
@@ -136,13 +127,10 @@ class SummaryModel(BaseModel):
         back_populates="summaries"
     )
 
-
 class ResultModel(BaseModel):
     """Represents a test result."""
 
     __tablename__ = "tv_results"
-
-    id: Mapped[uuid.UUID] = UUIDColumn()
 
     tested_person_id: Mapped[uuid.UUID] = UUIDFKey(
         nullable=True,
@@ -156,8 +144,8 @@ class ResultModel(BaseModel):
     )
 
     evaluation_date: Mapped[datetime.datetime] = mapped_column(
-        nullable=False,
-        default=datetime.datetime.now,
+        nullable=True,
+        default=None,
         comment="Date and time of the evaluation"
     )
     result: Mapped[str] = mapped_column(
@@ -176,13 +164,10 @@ class ResultModel(BaseModel):
         back_populates="result"
     )
 
-
 class NormModel(BaseModel):
     """Represents a norm for test results."""
 
     __tablename__ = "tv_norms"
-
-    id: Mapped[uuid.UUID] = UUIDColumn()
 
     effective_date: Mapped[datetime.datetime] = mapped_column(
         nullable=True,
@@ -220,8 +205,8 @@ class NormModel(BaseModel):
         comment="Minimum value for the result"
     )
     result_maximal_value: Mapped[int] = mapped_column(
-        nullable=False,
-        default=0,
+        nullable=True,
+        default=None,
         comment="Maximum value for the result"
     )
     points: Mapped[int] = mapped_column(

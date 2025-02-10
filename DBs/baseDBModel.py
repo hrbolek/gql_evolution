@@ -14,7 +14,7 @@ def UUIDColumn(**kwargs):
         sqlalchemy.types.Uuid,
         primary_key=True,
         unique=True,
-        default=uuid.uuid4,
+        default_factory=uuid.uuid4,
         nullable=False,  # Primary keys are non-nullable
         **kwargs,
         comment="Primary key"
@@ -45,7 +45,6 @@ def UUIDFKey(ForeignKeyArg=None, **kwargs):
 class BaseModel(MappedAsDataclass, DeclarativeBase):
     """Base model with shared attributes for all database entities."""
 
-    # Added default to every field
     id: Mapped[uuid.UUID] = UUIDColumn()
 
     created: Mapped[datetime.datetime] = mapped_column(

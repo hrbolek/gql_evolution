@@ -52,7 +52,7 @@ class BaseGQLModel:
         return result
     
 
-    id: typing.Optional[uuid.UUID] = strawberry.field(description="Primary key", default = None, permission_classes= [OnlyForAuthentized])
+    id: uuid.UUID = strawberry.field(description="Primary key", default = None, permission_classes= [OnlyForAuthentized])
     lastchange: typing.Optional[dt.datetime] = strawberry.field(description="Last change", default = None, permission_classes= [OnlyForAuthentized])
     created: typing.Optional[dt.datetime] = strawberry.field(description="Created", default = None, permission_classes= [OnlyForAuthentized])
     createdby_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the creator", default = None, permission_classes= [OnlyForAuthentized])

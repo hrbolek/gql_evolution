@@ -102,11 +102,11 @@ async def result_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typi
     result = await ResultGQLModel.load_with_loader(info=info, id=id)
     return result
 
-@strawberry.field(description="Returns a list of results", permission_classes=[OnlyForAuthentized])
+'''@strawberry.field(description="Returns a list of results", permission_classes=[OnlyForAuthentized])
 async def result_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[ResultGQLModel]:
     loader = ResultGQLModel.getloader(info)
     rows = await loader.page(skip, limit)
-    return [ResultGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
+    return [ResultGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []'''
 
 result_page = strawberry.field(
         description="""Finds paged results""",
