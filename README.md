@@ -25,7 +25,9 @@ Mezi požadavky tohoto systému patří:
 
 Zdroj: RÁČIL, Tomáš. IS pro sběr a vyhodnocení vybraných anatomicko- fyziologických dat a výzkumů. DIPLOMOVÁ PRÁCE. BRNO: UNIVERZITA OBRANY V BRNĚ, 2020.
 
-Zde bude umístěná aktualizovaná struktura systému:
+Aktualizovaná struktura systému:
+
+<img src="updated-database-structure.png" alt="Chyba">
 
 ## Požadavky
 
@@ -37,8 +39,8 @@ Zde bude umístěná aktualizovaná struktura systému:
     changedby_id
     createby_id
     rbacobject_id = **splněno**
-- vektorové atributy mají volitelné parametry where, limit a skip (je možné se domluvit na výjimce) a mají alternativu podle standardu relay connection = **chybí where a alternativa**
-- součástí filtrů (where) bude primární klíč i cizí klíče = **splněno?**
+- vektorové atributy mají volitelné parametry where, limit a skip (je možné se domluvit na výjimce) a mají alternativu podle standardu relay connection = **splněno?**
+- součástí filtrů (where) bude primární klíč i cizí klíče = **splněno**
 - počáteční import dat je realizován jako asynchronní task:
 task = asyncio.create_task(initDB(asyncSessionMaker)) = **splněno**
 - mutace upravit tak, aby používaly
@@ -46,8 +48,8 @@ from uoishelpers.resolvers import encapsulateInsert, encapsulateUpdate, encapsul
 (je možné se domluvit na výjimce) = **splněno?**
 - všechny typy, inputs, apod. mají description = **splněno**
 - všechny atributy mají anotace, např. Annotated[Optional[str], strawberry.argument(description="")]="0" = **splněno**
-- u všech fields jsou permission classes a v komentáři uvedeno, kdo má k atributu či funkcionalitě přístup = **nesplněno**
-- testy s alespoň 90% pokrytím pomocí dotazů, ty jsou uloženy v systému souborů (read.gql, create.gql, …) = **nesplněno**
+- u všech fields jsou permission classes a v komentáři uvedeno, kdo má k atributu či funkcionalitě přístup = **splněno**
+- testy s alespoň 90% pokrytím pomocí dotazů, ty jsou uloženy v systému souborů (read.gql, create.gql, …) = **splněno**
 
 ________________________________________________________________________
 
@@ -60,21 +62,22 @@ ________________________________________________________________________
 - předělat systemadata.json (jeden uživatel s jedním výsledkem) = **hotovo**
 - vytvořit a zprovoznit READ operace pro jedotlivé GQL modely = **hotovo**
 - vytvořit a zprovoznit CUD operace pro jednotlivé GQL modely = **hotovo**
-- vytvořit a zprovoznit testy s minimálním 90 % pokrytím dotazů = **nesplněno**
+- vytvořit a zprovoznit testy s minimálním 90 % pokrytím dotazů = **hotovo**
 
 ________________________________________________________________________
 
 ## Záznamy
 
-- 4.11. = základní návrh databáze
-- 14.11. = zprovoznění GQL, Voyageru, drobné úpravy v kódu
-- 25.11. = vytvoření systemdata.json a odstranění chyb v rámci propojení GQL modelů
-- 5.12. = zprovnění READ operací pro každý GQL model
-- 18.12. = zprovoznění CUD operací pro každý GQL model
-- 6.1. = počátek vytváření testů
-- 29.1. = první pokus o test
-- 5.2. = zprovoznění testů (77%)
-- 6.2. = 89 % pokrytí testů
+- 4.11.2024 = základní návrh databáze
+- 14.11.2024 = zprovoznění GQL, Voyageru, drobné úpravy v kódu
+- 25.11.2024 = vytvoření systemdata.json a odstranění chyb v rámci propojení GQL modelů
+- 5.12.2024 = zprovnění READ operací pro každý GQL model
+- 18.12.2024 = zprovoznění CUD operací pro každý GQL model
+- 6.1.2025 = počátek vytváření testů
+- 29.1.2025 = první pokus o test
+- 5.2.2025 = zprovoznění testů s pokrytím 77 %
+- 6.2.2025 = 89 % pokrytí testů
+- 10.2.2025 = 91 % pokrtytí testů
 ________________________________________________________________________
 
 ## Poznámky

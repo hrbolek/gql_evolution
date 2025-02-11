@@ -101,14 +101,14 @@ async def norm_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typing
     result = await NormGQLModel.load_with_loader(info=info, id=id)
     return result
 
-'''@strawberry.field(description="Returns a list of norms", permission_classes=[OnlyForAuthentized])
-async def norm_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[NormGQLModel]:
-    loader = NormGQLModel.getloader(info)
-    rows = await loader.page(skip, limit)
-    return [NormGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []'''
+# @strawberry.field(description="Returns a list of norms", permission_classes=[OnlyForAuthentized])
+# async def norm_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[NormGQLModel]:
+#     loader = NormGQLModel.getloader(info)
+#     rows = await loader.page(skip, limit)
+#     return [NormGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
 
 norm_page = strawberry.field(
-        description="""Finds paged norms""",
+        description="""Returns a list of norms""",
         permission_classes=[OnlyForAuthentized],
         resolver=PageResolver[NormGQLModel](whereType=NormInputFilter)
         ) 

@@ -1,6 +1,6 @@
-mutation ($id: UUID!, $lastchange: DateTime!, $summary_id: UUID, $name: String!) {
+mutation ($id: UUID!, $lastchange: DateTime!, $name: String!) {
   result: disciplineUpdate(
-    discipline: {id: $id, lastchange: $lastchange, name: $name, summaryId: $summary_id}
+    discipline: {id: $id, lastchange: $lastchange, name: $name}
   ) {
     __typename
     ...Discipline
@@ -18,5 +18,4 @@ fragment Discipline on DisciplineGQLModel {
     name
     nameEn
     description
-    summary { id }
 }

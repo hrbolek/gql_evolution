@@ -110,14 +110,14 @@ async def summary_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typ
     result = await SummaryGQLModel.load_with_loader(info=info, id=id)
     return result
 
-'''@strawberry.field(description="Returns a list of summaries", permission_classes=[OnlyForAuthentized])
-async def summary_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[SummaryGQLModel]:
-    loader = SummaryGQLModel.getloader(info)
-    rows = await loader.page(skip, limit)
-    return [SummaryGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []'''
+# @strawberry.field(description="Returns a list of summaries", permission_classes=[OnlyForAuthentized])
+# async def summary_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[SummaryGQLModel]:
+#     loader = SummaryGQLModel.getloader(info)
+#     rows = await loader.page(skip, limit)
+#     return [SummaryGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
 
 summary_page = strawberry.field(
-        description="""Finds paged summaries""",
+        description="""Returns a list of summaries""",
         permission_classes=[OnlyForAuthentized],
         resolver=PageResolver[SummaryGQLModel](whereType=SummaryInputFilter)
         ) 
@@ -140,7 +140,6 @@ class SummaryUpdateGQLModel:
     effective_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result is effective", default=None)
     expiration_date: typing.Optional[dt.datetime] = strawberry.field(description="Date when the result expires", default=None)
     point_range: typing.Optional[str] = strawberry.field(description="Range of points", default=None)
-    result_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the result", default=None)
     norm_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the norm", default=None)
 
 @strawberry.input(description="Definition of a summary used for delete")

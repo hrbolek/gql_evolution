@@ -86,14 +86,14 @@ async def discipline_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> 
     result = await DisciplineGQLModel.load_with_loader(info=info, id=id)
     return result
 
-'''@strawberry.field(description="Returns a list of disciplines", permission_classes=[OnlyForAuthentized])
-async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineGQLModel]:
-    loader = DisciplineGQLModel.getloader(info)
-    rows = await loader.page(skip, limit)
-    return [DisciplineGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []'''
+# @strawberry.field(description="Returns a list of disciplines", permission_classes=[OnlyForAuthentized])
+# async def discipline_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[DisciplineGQLModel]:
+#     loader = DisciplineGQLModel.getloader(info)
+#     rows = await loader.page(skip, limit)
+#     return [DisciplineGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
 
 discipline_page = strawberry.field(
-        description="""Finds paged disciplines""",
+        description="""Returns a list of disciplines""",
         permission_classes=[OnlyForAuthentized],
         resolver=PageResolver[DisciplineGQLModel](whereType=DisciplineInputFilter)
         )    
@@ -115,7 +115,6 @@ class DisciplineUpdateGQLModel:
     name: typing.Optional[str] = strawberry.field(description="Name of the discipline", default=None)
     name_en: typing.Optional[str] = strawberry.field(description="Name of the discipline in English", default=None)
     description: typing.Optional[str] = strawberry.field(description="Description of the discipline", default=None)
-    summary_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the summary", default=None)
 
 @strawberry.input(description="Definition of a discipline used for delete")
 class DisciplineDeleteGQLModel:

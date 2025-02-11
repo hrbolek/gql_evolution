@@ -32,7 +32,7 @@ def UUIDFKey(ForeignKeyArg=None, **kwargs):
     if ForeignKeyArg:
         return mapped_column(
             sqlalchemy.types.Uuid,
-            ForeignKey(ForeignKeyArg),  # Pass ForeignKey object directly
+            ForeignKey(ForeignKeyArg),
             **kwargs
         )
     else:
@@ -43,7 +43,6 @@ def UUIDFKey(ForeignKeyArg=None, **kwargs):
 
 # Base model for all database models
 class BaseModel(MappedAsDataclass, DeclarativeBase):
-    """Base model with shared attributes for all database entities."""
 
     id: Mapped[uuid.UUID] = UUIDColumn()
 

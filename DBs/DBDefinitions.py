@@ -5,8 +5,8 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column, validates
 from .BaseDBModel import BaseModel, UUIDFKey, UUIDColumn
 
+#Model representing a single discipline
 class DisciplineModel(BaseModel):
-    """Represents a discipline in the system."""
 
     __tablename__ = "tv_disciplines"
 
@@ -19,7 +19,7 @@ class DisciplineModel(BaseModel):
 
     name: Mapped[str] = mapped_column(
         nullable=False,
-        default="",
+        default="Discipline",
         comment="Name of the discipline"
     )
     name_en: Mapped[str] = mapped_column(
@@ -38,8 +38,8 @@ class DisciplineModel(BaseModel):
         back_populates="disciplines"
     )
 
+#Model representing a set of disciplines
 class DisciplineSetModel(BaseModel):
-    """Represents a set of disciplines."""
 
     __tablename__ = "tv_discipline_sets"
 
@@ -52,7 +52,7 @@ class DisciplineSetModel(BaseModel):
 
     name: Mapped[str] = mapped_column(
         nullable=False,
-        default="",
+        default="Discipline Set",
         comment="Name of the discipline set"
     )
     name_en: Mapped[str] = mapped_column(
@@ -76,8 +76,8 @@ class DisciplineSetModel(BaseModel):
         back_populates="sets"
     )
 
+#Model interconnecting disciplines, sets, results and norms; representing a summary of results for a person in whole semester
 class SummaryModel(BaseModel):
-    """Represents a summary of disciplines and sets."""
 
     __tablename__ = "tv_summaries"
 
@@ -106,7 +106,7 @@ class SummaryModel(BaseModel):
     )
     point_range: Mapped[str] = mapped_column(
         nullable=False,
-        default="",
+        default="0-10",
         comment="Range of points"
     )
 
@@ -127,8 +127,8 @@ class SummaryModel(BaseModel):
         back_populates="summaries"
     )
 
+#Model representing a result of an examination
 class ResultModel(BaseModel):
-    """Represents a test result."""
 
     __tablename__ = "tv_results"
 
@@ -150,7 +150,7 @@ class ResultModel(BaseModel):
     )
     result: Mapped[str] = mapped_column(
         nullable=False,
-        default="",
+        default="0",
         comment="Result of the test"
     )
     note: Mapped[str] = mapped_column(
@@ -164,8 +164,8 @@ class ResultModel(BaseModel):
         back_populates="result"
     )
 
+#Model representing a norm for test result
 class NormModel(BaseModel):
-    """Represents a norm for test results."""
 
     __tablename__ = "tv_norms"
 

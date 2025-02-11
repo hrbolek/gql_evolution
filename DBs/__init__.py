@@ -35,8 +35,6 @@ import os
 
 # Derives the connection string from environment variables or Docker Envs.
 
-# Returns: connectionstring (str): Connection string for database connection.
-
 def ComposeConnectionString():
     
     # Get database information from environment

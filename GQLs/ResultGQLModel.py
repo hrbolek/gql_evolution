@@ -102,14 +102,14 @@ async def result_by_id(self, info: strawberry.types.Info, id: uuid.UUID) -> typi
     result = await ResultGQLModel.load_with_loader(info=info, id=id)
     return result
 
-'''@strawberry.field(description="Returns a list of results", permission_classes=[OnlyForAuthentized])
-async def result_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[ResultGQLModel]:
-    loader = ResultGQLModel.getloader(info)
-    rows = await loader.page(skip, limit)
-    return [ResultGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []'''
+# @strawberry.field(description="Returns a list of results", permission_classes=[OnlyForAuthentized])
+# async def result_page(self, info: strawberry.types.Info, skip: int = 0, limit: int = 10) -> typing.List[ResultGQLModel]:
+#     loader = ResultGQLModel.getloader(info)
+#     rows = await loader.page(skip, limit)
+#     return [ResultGQLModel.from_sqlalchemy(row) for row in rows] if rows is not None else []
 
 result_page = strawberry.field(
-        description="""Finds paged results""",
+        description="""Returns a list of results""",
         permission_classes=[OnlyForAuthentized],
         resolver=PageResolver[ResultGQLModel](whereType=ResultInputFilter)
         ) 
@@ -130,7 +130,6 @@ class ResultUpdateGQLModel:
     lastchange: dt.datetime = strawberry.field(description="Last change of the record")
     id: uuid.UUID = strawberry.field(description="ID of the result")
     tested_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the tested person", default=None)
-    examiner_person_id: typing.Optional[uuid.UUID] = strawberry.field(description="ID of the examiner person", default=None)
     evaluation_date: typing.Optional[dt.datetime] = strawberry.field(description="Date and time of the result", default=None)
     result: typing.Optional[str] = strawberry.field(description="Result of the test", default=None)
     note: typing.Optional[str] = strawberry.field(description="Additional note", default=None)

@@ -6,6 +6,7 @@ import datetime
 import os.path
 import json
 
+# Function to compare expected and actual JSON responses
 def checkExpected(responseJSON, expectedJSON):
     def compareLists(left, right):
         if len(left) != len(right):
@@ -21,6 +22,7 @@ def checkExpected(responseJSON, expectedJSON):
                 return False
         return True
             
+    # Recursive function to compare dictionaries
     def compareDicts(left, right):
         allKeys = set(left.keys()).update(right.keys())
         for key in allKeys:
@@ -39,11 +41,14 @@ def checkExpected(responseJSON, expectedJSON):
             elif leftValue != rightValue:
                 return False
         return True
+    
+    # Extract relevant data fields from response and expected JSON
     responseDataValue = responseJSON.get("data", None)
     expectedDataValue = expectedJSON.get("data", None)
     responseErrorValue = responseJSON.get("error", None)
     expectedErrorValue = expectedJSON.get("error", None)
 
+    # Check if the presence of data and errors match between actual and expected results
     if (responseDataValue is None) and (expectedDataValue is not None):
         return False
     if (responseDataValue is not None) and (expectedDataValue is None):
@@ -62,14 +67,19 @@ def checkExpected(responseJSON, expectedJSON):
 
 import os 
 import re
+
+# Get the directory path of the current file
 dir_path = os.path.dirname(os.path.realpath(__file__))
 print("dir_path", dir_path, flush=True)
 
+# Set the location for GraphQL queries
 location = "./src/tests/gqls"
 location = re.sub(r"\\tests\\.+", r"\\tests\\gqls", dir_path)
 # location
 print("location", location, flush=True)
 logging.info(f"Queries location {dir_path} => {location}")
+
+# Function to load a GraphQL query from a file
 def getQuery(tableName, queryName):
     queryFileName = f"{location}/{tableName}/{queryName}.gql"
     assert os.path.isfile(queryFileName), f"unable find query {queryName}@{tableName} {queryFileName}"
@@ -78,6 +88,7 @@ def getQuery(tableName, queryName):
         query = f.read()
     return query
 
+# Function to load query variables from a file
 def getVariables(tableName, queryName):
     variableFileName = f"{location}/{tableName}/{queryName}.var.json"
 
@@ -88,6 +99,7 @@ def getVariables(tableName, queryName):
         variables = {}
     return variables
 
+# Function to load expected response results from a file
 def getExpectedResult(tableName, queryName):
     resultFileName = f"{location}/{tableName}/{queryName}.res.json"
 
@@ -98,7 +110,7 @@ def getExpectedResult(tableName, queryName):
         expectedResult = None
     return expectedResult
 
-
+# Function to create a test for fetching an entity by ID
 def createByIdTest2(tableName, queryName=None, variables=None, expectedJson=None):
     @pytest.mark.asyncio
     async def result_test(SchemaExecutorDemo):
@@ -133,6 +145,7 @@ def createByIdTest2(tableName, queryName=None, variables=None, expectedJson=None
         
     return result_test
 
+# Function to create a test for a GraphQL query
 def createTest2(tableName, queryName, variables=None, expectedJson=None):
     @pytest.mark.asyncio
     async def result_test(SchemaExecutorDemo):
@@ -153,6 +166,7 @@ def createTest2(tableName, queryName, variables=None, expectedJson=None):
         
     return result_test
 
+# Function to create a test for updating an entity
 def createUpdateTest2(tableName, variables=None, expectedJson=None):
     queryName = "update"
     @pytest.mark.asyncio
@@ -199,6 +213,7 @@ def createUpdateTest2(tableName, variables=None, expectedJson=None):
         
     return result_test
 
+# Function to create a test for deleting an entity
 def createDeleteTest2(tableName, variables=None, expectedJson=None):
     @pytest.mark.asyncio
     async def result_test(SchemaExecutorDemo):

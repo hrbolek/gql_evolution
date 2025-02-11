@@ -16,9 +16,6 @@ from .NormGQLModel import norm_by_id, norm_page
 # Define the root query type with a description
 @strawberry.type(description="Type for query root")
 class Query:
-    @strawberry.field(description="Returns hello world")
-    async def hello(self, info: strawberry.types.Info) -> str:
-        return "hello world"
     
     # Include other queries
     result_by_id = result_by_id
@@ -41,9 +38,6 @@ from .NormGQLModel import norm_insert, norm_update, norm_delete
 # Define the root mutation type with a description
 @strawberry.type(description="Type for mutation root")
 class Mutation:
-    @strawberry.field(description="Returns hello world")
-    async def hello(self, info: strawberry.types.Info) -> str:
-        return "hello world"
     
     # Include other mutations
     result_insert = result_insert
