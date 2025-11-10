@@ -5,6 +5,7 @@ from src.DBDefinitions import BaseModel
 from src.DBDefinitions import (
     EventModel,
     EventInvitationModel,
+    ProjectModel,
 
 )
 
@@ -20,14 +21,14 @@ class LoaderMap(LoaderMapBase[BaseModel]):
 
     EventModel: IDLoader[src.DBDefinitions.EventModel] = None
     EventInvitationModel: IDLoader[src.DBDefinitions.EventInvitationModel] = None
-
+    ProjectModel: IDLoader[src.DBDefinitions.ProjectModel] = None
 
     def __init__(self, session):
         super().__init__(session)
 
         self.EventModel = self.get(EventModel)
         self.EventInvitationModel = self.get(EventInvitationModel)
-
+        self.ProjectModel = self.get(ProjectModel)
         # print(f"LoaderMap created with session: {session}")
 
 def createLoadersContext(session):
