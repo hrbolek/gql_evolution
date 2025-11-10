@@ -38,12 +38,7 @@ class ProjectModel(BaseModel):
         comment="Materialized path technique, not implemented"
     )
     
-    #semantic vector, default is 1024 zeros
-    vector: Mapped[typing.List[float]] = mapped_column(
-        ARRAY(sqlalchemy.Float),
-        nullable=True,
-        default_factory=lambda: [0.0] * 1024
-    )
+    
 
 
     @hybrid_property
