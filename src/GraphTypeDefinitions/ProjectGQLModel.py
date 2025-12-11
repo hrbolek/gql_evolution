@@ -37,14 +37,9 @@ from uoishelpers.gqlpermissions.UserAbsoluteAccessControlExtension import UserAb
 from .BaseGQLModel import BaseGQLModel, IDType, Relation
 from .TimeUnit import TimeUnit
 
-EventInvitationGQLModel = typing.Annotated["EventInvitationGQLModel", strawberry.lazy(".EventInvitationGQLModel")]
-EventInvitationInputFilter = typing.Annotated["EventInvitationInputFilter", strawberry.lazy(".EventInvitationGQLModel")]
-
-
 @createInputs2
 class ProjectInputFilter:
     id: IDType
-    valid: bool
 
 
 @strawberry.federation.type(
@@ -73,33 +68,6 @@ Materializovaná cesta reprezentující umístění skupiny v hierarchii.""",
         ]
     )
 
-    valid: typing.Optional[bool] = strawberry.field(
-        name="valid_raw",
-        description="""If it intersects current date""",
-        default=None,
-        permission_classes=[OnlyForAuthentized]
-    )
-
-    @strawberry.field(
-        name="valid",
-        description="""Event duration, implicitly in minutes""",
-        permission_classes=[
-            OnlyForAuthentized,
-            # OnlyForAdmins
-        ],
-    )
-    def valid_(self) -> typing.Optional[bool]:
-        if self.valid is not None:
-            return self.valid
-        now = datetime.datetime.now()
-        if self.startdate and self.enddate:
-            return self.startdate <= now <= self.enddate
-        elif self.startdate:
-            return self.startdate <= now
-        elif self.enddate:
-            return now <= self.enddate
-        return False
-
 @strawberry.interface(
     description="""Project queries"""
 )
@@ -123,7 +91,7 @@ from uoishelpers.resolvers import TreeInputStructureMixin, InputModelMixin
 
 
 
-class ProjectInsertGQLModel(TreeInputStructureMixin):
+class ProjectInsertGQLModel(InputModelMixin):
     getLoader = ProjectGQLModel.getLoader
 
     id: typing.Optional[IDType] = strawberry.field(
@@ -131,7 +99,10 @@ class ProjectInsertGQLModel(TreeInputStructureMixin):
         default=None
     )
 
-    rbacobject_id: strawberry.Private[IDType] = None
+    rbacobject_id: IDType = strawberry.field(
+        description="""Definitoin of access control"""
+    )
+
     createdby_id: strawberry.Private[IDType] = None
 
 
@@ -174,29 +145,26 @@ class ProjectMutation:
         ],
         extensions=[
             # UpdatePermissionCheckRoleFieldExtension[GroupGQLModel](roles=["administrátor", "personalista"]),
-            UserAccessControlExtension[UpdateError, ProjectGQLModel](
+            UserAccessControlExtension[InsertError, ProjectGQLModel](
                 roles=[
                     "plánovací administrátor", 
-                    # "personalista"
+                    "administrátor"
                 ]
             ),
-            UserRoleProviderExtension[UpdateError, ProjectGQLModel](),
-            RbacProviderExtension[UpdateError, ProjectGQLModel](),
-            LoadDataExtension[UpdateError, ProjectGQLModel](
-                getLoader=ProjectGQLModel.getLoader,
-                primary_key_name="masterevent_id"
-            )
+            UserRoleProviderExtension[InsertError, ProjectGQLModel](),
+            RbacInsertProviderExtension[InsertError, ProjectGQLModel](
+                rbac_key_name="rbacobject_id"    
+            ),
         ],
     )
-    async def event_insert(
+    async def project_insert(
         self,
         info: strawberry.Info,
-        event: ProjectInsertGQLModel,
-        db_row: typing.Any,
+        project: ProjectInsertGQLModel,
         rbacobject_id: IDType,
         user_roles: typing.List[dict],
     ) -> typing.Union[ProjectGQLModel, InsertError[ProjectGQLModel]]:
-        return await Insert[ProjectGQLModel].DoItSafeWay(info=info, entity=event)
+        return await Insert[ProjectGQLModel].DoItSafeWay(info=info, entity=project)
     
 
 
@@ -219,12 +187,12 @@ class ProjectMutation:
             LoadDataExtension[UpdateError, ProjectGQLModel]()
         ],
     )
-    async def event_update(
+    async def project_update(
         self,
         info: strawberry.Info,
-        event: ProjectUpdateGQLModel
+        project: ProjectUpdateGQLModel
     ) -> typing.Union[ProjectGQLModel, UpdateError[ProjectGQLModel]]:
-        return await Update[ProjectGQLModel].DoItSafeWay(info=info, entity=event)
+        return await Update[ProjectGQLModel].DoItSafeWay(info=info, entity=project)
     
 
 
@@ -247,10 +215,10 @@ class ProjectMutation:
             LoadDataExtension[DeleteError, ProjectGQLModel]()
         ],
     )   
-    async def event_delete(
+    async def project_delete(
         self,
         info: strawberry.Info,
-        event: ProjectDeleteGQLModel
+        project: ProjectDeleteGQLModel
     ) -> typing.Optional[DeleteError[ProjectGQLModel]]:
-        return await Delete[ProjectGQLModel].DoItSafeWay(info=info, entity=event)
+        return await Delete[ProjectGQLModel].DoItSafeWay(info=info, entity=project)
     
