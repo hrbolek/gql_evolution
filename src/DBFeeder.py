@@ -8,6 +8,8 @@ from src.DBDefinitions import (
     EventModel, 
     EventInvitationModel,
     ProjectModel,
+    FinanceModel,
+    MilestoneModel,
 )
 
 get_demodata = lambda :readJsonFile(jsonFileName="./systemdata.json")
@@ -22,7 +24,9 @@ async def initDB(asyncSessionMaker, filename="./systemdata.json"):
         dbModels = [
             EventModel, 
             EventInvitationModel,
-            ProjectModel
+            ProjectModel,
+            FinanceModel,
+            MilestoneModel,
         ]
         
 

@@ -10348,6 +10348,28 @@
             "createdby_id": "5968049d-1065-4caa-acb5-0c6fa15ae421",
             "changedby_id": "5968049d-1065-4caa-acb5-0c6fa15ae421"
         }
+    ],
+    "finance_evolution": [
+        {
+            "_chunk": 0,
+            "id": "67ec2b0b-a39d-40df-9cea-e295b36749c9",
+            "created": "2024-08-11T21:45:06.685651",
+            "lastchange": "2024-08-11T21:45:06.685651",
+            "__typename": "FinanceGQLModel",
+            "createdby_id": "5968049d-1065-4caa-acb5-0c6fa15ae421",
+            "changedby_id": "5968049d-1065-4caa-acb5-0c6fa15ae421"
+        }
+    ],
+    "Milestone_evolution": [
+        {
+            "_chunk": 0,
+            "id": "77ec2b0b-a39d-40df-9cea-e295b36749c9",
+            "created": "2024-08-11T21:45:06.685651",
+            "lastchange": "2024-08-11T21:45:06.685651",
+            "__typename": "MilestoneGQLModel",
+            "createdby_id": "5968049d-1065-4caa-acb5-0c6fa15ae421",
+            "changedby_id": "5968049d-1065-4caa-acb5-0c6fa15ae421"
+        }
     ]
 
 }

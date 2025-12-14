@@ -10,6 +10,8 @@ from .BaseModel import BaseModel
 from .EventDBModel import EventModel
 from .EventInvitationModel import EventInvitationModel
 from .ProjectModel import ProjectModel
+from .FinanceModel import FinanceModel
+from .MilestoneModel import MilestoneModel
 
 async def startEngine(connectionstring, makeDrop=False, makeUp=True):
     """Provede nezbytne ukony a vrati asynchronni SessionMaker"""
