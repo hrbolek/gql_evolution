@@ -133,7 +133,7 @@ class ProjectDeleteGQLModel:
         description="""last change""",
     )
 
-@strawberry.interface(
+@strawberry.type(
     description="""Project mutations"""
 )
 class ProjectMutation:
@@ -178,7 +178,8 @@ class ProjectMutation:
             # UpdatePermissionCheckRoleFieldExtension[GroupGQLModel](roles=["administrátor", "personalista"]),
             UserAccessControlExtension[UpdateError, ProjectGQLModel](
                 roles=[
-                    "plánovací administrátor", 
+                    "plánovací administrátor",
+                    "administrátor"
                     # "personalista"
                 ]
             ),
@@ -190,7 +191,10 @@ class ProjectMutation:
     async def project_update(
         self,
         info: strawberry.Info,
-        project: ProjectUpdateGQLModel
+        project: ProjectUpdateGQLModel,
+        rbacobject_id: IDType,
+        user_roles: typing.List[dict],
+        db_row: typing.Any
     ) -> typing.Union[ProjectGQLModel, UpdateError[ProjectGQLModel]]:
         return await Update[ProjectGQLModel].DoItSafeWay(info=info, entity=project)
     
@@ -206,7 +210,8 @@ class ProjectMutation:
             # UpdatePermissionCheckRoleFieldExtension[GroupGQLModel](roles=["administrátor", "personalista"]),
             UserAccessControlExtension[DeleteError, ProjectGQLModel](
                 roles=[
-                    "plánovací administrátor", 
+                    "plánovací administrátor",
+                    "administrátor"
                     # "personalista"
                 ]
             ),
@@ -218,7 +223,9 @@ class ProjectMutation:
     async def project_delete(
         self,
         info: strawberry.Info,
-        project: ProjectDeleteGQLModel
+        project: ProjectDeleteGQLModel,
+        rbacobject_id: IDType,
+        user_roles: typing.List[dict],
+        db_row: typing.Any
     ) -> typing.Optional[DeleteError[ProjectGQLModel]]:
         return await Delete[ProjectGQLModel].DoItSafeWay(info=info, entity=project)
-    
