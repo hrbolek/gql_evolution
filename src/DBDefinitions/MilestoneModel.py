@@ -25,4 +25,28 @@ from sqlalchemy.dialects.postgresql import ARRAY
 class MilestoneModel(BaseModel):
     __tablename__ = "Milestone_evolution"
 
+    name: Mapped[str] = mapped_column(default=None, nullable=True, comment="Name of the project")
+    description: Mapped[str] = mapped_column(default=None, nullable=True, comment="Description of the project")
+    duedate: Mapped[datetime.datetime] = mapped_column(default=None, nullable=True, comment="Due date of the milestone")
+    iscompleted: Mapped[bool] = mapped_column(default=False, nullable=False, comment="Is the milestone completed?")
     
+    # Foreign Key to Project
+    project_id: Mapped[IDType] = UUIDFKey(nullable=False, comment="Reference to the project")
+    
+    # Relationship back to Project
+    project = relationship(
+        "ProjectModel",
+        back_populates="milestones",
+        uselist=False,
+        foreign_keys=[project_id],
+        comment="The project this milestone belongs to"
+    )
+    
+    # Relationship to Finance
+    finances = relationship(
+        "FinanceModel",
+        back_populates="milestone",
+        uselist=True,
+        cascade="save-update, delete",
+        comment="Financial records associated with this milestone"
+    )

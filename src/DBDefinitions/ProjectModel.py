@@ -25,16 +25,26 @@ from sqlalchemy.dialects.postgresql import ARRAY
 class ProjectModel(BaseModel):
     __tablename__ = "projects_evolution"
 
-    path_attribute_name = "path"
-    parent_attribute_name = "masterevent"
-    parent_id_attribute_name = "masterevent_id"
-    children_attribute_name = "subevents"
-
-    # Materialized path technique
-    path: Mapped[str] = mapped_column(
-        index=True,
-        nullable=True,
-        default=None,
-        comment="Materialized path technique, not implemented"
+    name: Mapped[str] = mapped_column(default=None, nullable=True, comment="Name of the project")
+    description: Mapped[str] = mapped_column(default=None, nullable=True, comment="Description of the project")
+    startdate: Mapped[datetime.datetime] = mapped_column(default=None, nullable=True, comment="Start date of the project")
+    enddate: Mapped[datetime.datetime] = mapped_column(default=None, nullable=True, comment="End date of the project")
+    isdone: Mapped[bool] = mapped_column(default=False, nullable=False, comment="Is the project done?")
+    
+    # Relationships
+    milestones = relationship(
+        "MilestoneModel",
+        back_populates="project",
+        uselist=True,
+        cascade="save-update, delete",
+        comment="Milestones associated with this project"
     )
     
+    finances = relationship(
+        "FinanceModel",
+        back_populates="project",
+        uselist=True,
+        cascade="save-update, delete",
+        comment="Financial records associated with this project"
+    )
+
