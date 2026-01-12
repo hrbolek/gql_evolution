@@ -40,6 +40,8 @@ from .TimeUnit import TimeUnit
 @createInputs2
 class ProjectInputFilter:
     id: IDType
+    name: typing.Optional[str] = None
+    description: typing.Optional[str] = None
 
 
 @strawberry.federation.type(
@@ -51,21 +53,51 @@ class ProjectGQLModel(BaseGQLModel):
     def getLoader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).ProjectModel
 
-    path: typing.Optional[str] = strawberry.field(
-        description="""Materialized path representing the group's hierarchical location.  
-Materializovaná cesta reprezentující umístění skupiny v hierarchii.""",
+#     path: typing.Optional[str] = strawberry.field(
+#         description="""Materialized path representing the group's hierarchical location.  
+# Materializovaná cesta reprezentující umístění skupiny v hierarchii.""",
+#         default=None,
+#         permission_classes=[OnlyForAuthentized]
+#     )
+
+
+    # vector: typing.Optional[typing.List[float]] = strawberry.field(
+    #     name="vector",
+    #     default=lambda: [0.0] * 1024,
+    #     description="semantic vector, default is 1024 zeros",
+    #     permission_classes=[
+    #         OnlyForAuthentized
+    #     ]
+    # )
+
+    name: typing.Optional[str] = strawberry.field(
+        description="Name of the project",
         default=None,
         permission_classes=[OnlyForAuthentized]
     )
 
+    description: typing.Optional[str] = strawberry.field(
+        description="Description of the project",
+        default=None,
+        permission_classes=[OnlyForAuthentized]
+    )
 
-    vector: typing.Optional[typing.List[float]] = strawberry.field(
-        name="vector",
-        default=lambda: [0.0] * 1024,
-        description="semantic vector, default is 1024 zeros",
-        permission_classes=[
-            OnlyForAuthentized
-        ]
+    startdate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Start date of the project",
+        default=None,
+        permission_classes=[OnlyForAuthentized]
+    )
+
+    enddate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="End date of the project",
+        default=None,
+        permission_classes=[OnlyForAuthentized]
+    )
+
+    isdone: bool = strawberry.field(
+        description="Is the project done?",
+        default=False,
+        permission_classes=[OnlyForAuthentized]
     )
 
 @strawberry.interface(
@@ -96,6 +128,23 @@ class ProjectInsertGQLModel(InputModelMixin):
 
     id: typing.Optional[IDType] = strawberry.field(
         description="""Event id""",
+        default=None
+    )
+
+    name: typing.Optional[str] = strawberry.field(
+        description="Name of the project",
+        default=None
+    )
+    description: typing.Optional[str] = strawberry.field(
+        description="Description of the project",
+        default=None
+    )
+    startdate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Start date of the project",
+        default=None
+    )
+    enddate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="End date of the project",
         default=None
     )
 

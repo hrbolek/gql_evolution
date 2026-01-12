@@ -24,27 +24,56 @@ from sqlalchemy.dialects.postgresql import ARRAY
 ###########################################################################################################################
 class ProjectModel(BaseModel):
     __tablename__ = "projects_evolution"
+    path_attribute_name = "path"
 
-    name: Mapped[str] = mapped_column(default=None, nullable=True, comment="Name of the project")
-    description: Mapped[str] = mapped_column(default=None, nullable=True, comment="Description of the project")
-    startdate: Mapped[datetime.datetime] = mapped_column(default=None, nullable=True, comment="Start date of the project")
-    enddate: Mapped[datetime.datetime] = mapped_column(default=None, nullable=True, comment="End date of the project")
-    isdone: Mapped[bool] = mapped_column(default=False, nullable=False, comment="Is the project done?")
-    
-    # Relationships
     milestones = relationship(
         "MilestoneModel",
-        back_populates="project",
         uselist=True,
+        init=True,
         cascade="save-update, delete",
-        comment="Milestones associated with this project"
-    )
-    
-    finances = relationship(
-        "FinanceModel",
         back_populates="project",
-        uselist=True,
-        cascade="save-update, delete",
-        comment="Financial records associated with this project"
+        foreign_keys="MilestoneModel.project_id",
     )
 
+    finances = relationship(
+        "FinanceModel",
+        uselist=True,
+        init=True,
+        cascade="save-update, delete",
+        back_populates="project",
+        foreign_keys="FinanceModel.project_id",
+    )
+
+    name: Mapped[typing.Optional[str]] = mapped_column(
+        sqlalchemy.String,
+        nullable=True,
+        default=None,
+        comment="Name of the project",
+    )
+
+    description: Mapped[typing.Optional[str]] = mapped_column(
+        sqlalchemy.String,
+        nullable=True,
+        default=None,
+        comment="Description of the project",
+    )
+
+    startdate: Mapped[typing.Optional[datetime.datetime]] = mapped_column(
+        sqlalchemy.DateTime,
+        nullable=True,
+        default=None,
+        comment="Start date of the project",
+    )
+
+    enddate: Mapped[typing.Optional[datetime.datetime]] = mapped_column(
+        sqlalchemy.DateTime,
+        nullable=True,
+        default=None,
+        comment="End date of the project",
+    )
+
+    isdone: Mapped[bool] = mapped_column(
+        default=False,
+        nullable=False,
+        comment="Is the project done?",
+    )

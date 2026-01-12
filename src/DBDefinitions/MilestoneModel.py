@@ -24,29 +24,57 @@ from sqlalchemy.dialects.postgresql import ARRAY
 ###########################################################################################################################
 class MilestoneModel(BaseModel):
     __tablename__ = "Milestone_evolution"
+    path_attribute_name = "path"
 
-    name: Mapped[str] = mapped_column(default=None, nullable=True, comment="Name of the project")
-    description: Mapped[str] = mapped_column(default=None, nullable=True, comment="Description of the project")
-    duedate: Mapped[datetime.datetime] = mapped_column(default=None, nullable=True, comment="Due date of the milestone")
-    iscompleted: Mapped[bool] = mapped_column(default=False, nullable=False, comment="Is the milestone completed?")
-    
-    # Foreign Key to Project
-    project_id: Mapped[IDType] = UUIDFKey(nullable=False, comment="Reference to the project")
-    
+    # Foreign Key to Project (must be declared before defaulted fields for dataclasses)
+    project_id: Mapped[typing.Optional[IDType]] = mapped_column(
+        ForeignKey("projects_evolution.id"),
+        nullable=False,
+        default=None,
+        comment="Reference to the project",
+    )
+
+    # title / brief description
+    name: Mapped[typing.Optional[str]] = mapped_column(
+        sqlalchemy.String,
+        nullable=True,
+        default=None,
+        comment="Name of the milestone",
+    )
+
+    description: Mapped[typing.Optional[str]] = mapped_column(
+        sqlalchemy.String,
+        nullable=True,
+        default=None,
+        comment="Description of the milestone",
+    )
+
+    duedate: Mapped[typing.Optional[datetime.datetime]] = mapped_column(
+        sqlalchemy.DateTime,
+        nullable=True,
+        default=None,
+        comment="Due date of the milestone",
+    )
+
+    iscompleted: Mapped[bool] = mapped_column(
+        default=False,
+        nullable=False,
+        comment="Is the milestone completed?",
+    )
+
     # Relationship back to Project
     project = relationship(
         "ProjectModel",
         back_populates="milestones",
         uselist=False,
         foreign_keys=[project_id],
-        comment="The project this milestone belongs to"
     )
-    
+
     # Relationship to Finance
     finances = relationship(
         "FinanceModel",
         back_populates="milestone",
         uselist=True,
+        init=True,
         cascade="save-update, delete",
-        comment="Financial records associated with this milestone"
     )
