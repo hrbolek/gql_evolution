@@ -46,26 +46,35 @@ class MilestoneInputFilter:
     description="""Entity representing a Milestone""",
     keys=["id"]
 )
+
 class MilestoneGQLModel(BaseGQLModel):
     @classmethod
     def getLoader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).MilestoneModel
 
-    path: typing.Optional[str] = strawberry.field(
-        description="""Materialized path representing the group's hierarchical location.  
-Materializovaná cesta reprezentující umístění skupiny v hierarchii.""",
-        default=None,
-        permission_classes=[OnlyForAuthentized]
+    name: typing.Optional[str] = strawberry.field(
+        description="Name of the milestone",
+        default=None
     )
 
+    description: typing.Optional[str] = strawberry.field(
+        description="Description of the milestone",
+        default=None
+    )
 
-    vector: typing.Optional[typing.List[float]] = strawberry.field(
-        name="vector",
-        default=lambda: [0.0] * 1024,
-        description="semantic vector, default is 1024 zeros",
-        permission_classes=[
-            OnlyForAuthentized
-        ]
+    duedate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Due date of the milestone",
+        default=None
+    )
+
+    iscompleted: bool = strawberry.field(
+        description="Is the milestone completed?",
+        default=False
+    )
+
+    project_id: typing.Optional[IDType] = strawberry.field(
+        description="Reference to the project",
+        default=None
     )
 
 @strawberry.interface(
@@ -88,21 +97,32 @@ from uoishelpers.resolvers import TreeInputStructureMixin, InputModelMixin
 @strawberry.input(
     description="""Input type for creating a Milestone"""
 )
-
-
-
 class MilestoneInsertGQLModel(InputModelMixin):
     getLoader = MilestoneGQLModel.getLoader
 
     id: typing.Optional[IDType] = strawberry.field(
-        description="""Event id""",
+        description="""Milestone id""",
         default=None
     )
-
+    name: typing.Optional[str] = strawberry.field(
+        description="Name of the milestone",
+        default=None
+    )
+    description: typing.Optional[str] = strawberry.field(
+        description="Description of the milestone",
+        default=None
+    )
+    duedate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Due date of the milestone",
+        default=None
+    )
+    iscompleted: bool = strawberry.field(
+        description="Is the milestone completed?",
+        default=False
+    )
     rbacobject_id: IDType = strawberry.field(
         description="""Definitoin of access control"""
     )
-
     createdby_id: strawberry.Private[IDType] = None
 
 
@@ -111,15 +131,27 @@ class MilestoneInsertGQLModel(InputModelMixin):
 )
 class MilestoneUpdateGQLModel:
     id: IDType = strawberry.field(
-        description="""Event id""",
+        description="""Milestone id""",
     )
     lastchange: datetime.datetime = strawberry.field(
         description="timestamp"
     )
-    # parent_id: typing.Optional[IDType] = strawberry.field(
-    #     description="""Event parent id""",
-    #     default=None
-    # )
+    name: typing.Optional[str] = strawberry.field(
+        description="Name of the milestone",
+        default=None
+    )
+    description: typing.Optional[str] = strawberry.field(
+        description="Description of the milestone",
+        default=None
+    )
+    duedate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Due date of the milestone",
+        default=None
+    )
+    iscompleted: typing.Optional[bool] = strawberry.field(
+        description="Is the milestone completed?",
+        default=None
+    )
     changedby_id: strawberry.Private[IDType] = None
 
 @strawberry.input(

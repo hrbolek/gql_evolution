@@ -46,26 +46,35 @@ class FinanceInputFilter:
     description="""Entity representing a Finance""",
     keys=["id"]
 )
+
 class FinanceGQLModel(BaseGQLModel):
     @classmethod
     def getLoader(cls, info: strawberry.types.Info):
         return getLoadersFromInfo(info).FinanceModel
 
-    path: typing.Optional[str] = strawberry.field(
-        description="""Materialized path representing the group's hierarchical location.  
-Materializovaná cesta reprezentující umístění skupiny v hierarchii.""",
-        default=None,
-        permission_classes=[OnlyForAuthentized]
+    price: typing.Optional[float] = strawberry.field(
+        description="Price associated with the finance record",
+        default=None
     )
 
+    currency: typing.Optional[str] = strawberry.field(
+        description="Currency of the price",
+        default="CZK"
+    )
 
-    vector: typing.Optional[typing.List[float]] = strawberry.field(
-        name="vector",
-        default=lambda: [0.0] * 1024,
-        description="semantic vector, default is 1024 zeros",
-        permission_classes=[
-            OnlyForAuthentized
-        ]
+    transaction_date: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Date of the transaction",
+        default=None
+    )
+
+    project_id: typing.Optional[IDType] = strawberry.field(
+        description="Reference to the project",
+        default=None
+    )
+
+    milestone_id: typing.Optional[IDType] = strawberry.field(
+        description="Reference to the milestone",
+        default=None
     )
 
 @strawberry.interface(
@@ -88,21 +97,28 @@ from uoishelpers.resolvers import TreeInputStructureMixin, InputModelMixin
 @strawberry.input(
     description="""Input type for creating a Finance"""
 )
-
-
-
 class FinanceInsertGQLModel(InputModelMixin):
     getLoader = FinanceGQLModel.getLoader
 
     id: typing.Optional[IDType] = strawberry.field(
-        description="""Event id""",
+        description="""Finance id""",
         default=None
     )
-
+    price: typing.Optional[float] = strawberry.field(
+        description="Price associated with the finance record",
+        default=None
+    )
+    currency: typing.Optional[str] = strawberry.field(
+        description="Currency of the price",
+        default="CZK"
+    )
+    transaction_date: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Date of the transaction",
+        default=None
+    )
     rbacobject_id: IDType = strawberry.field(
         description="""Definitoin of access control"""
     )
-
     createdby_id: strawberry.Private[IDType] = None
 
 
@@ -111,15 +127,23 @@ class FinanceInsertGQLModel(InputModelMixin):
 )
 class FinanceUpdateGQLModel:
     id: IDType = strawberry.field(
-        description="""Event id""",
+        description="""Finance id""",
     )
     lastchange: datetime.datetime = strawberry.field(
         description="timestamp"
     )
-    # parent_id: typing.Optional[IDType] = strawberry.field(
-    #     description="""Event parent id""",
-    #     default=None
-    # )
+    price: typing.Optional[float] = strawberry.field(
+        description="Price associated with the finance record",
+        default=None
+    )
+    currency: typing.Optional[str] = strawberry.field(
+        description="Currency of the price",
+        default=None
+    )
+    transaction_date: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Date of the transaction",
+        default=None
+    )
     changedby_id: strawberry.Private[IDType] = None
 
 @strawberry.input(
