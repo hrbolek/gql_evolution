@@ -40,14 +40,12 @@ from .TimeUnit import TimeUnit
 @createInputs2
 class ProjectInputFilter:
     id: IDType
-    name: typing.Optional[str] = None
-    description: typing.Optional[str] = None
-
 
 @strawberry.federation.type(
     description="""Entity representing a Project""",
     keys=["id"]
 )
+
 class ProjectGQLModel(BaseGQLModel):
     @classmethod
     def getLoader(cls, info: strawberry.types.Info):
@@ -103,6 +101,7 @@ class ProjectGQLModel(BaseGQLModel):
 @strawberry.interface(
     description="""Project queries"""
 )
+
 class ProjectQuery:
     project_by_id: typing.Optional[ProjectGQLModel] = strawberry.field(
         description="""get a project by its id""",
@@ -121,8 +120,6 @@ from uoishelpers.resolvers import TreeInputStructureMixin, InputModelMixin
     description="""Input type for creating a Project"""
 )
 
-
-
 class ProjectInsertGQLModel(InputModelMixin):
     getLoader = ProjectGQLModel.getLoader
 
@@ -130,7 +127,6 @@ class ProjectInsertGQLModel(InputModelMixin):
         description="""Event id""",
         default=None
     )
-
     name: typing.Optional[str] = strawberry.field(
         description="Name of the project",
         default=None
@@ -147,9 +143,12 @@ class ProjectInsertGQLModel(InputModelMixin):
         description="End date of the project",
         default=None
     )
-
     rbacobject_id: IDType = strawberry.field(
         description="""Definitoin of access control"""
+    )
+    isdone: bool = strawberry.field(
+        description="Is the project done?",
+        default=False
     )
 
     createdby_id: strawberry.Private[IDType] = None
@@ -160,15 +159,33 @@ class ProjectInsertGQLModel(InputModelMixin):
 )
 class ProjectUpdateGQLModel:
     id: IDType = strawberry.field(
-        description="""Event id""",
+        description="""Project id""",
     )
     lastchange: datetime.datetime = strawberry.field(
         description="timestamp"
     )
-    # parent_id: typing.Optional[IDType] = strawberry.field(
-    #     description="""Event parent id""",
-    #     default=None
-    # )
+    
+    name: typing.Optional[str] = strawberry.field(
+        description="Name of the project",
+        default=None
+    )
+    description: typing.Optional[str] = strawberry.field(
+        description="Description of the project",
+        default=None
+    )
+    startdate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Start date of the project",
+        default=None
+    )
+    enddate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="End date of the project",
+        default=None
+    )
+    isdone: typing.Optional[bool] = strawberry.field(
+        description="Is the project done?",
+        default=None
+    )
+    
     changedby_id: strawberry.Private[IDType] = None
 
 @strawberry.input(
