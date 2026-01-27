@@ -263,6 +263,9 @@ async def test_project_crud():
     project_lastchange = None
     
     try:
+        # ========== KROK 2: PROJECT CREATE ==========
+        # Vytvoř nový projekt s parametry: name, description, dates, rbacobjectId, isdone
+        # Ověř, že jsou vráceny všechna pole včetně automaticky generovaného ID a lastchange
         # ===== CREATE =====
         print_test("Project CREATE", "INFO", "Creating a new project...")
         
@@ -287,6 +290,9 @@ async def test_project_crud():
         
         print_test("Project CREATE", "PASS", f"id={project_id[:8]}..., name='{project_data['name']}', isdone={project_data['isdone']}")
     
+        # ========== KROK 3: PROJECT READ ==========
+        # Načti vytvořený projekt z DB pomocí jeho ID
+        # Ověř, že všechna vrácená pole odpovídají datům, která byla vložena v CREATE
         # ===== READ =====
         print_test("Project READ", "INFO", f"Reading project {project_id[:8]}...")
         client = createFederationClient()
@@ -301,6 +307,10 @@ async def test_project_crud():
         details = f"name='{read_project['name']}', description='{read_project.get('description', 'N/A')[:30]}...', isdone={read_project['isdone']}"
         print_test("Project READ", "PASS", details)
     
+        # ========== KROK 4: PROJECT UPDATE ==========
+        # Aktualizuj projekt: změní se name, description, dates a isdone (False -> True)
+        # DŮLEŽITÉ: Musíš poslat správný lastchange z READ kroku, jinak server odmítne update
+        # Ověř, že se všechna pole skutečně změnila v DB
         # ===== UPDATE =====
         print_test("Project UPDATE", "INFO", "Updating project...")
         update_vars = {
@@ -326,6 +336,11 @@ async def test_project_crud():
         
         print_test("Project UPDATE", "PASS", f"name: 'Test Project' → '{updated_project['name']}', isdone: False → {updated_project['isdone']}")
     
+        # ========== KROK 5: PROJECT UPDATE (STALE DATA TEST) ==========
+        # Toto je TEST OPTIMISTICKÉHO UZAMYKÁNÍ (optimistic locking)
+        # Pokus se updatovat projekt se ŠPATNÝM lastchange (z roku 2020)
+        # Server MUSÍ odmítnout s chybou ProjectGQLModelUpdateError
+        # Tím se zabraňuje konfliktům když dvě operace zkoušejí updatovat stejný záznam
         # ===== UPDATE with wrong lastchange (should fail) =====
         print_test("Project UPDATE (stale data)", "INFO", "Testing with wrong lastchange...")
         bad_update_vars = {
@@ -343,6 +358,10 @@ async def test_project_crud():
         print_test("Project UPDATE (stale data)", "PASS", f"Correctly rejected: {bad_update['msg'][:50]}...")
         
     finally:
+        # ========== KROK 6: PROJECT DELETE ==========
+        # Smaž projekt - DŮLEŽITÉ: Je v finally bloku!
+        # To znamená, že se spustí VŽDYCKY, i když některý z testů výše selhaje
+        # Tím se zajistí čištění DB a prevence sirotčích záznamů
         # ===== DELETE (cleanup always runs) =====
         if project_id and project_lastchange:
             print_test("Project DELETE", "INFO", f"Deleting project {project_id[:8]}...")
@@ -364,7 +383,9 @@ async def main():
     print(f"{'  GRAPHQL CRUD TEST SUITE':^60}")
     print(f"{'='*60}{Colors.RESET}\n")
     
-    # Check initial database state
+    # ========== KROK 1: PRE-TEST CHECK ==========
+    # Ověř, že server běží a spočítej počáteční počet projektů
+    # Toto slouží jako baseline pro ověření čištění DB na konci
     print_test("Pre-test Check", "INFO", "Checking initial database state...")
     client = createFederationClient()
     initial_projects = await client(PROJECT_PAGE, {})
@@ -388,6 +409,10 @@ async def main():
     try:
         await test_project_crud()
         
+        # ========== KROK 7: POST-TEST CHECK ==========
+        # Spustí PROJECT_PAGE query znovu a porovná počet projektů
+        # Počet by měl být STEJNÝ jako na začátku (initial_project_count)
+        # Pokud je jiný, znamená to, že DELETE v kroku 6 neprošel a zůstaly sirotčí záznamy
         # Check final database state
         print_test("Post-test Check", "INFO", "Verifying database cleanup...")
         final_projects = await client(PROJECT_PAGE, {})
