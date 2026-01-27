@@ -104,6 +104,13 @@ class FinanceInsertGQLModel(InputModelMixin):
         description="""Finance id""",
         default=None
     )
+    project_id: IDType = strawberry.field(
+        description="""Project id - required"""
+    )
+    milestone_id: typing.Optional[IDType] = strawberry.field(
+        description="""Milestone id - optional""",
+        default=None
+    )
     price: typing.Optional[float] = strawberry.field(
         description="Price associated with the finance record",
         default=None

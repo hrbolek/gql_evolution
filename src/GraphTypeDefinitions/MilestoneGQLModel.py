@@ -104,6 +104,9 @@ class MilestoneInsertGQLModel(InputModelMixin):
         description="""Milestone id""",
         default=None
     )
+    project_id: IDType = strawberry.field(
+        description="""Project id - required"""
+    )
     name: typing.Optional[str] = strawberry.field(
         description="Name of the milestone",
         default=None
