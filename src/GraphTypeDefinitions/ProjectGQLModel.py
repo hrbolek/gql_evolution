@@ -46,6 +46,7 @@ class ProjectInputFilter:
     keys=["id"]
 )
 
+## Entity representující projekt, který bude obsahovat informace o projektu
 class ProjectGQLModel(BaseGQLModel):
     @classmethod
     def getLoader(cls, info: strawberry.types.Info):
@@ -98,8 +99,9 @@ class ProjectGQLModel(BaseGQLModel):
         permission_classes=[OnlyForAuthentized]
     )
 
-@strawberry.interface(
-    description="""Project queries"""
+
+@strawberry.interface( 
+    description="""Project queries""" #dotazovací rozhraní pro projekt, které bude obsahovat dotazy pro získání projektu podle id a pro získání stránky projektů
 )
 
 class ProjectQuery:
@@ -120,7 +122,7 @@ from uoishelpers.resolvers import TreeInputStructureMixin, InputModelMixin
     description="""Input type for creating a Project"""
 )
 
-class ProjectInsertGQLModel(InputModelMixin):
+class ProjectInsertGQLModel(InputModelMixin): #vstupní model pro vytvoření projektu, který bude obsahovat stejné pole jako ProjectGQLModel a bude mít metodu getLoader pro získání loaderu pro projekt
     getLoader = ProjectGQLModel.getLoader
 
     id: typing.Optional[IDType] = strawberry.field(
@@ -157,7 +159,7 @@ class ProjectInsertGQLModel(InputModelMixin):
 @strawberry.input(
     description="""Input type for updating a Project"""
 )
-class ProjectUpdateGQLModel:
+class ProjectUpdateGQLModel:#vstupní model pro aktualizaci projektu, který bude obsahovat stejné pole jako ProjectGQLModel a bude mít metodu getLoader pro získání loaderu pro projekt
     id: IDType = strawberry.field(
         description="""Project id""",
     )
@@ -191,7 +193,7 @@ class ProjectUpdateGQLModel:
 @strawberry.input(
     description="""Input type for deleting a Project"""
 )
-class ProjectDeleteGQLModel:
+class ProjectDeleteGQLModel:#vstupní model pro smazání projektu, který bude obsahovat pole id pro identifikaci projektu a pole lastchange pro kontrolu změn
     id: IDType = strawberry.field(
         description="""Project id""",
     )

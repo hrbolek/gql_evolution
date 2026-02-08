@@ -85,3 +85,8 @@
 **Autor: vojtechvel** - Aktualizace pracovního deníku
 - Přidání informací o postupu v projektu
 
+## 2026-02-08
+**Autor: vojtechvel** - Přidání komentářů
+- Přidání komentářů pro lepší čitelnost kodu
+- Změny pro Projekt, Finance, Milestone Model a GQLModel
+

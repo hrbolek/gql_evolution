@@ -50,7 +50,7 @@ class FinanceInputFilter:
 class FinanceGQLModel(BaseGQLModel):
     @classmethod
     def getLoader(cls, info: strawberry.types.Info):
-        return getLoadersFromInfo(info).FinanceModel
+        return getLoadersFromInfo(info).FinanceModel #metoda pro získání loaderu pro finance, která bude použita pro načítání dat o financích z databáze
 
     price: typing.Optional[float] = strawberry.field(
         description="Price associated with the finance record",
@@ -78,7 +78,7 @@ class FinanceGQLModel(BaseGQLModel):
     )
 
 @strawberry.interface(
-    description="""Finance queries"""
+    description="""Finance queries""" #dotazovací rozhraní pro finance, které bude obsahovat dotazy pro získání financí podle id a pro získání stránky financí
 )
 class FinanceQuery:
     finance_by_id: typing.Optional[FinanceGQLModel] = strawberry.field(
@@ -97,7 +97,7 @@ from uoishelpers.resolvers import TreeInputStructureMixin, InputModelMixin
 @strawberry.input(
     description="""Input type for creating a Finance"""
 )
-class FinanceInsertGQLModel(InputModelMixin):
+class FinanceInsertGQLModel(InputModelMixin): #vstupní model pro vytvoření financí, který bude obsahovat stejné pole jako FinanceGQLModel a bude mít metodu getLoader pro získání loaderu pro finance
     getLoader = FinanceGQLModel.getLoader
 
     id: typing.Optional[IDType] = strawberry.field(
@@ -130,7 +130,7 @@ class FinanceInsertGQLModel(InputModelMixin):
 
 
 @strawberry.input(
-    description="""Input type for updating a Finance"""
+    description="""Input type for updating a Finance""" #vstupní model pro aktualizaci financí, který bude obsahovat stejné pole jako FinanceGQLModel a bude mít metodu getLoader pro získání loaderu pro finance
 )
 class FinanceUpdateGQLModel:
     id: IDType = strawberry.field(
@@ -154,7 +154,7 @@ class FinanceUpdateGQLModel:
     changedby_id: strawberry.Private[IDType] = None
 
 @strawberry.input(
-    description="""Input type for deleting a Finance"""
+    description="""Input type for deleting a Finance""" #vstupní model pro smazání financí, který bude obsahovat pole id pro identifikaci financí a pole lastchange pro kontrolu změn
 )
 class FinanceDeleteGQLModel:
     id: IDType = strawberry.field(

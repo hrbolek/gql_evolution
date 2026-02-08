@@ -19,15 +19,16 @@ from sqlalchemy.dialects.postgresql import ARRAY
 ###########################################################################################################################
 #
 # zde definujte sve SQLAlchemy modely
-# je-li treba, muzete definovat modely obsahujici jen id polozku, na ktere se budete odkazovat
+# 
+# Model pro milestone, který bude obsahovat informace o milestonu a bude mít vztah N:1 na ProjectModel
+# Model obsahuje id, project_id, name, description, duedate, iscompleted
 #
 ###########################################################################################################################
 class MilestoneModel(BaseModel):
     __tablename__ = "Milestone_evolution"
     path_attribute_name = "path"
 
-    # Foreign Key to Project (must be declared before defaulted fields for dataclasses)
-    project_id: Mapped[typing.Optional[IDType]] = mapped_column(
+    project_id: Mapped[typing.Optional[IDType]] = mapped_column( #Foreign Key na projekt, který bude obsahovat odkaz na projekt,
         ForeignKey("projects_evolution.id"),
         nullable=False,
         default=None,
@@ -35,35 +36,35 @@ class MilestoneModel(BaseModel):
     )
 
     # title / brief description
-    name: Mapped[typing.Optional[str]] = mapped_column(
+    name: Mapped[typing.Optional[str]] = mapped_column( #název milestonu, který bude obsahovat textový řetězec
         sqlalchemy.String,
         nullable=True,
         default=None,
         comment="Name of the milestone",
     )
 
-    description: Mapped[typing.Optional[str]] = mapped_column(
+    description: Mapped[typing.Optional[str]] = mapped_column( #popis milestonu, který bude obsahovat textový řetězec
         sqlalchemy.String,
         nullable=True,
         default=None,
         comment="Description of the milestone",
     )
 
-    duedate: Mapped[typing.Optional[datetime.datetime]] = mapped_column(
+    duedate: Mapped[typing.Optional[datetime.datetime]] = mapped_column( #datum splnění milestonu, které bude obsahovat datum a čas
         sqlalchemy.DateTime,
         nullable=True,
         default=None,
         comment="Due date of the milestone",
     )
 
-    iscompleted: Mapped[bool] = mapped_column(
+    iscompleted: Mapped[bool] = mapped_column( #informace o tom, zda je mileston splněn, která bude obsahovat boolean hodnotu
         default=False,
         nullable=False,
         comment="Is the milestone completed?",
     )
 
-    # Relationship back to Project
-    project = relationship(
+    
+    project = relationship( #popis vztahu N:1 mezi milestonem a projektem
         "ProjectModel",
         back_populates="milestones",
         uselist=False,

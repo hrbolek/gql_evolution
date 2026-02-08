@@ -49,7 +49,7 @@ class MilestoneInputFilter:
 
 class MilestoneGQLModel(BaseGQLModel):
     @classmethod
-    def getLoader(cls, info: strawberry.types.Info):
+    def getLoader(cls, info: strawberry.types.Info): #metoda pro získání loaderu pro mileston, která bude použita pro načítání dat o milestonu z databáze
         return getLoadersFromInfo(info).MilestoneModel
 
     name: typing.Optional[str] = strawberry.field(
@@ -78,7 +78,7 @@ class MilestoneGQLModel(BaseGQLModel):
     )
 
 @strawberry.interface(
-    description="""Milestone queries"""
+    description="""Milestone queries""" #dotazovací rozhraní pro mileston, které bude obsahovat dotazy pro získání milestonu podle id a pro získání stránky milestonů
 )
 class MilestoneQuery:
     milestone_by_id: typing.Optional[MilestoneGQLModel] = strawberry.field(
@@ -95,7 +95,7 @@ class MilestoneQuery:
 
 from uoishelpers.resolvers import TreeInputStructureMixin, InputModelMixin
 @strawberry.input(
-    description="""Input type for creating a Milestone"""
+    description="""Input type for creating a Milestone""" #vstupní model pro vytvoření milestonu, který bude obsahovat stejné pole jako MilestoneGQLModel a bude mít metodu getLoader pro získání loaderu pro mileston
 )
 class MilestoneInsertGQLModel(InputModelMixin):
     getLoader = MilestoneGQLModel.getLoader
@@ -130,7 +130,7 @@ class MilestoneInsertGQLModel(InputModelMixin):
 
 
 @strawberry.input(
-    description="""Input type for updating a Milestone"""
+    description="""Input type for updating a Milestone""" #vstupní model pro aktualizaci milestonu, který bude obsahovat stejné pole jako MilestoneGQLModel a bude mít metodu getLoader pro získání loaderu pro mileston
 )
 class MilestoneUpdateGQLModel:
     id: IDType = strawberry.field(
@@ -158,7 +158,7 @@ class MilestoneUpdateGQLModel:
     changedby_id: strawberry.Private[IDType] = None
 
 @strawberry.input(
-    description="""Input type for deleting a Milestone"""
+    description="""Input type for deleting a Milestone""" #vstupní model pro smazání milestonu, který bude obsahovat pole id pro identifikaci milestonu a pole lastchange pro kontrolu změn
 )
 class MilestoneDeleteGQLModel:
     id: IDType = strawberry.field(

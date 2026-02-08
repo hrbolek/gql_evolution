@@ -19,15 +19,17 @@ from sqlalchemy.dialects.postgresql import ARRAY
 ###########################################################################################################################
 #
 # zde definujte sve SQLAlchemy modely
-# je-li treba, muzete definovat modely obsahujici jen id polozku, na ktere se budete odkazovat
+# 
+# Model pro finance, který bude obsahovat informace o financích projektu a bude mít vztah N:1 na ProjectModel
+# Model obsahuje id, project_id, milestone_id, price, currency, transaction_date
 #
 ###########################################################################################################################
 class FinanceModel(BaseModel):
     __tablename__ = "finance_evolution"
 
-    # Foreign Keys (declare before defaulted fields)
-    project_id: Mapped[typing.Optional[IDType]] = mapped_column(
-        ForeignKey("projects_evolution.id"),
+    
+    project_id: Mapped[typing.Optional[IDType]] = mapped_column(#Foreign Key na projekt, který bude obsahovat odkaz na projekt,
+        ForeignKey("projects_evolution.id"),                    #ke kterému finance patří
         nullable=False,
         default=None,
         comment="Reference to the project",
@@ -40,27 +42,28 @@ class FinanceModel(BaseModel):
         comment="Reference to the milestone",
     )
 
-    price: Mapped[typing.Optional[float]] = mapped_column(
+    
+    price: Mapped[typing.Optional[float]] = mapped_column( #cena spojená s finančním záznamem, která bude obsahovat desetinné číslo
         default=0.0,
         nullable=True,
         comment="Price associated with the finance record",
     )
 
-    currency: Mapped[typing.Optional[str]] = mapped_column(
+    currency: Mapped[typing.Optional[str]] = mapped_column( #měna spojená s finančním záznamem, která bude obsahovat textový řetězec, například "CZK" nebo "USD"
         sqlalchemy.String,
         nullable=True,
         default="CZK",
         comment="Currency of the price",
     )
 
-    transaction_date: Mapped[typing.Optional[datetime.datetime]] = mapped_column(
+    transaction_date: Mapped[typing.Optional[datetime.datetime]] = mapped_column( #datum transakce spojené s finančním záznamem, které bude obsahovat datum a čas
         sqlalchemy.DateTime,
         nullable=True,
         default=None,
         comment="Date of the transaction",
     )
 
-    # Relationships
+    # vztah N:1 na ProjectModel, který bude obsahovat odkaz na projekt, ke kterému finance patří
     project = relationship(
         "ProjectModel",
         back_populates="finances",

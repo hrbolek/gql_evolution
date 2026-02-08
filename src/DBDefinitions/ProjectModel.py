@@ -19,24 +19,27 @@ from sqlalchemy.dialects.postgresql import ARRAY
 ###########################################################################################################################
 #
 # zde definujte sve SQLAlchemy modely
-# je-li treba, muzete definovat modely obsahujici jen id polozku, na ktere se budete odkazovat
+# 
+# Model pro projekt, ktery bude obsahovat informace o projektu a bude mit vztah 1:N na MilestoneModel a FinanceModel
+# Model obsahuje id, name, description, startdate, enddate, isdone
+#
 #
 ###########################################################################################################################
 class ProjectModel(BaseModel):
     __tablename__ = "projects_evolution"
     path_attribute_name = "path"
 
-    milestones = relationship(
-        "MilestoneModel",
-        uselist=True,
+    milestones = relationship( #popis vztahu 1:N mezi projektem a milestonem, ktery bude obsahovat seznam milestonu,                     
+        "MilestoneModel",      #ktere patri k projektu
+        uselist=True,         
         init=True,
         cascade="save-update, delete",
         back_populates="project",
         foreign_keys="MilestoneModel.project_id",
     )
 
-    finances = relationship(
-        "FinanceModel",
+    finances = relationship( #popis vztahu 1:N mezi projektem a financemi, ktery bude obsahovat seznam milestonu,
+        "FinanceModel",      #ktere patri k projektu
         uselist=True,
         init=True,
         cascade="save-update, delete",
@@ -44,35 +47,35 @@ class ProjectModel(BaseModel):
         foreign_keys="FinanceModel.project_id",
     )
 
-    name: Mapped[typing.Optional[str]] = mapped_column(
+    name: Mapped[typing.Optional[str]] = mapped_column( #nazev projektu, ktery bude obsahovat textový řetězec
         sqlalchemy.String,
         nullable=True,
         default=None,
         comment="Name of the project",
     )
 
-    description: Mapped[typing.Optional[str]] = mapped_column(
+    description: Mapped[typing.Optional[str]] = mapped_column( #popis projektu, ktery bude obsahovat textový řetězec
         sqlalchemy.String,
         nullable=True,
         default=None,
         comment="Description of the project",
     )
 
-    startdate: Mapped[typing.Optional[datetime.datetime]] = mapped_column(
+    startdate: Mapped[typing.Optional[datetime.datetime]] = mapped_column( #datum zahájení projektu, který bude obsahovat datum a čas
         sqlalchemy.DateTime,
         nullable=True,
         default=None,
         comment="Start date of the project",
     )
 
-    enddate: Mapped[typing.Optional[datetime.datetime]] = mapped_column(
+    enddate: Mapped[typing.Optional[datetime.datetime]] = mapped_column( #datum ukončení projektu, který bude obsahovat datum a čas
         sqlalchemy.DateTime,
         nullable=True,
         default=None,
         comment="End date of the project",
     )
 
-    isdone: Mapped[bool] = mapped_column(
+    isdone: Mapped[bool] = mapped_column( #indikátor dokončení projektu
         default=False,
         nullable=False,
         comment="Is the project done?",
