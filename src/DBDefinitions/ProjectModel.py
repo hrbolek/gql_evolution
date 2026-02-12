@@ -27,25 +27,6 @@ from sqlalchemy.dialects.postgresql import ARRAY
 ###########################################################################################################################
 class ProjectModel(BaseModel):
     __tablename__ = "projects_evolution"
-    path_attribute_name = "path"
-
-    milestones = relationship( #popis vztahu 1:N mezi projektem a milestonem, ktery bude obsahovat seznam milestonu,                     
-        "MilestoneModel",      #ktere patri k projektu
-        uselist=True,         
-        init=True,
-        cascade="save-update, delete",
-        back_populates="project",
-        foreign_keys="MilestoneModel.project_id",
-    )
-
-    finances = relationship( #popis vztahu 1:N mezi projektem a financemi, ktery bude obsahovat seznam milestonu,
-        "FinanceModel",      #ktere patri k projektu
-        uselist=True,
-        init=True,
-        cascade="save-update, delete",
-        back_populates="project",
-        foreign_keys="FinanceModel.project_id",
-    )
 
     name: Mapped[typing.Optional[str]] = mapped_column( #nazev projektu, ktery bude obsahovat textový řetězec
         sqlalchemy.String,
@@ -79,4 +60,29 @@ class ProjectModel(BaseModel):
         default=False,
         nullable=False,
         comment="Is the project done?",
+    )
+
+    projecttype: Mapped[typing.Optional[str]] = mapped_column( #typ projektu - vědecký, stavební, marketingový
+        sqlalchemy.String,
+        nullable=True,
+        default=None,
+        comment="Type of the project (scientific, construction, marketing)",
+    )
+
+    milestones = relationship( #popis vztahu 1:N mezi projektem a milestonem, ktery bude obsahovat seznam milestonu,                     
+        "MilestoneModel",      #ktere patri k projektu
+        uselist=True,         
+        init=True,
+        cascade="save-update, delete",
+        back_populates="project",
+        foreign_keys="MilestoneModel.project_id",
+    )
+
+    finances = relationship( #popis vztahu 1:N mezi projektem a financemi, ktery bude obsahovat seznam milestonu,
+        "FinanceModel",      #ktere patri k projektu
+        uselist=True,
+        init=True,
+        cascade="save-update, delete",
+        back_populates="project",
+        foreign_keys="FinanceModel.project_id",
     )

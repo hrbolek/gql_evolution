@@ -115,8 +115,12 @@ class MilestoneInsertGQLModel(InputModelMixin):
         description="Description of the milestone",
         default=None
     )
-    duedate: typing.Optional[datetime.datetime] = strawberry.field(
-        description="Due date of the milestone",
+    enddate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="End date of the milestone",
+        default=None
+    )
+    startdate: typing.Optional[datetime.datetime] = strawberry.field(
+        description="Start date of the milestone",
         default=None
     )
     iscompleted: bool = strawberry.field(

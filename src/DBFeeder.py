@@ -5,8 +5,6 @@ from uoishelpers.feeders import ImportModels
 from uoishelpers.dataloaders import readJsonFile
 
 from src.DBDefinitions import (
-    EventModel, 
-    EventInvitationModel,
     ProjectModel,
     FinanceModel,
     MilestoneModel,
@@ -22,8 +20,6 @@ async def initDB(asyncSessionMaker, filename="./systemdata.json"):
     if isDemo:
         print("Demo mode", flush=True)
         dbModels = [
-            EventModel, 
-            EventInvitationModel,
             ProjectModel,
             FinanceModel,
             MilestoneModel,
@@ -42,8 +38,9 @@ async def backupDB(asyncSessionMaker, filename="./systemdata.backup.json"):
     from src.DBDefinitions.BaseModel import IDType
 
     dbModels = [
-        EventModel, 
-        EventInvitationModel,
+        ProjectModel,
+        FinanceModel,
+        MilestoneModel,
     ]
     data = []
     async with asyncSessionMaker() as session:

@@ -36,6 +36,8 @@ from uoishelpers.gqlpermissions.UserAbsoluteAccessControlExtension import UserAb
 
 from .BaseGQLModel import BaseGQLModel, IDType, Relation
 from .TimeUnit import TimeUnit
+from .ProjectType import ProjectType
+
 
 @createInputs2
 class ProjectInputFilter:
@@ -99,6 +101,12 @@ class ProjectGQLModel(BaseGQLModel):
         permission_classes=[OnlyForAuthentized]
     )
 
+    projecttype: typing.Optional[str] = strawberry.field(
+        description="Type of the project (scientific, construction, marketing)",
+        default=None,
+        permission_classes=[OnlyForAuthentized]
+    )
+
 
 @strawberry.interface( 
     description="""Project queries""" #dotazovací rozhraní pro projekt, které bude obsahovat dotazy pro získání projektu podle id a pro získání stránky projektů
@@ -153,6 +161,11 @@ class ProjectInsertGQLModel(InputModelMixin): #vstupní model pro vytvoření pr
         default=False
     )
 
+    projecttype: typing.Optional[str] = strawberry.field(
+        description="Type of the project (scientific, construction, marketing)",
+        default=None
+    )
+
     createdby_id: strawberry.Private[IDType] = None
 
 
@@ -187,6 +200,11 @@ class ProjectUpdateGQLModel:#vstupní model pro aktualizaci projektu, který bud
         description="Is the project done?",
         default=None
     )
+
+    projecttype: typing.Optional[str] = strawberry.field(
+        description="Type of the project (scientific, construction, marketing)",
+        default=None
+    )
     
     changedby_id: strawberry.Private[IDType] = None
 
@@ -215,7 +233,6 @@ class ProjectMutation:
             # UpdatePermissionCheckRoleFieldExtension[GroupGQLModel](roles=["administrátor", "personalista"]),
             UserAccessControlExtension[InsertError, ProjectGQLModel](
                 roles=[
-                    "plánovací administrátor", 
                     "administrátor"
                 ]
             ),

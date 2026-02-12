@@ -7,8 +7,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from .BaseModel import BaseModel
-from .EventDBModel import EventModel
-from .EventInvitationModel import EventInvitationModel
 from .ProjectModel import ProjectModel
 from .FinanceModel import FinanceModel
 from .MilestoneModel import MilestoneModel

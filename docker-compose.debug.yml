@@ -12,7 +12,7 @@ services:
     build:
       context: ./proxy  # Path to the directory containing the Dockerfile
     environment:
-      - TARGET_SERVER=http://host.docker.internal:8001
+      - TARGET_SERVER=http://host.docker.internal:8000
 
   frontend:
     image: hrbolek/frontend

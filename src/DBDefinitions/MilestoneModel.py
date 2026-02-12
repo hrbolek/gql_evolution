@@ -26,7 +26,6 @@ from sqlalchemy.dialects.postgresql import ARRAY
 ###########################################################################################################################
 class MilestoneModel(BaseModel):
     __tablename__ = "Milestone_evolution"
-    path_attribute_name = "path"
 
     project_id: Mapped[typing.Optional[IDType]] = mapped_column( #Foreign Key na projekt, který bude obsahovat odkaz na projekt,
         ForeignKey("projects_evolution.id"),
@@ -50,11 +49,18 @@ class MilestoneModel(BaseModel):
         comment="Description of the milestone",
     )
 
-    duedate: Mapped[typing.Optional[datetime.datetime]] = mapped_column( #datum splnění milestonu, které bude obsahovat datum a čas
+    enddate: Mapped[typing.Optional[datetime.datetime]] = mapped_column( #datum splnění milestonu, které bude obsahovat datum a čas
         sqlalchemy.DateTime,
         nullable=True,
         default=None,
-        comment="Due date of the milestone",
+        comment="End date of the milestone",
+    )
+
+    startdate: Mapped[typing.Optional[datetime.datetime]] = mapped_column( #datum splnění milestonu, které bude obsahovat datum a čas
+        sqlalchemy.DateTime,
+        nullable=True,
+        default=None,
+        comment="Start date of the milestone",
     )
 
     iscompleted: Mapped[bool] = mapped_column( #informace o tom, zda je mileston splněn, která bude obsahovat boolean hodnotu
