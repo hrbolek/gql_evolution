@@ -86,6 +86,7 @@ async def Sdl(SchemaExecutor):
     sdl_json_result = await SchemaExecutor(query=service_sdl_query)
     data = sdl_json_result.get("data", {})
     sdl_str = data["_service"]["sdl"]
+    # assert False
     return parse(sdl_str)
 
 

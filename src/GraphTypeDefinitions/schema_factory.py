@@ -32,8 +32,8 @@ def get_production_extensions() -> list[ExtensionSpec]:
         SessionCommitExtension,
         WhoAmIExtension,
         RolePermissionSchemaExtension,
-        ParserCache(1000),
-        ValidationCache(1000),
+        lambda:ParserCache(1000),
+        lambda:ValidationCache(1000),
     ]
 
 
