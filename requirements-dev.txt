@@ -1,0 +1,25 @@
+# To ensure app dependencies are ported from your virtual environment/host machine into your container, run 'pip freeze > requirements.txt' in the terminal to overwrite this file
+fastapi[all]
+uvicorn[standard]
+gunicorn
+
+asyncpg
+aiohttp
+requests
+
+sqlalchemy[asyncio]
+sqlalchemy_utils
+
+pydantic
+starlette
+strawberry-graphql
+aiodataloader
+pyjwt[crypto]
+
+https://github.com/hrbolek/uoishelpers/archive/refs/heads/main.zip
+
+pytest
+pytest-cov
+pytest-asyncio
+aiosqlite
+https://github.com/hrbolek/PyMockOAuthServer/archive/refs/heads/main.zip

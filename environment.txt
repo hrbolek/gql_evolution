@@ -1,0 +1,3 @@
+DEMO=True
+DEMODATA=True
+GQLUG_ENDPOINT_URL=http://localhost:33003/gql

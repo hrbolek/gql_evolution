@@ -1,0 +1,16 @@
+[project]
+name = 'event-boilerplate-project'
+version = '0.1.0'
+description = 'Event/EventInvitation boilerplate for Strawberry GraphQL federation using uoishelpers'
+requires-python = '>=3.12'
+dependencies = [
+  'strawberry-graphql',
+  'sqlalchemy',
+  'asyncpg',
+  'greenlet',
+  'uoishelpers @ https://github.com/hrbolek/uoishelpers/archive/refs/heads/main.zip',
+]
+
+[tool.pytest.ini_options]
+testpaths = ['tests']
+pythonpath = ['.']
