@@ -1,0 +1,30 @@
+{
+  "name": "GraphQL Subgraph + AI Coder",
+
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+
+  "workspaceFolder": "/workspaces/project",
+
+  "forwardPorts": [
+    7932
+  ],
+
+  "portsAttributes": {
+    "7932": {
+      "label": "PydanticAI Coder",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "postCreateCommand": "pip install -r requirements-dev.txt",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  }
+}

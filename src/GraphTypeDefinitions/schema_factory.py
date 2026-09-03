@@ -57,7 +57,10 @@ def create_schema(
     selected_extensions = list(extensions) if extensions is not None else get_production_extensions()
 
     if include_cache_extensions:
-        selected_extensions.extend([ParserCache(1000), ValidationCache(1000)])
+        selected_extensions.extend([
+            lambda: ParserCache(1000),
+            lambda: ValidationCache(1000)
+        ])
 
     return strawberry.federation.Schema(
         query=Query,

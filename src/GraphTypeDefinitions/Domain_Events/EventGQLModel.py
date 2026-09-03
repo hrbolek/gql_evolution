@@ -13,6 +13,7 @@ from uoishelpers.resolvers import (
     InputModelMixin,
     PageResolver,
     UpdateError,
+    ScalarResolver,
     VectorResolver,
     createInputs2,
 )
@@ -24,7 +25,7 @@ from .TimeUnit import TimeUnit
 
 EventInvitationGQLModel = typing.Annotated['EventInvitationGQLModel', strawberry.lazy('.EventInvitationGQLModel')]
 EventInvitationInputFilter = typing.Annotated['EventInvitationInputFilter', strawberry.lazy('.EventInvitationGQLModel')]
-
+# EventTypeGQLModel = typing.Annotated['EventTypeGQLModel', strawberry.lazy('.EventTypeGQLModel')]
 
 @createInputs2
 class EventInputFilter:
@@ -51,6 +52,9 @@ class EventGQLModel(BaseGQLModel):
     place: typing.Optional[str] = strawberry.field(default=None, description='where the event will happen', permission_classes=[OnlyForAuthentized])
     valid: typing.Optional[bool] = strawberry.field(default=None, description='If the event is valid', permission_classes=[OnlyForAuthentized])
     masterevent_id: typing.Optional[IDType] = strawberry.field(default=None, description='Parent event id', permission_classes=[OnlyForAuthentized])
+
+    # event_type: typing.Optional['EventTypeGQLModel'] = strawberry.field(description='Event type', permission_classes=[OnlyForAuthentized], resolver=ScalarResolver['EventTypeGQLModel'](fkey_field_name='type_id'))
+    event_type_id: typing.Optional[IDType] = strawberry.field(default=None, description='Event type id', permission_classes=[OnlyForAuthentized])
 
     subevents: typing.List['EventGQLModel'] = strawberry.field(description='Event children', permission_classes=[OnlyForAuthentized], resolver=VectorResolver['EventGQLModel'](fkey_field_name='masterevent_id', whereType=EventInputFilter))
     user_invitations: typing.List[EventInvitationGQLModel] = strawberry.field(description='Event invitations', permission_classes=[OnlyForAuthentized], resolver=VectorResolver[EventInvitationGQLModel](fkey_field_name='event_id', whereType=EventInvitationInputFilter))

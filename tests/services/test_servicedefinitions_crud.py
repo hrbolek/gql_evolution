@@ -88,7 +88,7 @@ def service_has_standard_crud(service_cls: type[BaseService]) -> bool:
     )
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture#(scope="session")
 def service_classes() -> list[tuple[str, type[BaseService]]]:
     result = [
         (name, service_cls)

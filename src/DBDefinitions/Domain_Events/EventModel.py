@@ -45,6 +45,9 @@ class EventModel(BaseDBModel):
     
     place: Mapped[str] = mapped_column(default=None, nullable=True)
     facility_id: Mapped[IDType] = UUIDFKey(nullable=True)
+    type_id: Mapped[IDType] = mapped_column(ForeignKey("eventtypes.id"), index=True, nullable=True, default=None)
+    # type = relationship("EventTypeModel", back_populates="events")
+    type = relationship("EventTypeModel", viewonly=True)
 
     @hybrid_property
     def duration(self):

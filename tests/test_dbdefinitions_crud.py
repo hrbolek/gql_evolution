@@ -52,7 +52,7 @@ from src.DBDefinitions.main import (
 JsonDict = dict[str, typing.Any]
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture#(scope="session")
 def mapped_classes() -> list[type]:
     """
     Vrátí všechny SQLAlchemy mapované třídy.

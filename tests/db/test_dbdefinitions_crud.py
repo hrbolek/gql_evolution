@@ -31,6 +31,7 @@ import typing
 import uuid
 
 import pytest
+import pytest_asyncio
 import sqlalchemy
 from sqlalchemy import inspect
 from sqlalchemy.orm.properties import ColumnProperty, RelationshipProperty
@@ -52,7 +53,7 @@ from src.DBDefinitions.main import (
 JsonDict = dict[str, typing.Any]
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture#(scope="session")
 def mapped_classes() -> list[type]:
     """
     Vrátí všechny SQLAlchemy mapované třídy.
@@ -67,7 +68,7 @@ def mapped_classes() -> list[type]:
     return result
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def db_session():
     """
     Vytvoří async session pro DB test.
