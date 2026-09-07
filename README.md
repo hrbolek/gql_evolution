@@ -75,3 +75,9 @@ GraphTypeDefinitions/
 5. `InputFilter` přes `@createInputs2`.
 6. Query přes `PageResolver(... whereType=...)`.
 7. Mutace přes `ExecuteServiceMethod`.
+
+## Spuštění Coder
+
+```bash
+python .CoderDefinitions/main.py
+```

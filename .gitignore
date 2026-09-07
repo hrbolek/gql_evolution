@@ -16,6 +16,8 @@
 **/.pytest_cache
 **/.venv
 
+**/*.zip
+
 # misc
 .DS_Store
 .env.local
