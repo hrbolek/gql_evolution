@@ -14,11 +14,9 @@ against the test schema instead of calling resolvers or services directly.
 
 from __future__ import annotations
 
-import uuid
-
 import pytest
-import logging
-from tests.support.asserts import assert_insert, assert_update, assert_delete, assert_same, assert_typename_with_error
+from tests.support.asserts import assert_insert, assert_update, assert_delete, assert_same
+from tests.support.explicit_fixtures import EXPLICIT_PARENT_EVENT_ID
 
 async def event_insert(SchemaExecutor, CreateMutation, variables):
     query = CreateMutation("eventInsert")
@@ -60,7 +58,7 @@ async def test_event_insert(SchemaExecutor, CreateMutation, WhoAmIExtensionOverr
     )
 
     event = {
-        "mastereventId": "a64871f8-2308-48ff-adb2-33fb0b0741f1",
+        "mastereventId": str(EXPLICIT_PARENT_EVENT_ID),
         "name": "Test Event",
     }
     result = await event_insert(SchemaExecutor, CreateMutation, event)
@@ -82,7 +80,7 @@ async def test_event_update(SchemaExecutor, CreateMutation, RolePermissionSchema
     )
 
     event = {
-        "mastereventId": "a64871f8-2308-48ff-adb2-33fb0b0741f1",
+        "mastereventId": str(EXPLICIT_PARENT_EVENT_ID),
         "name": "Test Event",
     }
     delta = {
@@ -115,7 +113,7 @@ async def test_event_delete(SchemaExecutor, CreateMutation, RolePermissionSchema
     )
 
     event = {
-        "mastereventId": "a64871f8-2308-48ff-adb2-33fb0b0741f1",
+        "mastereventId": str(EXPLICIT_PARENT_EVENT_ID),
         "name": "Test Event",
     }
     result = await event_insert(SchemaExecutor, CreateMutation, event)

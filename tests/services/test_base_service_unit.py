@@ -158,14 +158,13 @@ async def test_execute_service_method_maps_sqlalchemy_errors():
     async def operation():
         raise sqlalchemy.exc.SQLAlchemyError("db failed")
 
-    async def error(msg, code, exception):
-        return {"msg": msg, "code": code, "exception": exception}
+    async def error(msg, code):
+        return {"msg": msg, "code": code}
 
     result = await FakeService.ExecuteServiceMethod(operation(), Error=error)
 
-    assert result["msg"].startswith("Database error: db failed")
+    assert result["msg"] == "Database operation failed"
     assert result["code"] in (None, "unknown")
-    assert isinstance(result["exception"], sqlalchemy.exc.SQLAlchemyError)
 
 
 @pytest.mark.asyncio
@@ -191,22 +190,13 @@ async def test_execute_service_method_maps_unexpected_exception_with_origin():
     async def operation():
         raise CodedRuntimeError("boom")
 
-    async def error(msg, code, filename, lineno, exception):
-        return {
-            "msg": msg,
-            "code": code,
-            "filename": filename,
-            "lineno": lineno,
-            "exception": exception,
-        }
+    async def error(msg, code):
+        return {"msg": msg, "code": code}
 
     result = await FakeService.ExecuteServiceMethod(operation(), Error=error)
 
-    assert "CodedRuntimeError: boom code(RUNTIME-CODE)" in result["msg"]
+    assert result["msg"] == "Unexpected service error"
     assert result["code"] == "RUNTIME-CODE"
-    assert result["filename"].endswith("test_base_service_unit.py")
-    assert isinstance(result["lineno"], int)
-    assert isinstance(result["exception"], CodedRuntimeError)
 
 
 @pytest.mark.asyncio

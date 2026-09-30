@@ -17,9 +17,12 @@ import pytest
 import pytest_asyncio
 
 from src.Dataloaders import LoaderMap
+from src.DBDefinitions import EventModel
 from src.DBDefinitions.runtime import Database, DatabaseSettings
 from src.GraphTypeDefinitions.GraphQLContext import GraphQLContext
 from src.ServiceDefinitions.ServiceContext import ServiceContext
+
+EXPLICIT_PARENT_EVENT_ID = uuid.UUID("a64871f8-2308-48ff-adb2-33fb0b0741f1")
 
 
 def env_uuid(name: str, *, required: bool = False) -> uuid.UUID | None:
@@ -77,6 +80,17 @@ async def explicit_database_runtime():
     )
     await Database().start(settings)
     try:
+        async with Database().session() as session:
+            parent_event = await session.get(EventModel, EXPLICIT_PARENT_EVENT_ID)
+            if parent_event is None:
+                session.add(
+                    EventModel(
+                        id=EXPLICIT_PARENT_EVENT_ID,
+                        rbacobject_id=EXPLICIT_PARENT_EVENT_ID,
+                        name="pytest explicit parent event",
+                    )
+                )
+                await session.commit()
         yield Database()
     finally:
         await Database().stop()

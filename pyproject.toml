@@ -8,7 +8,7 @@ dependencies = [
   'sqlalchemy',
   'asyncpg',
   'greenlet',
-  'uoishelpers @ https://github.com/hrbolek/uoishelpers/archive/refs/heads/main.zip',
+  'uoishelpers @ https://github.com/hrbolek/uoishelpers/archive/4e41615436d6effbe248d8503e4df373549bcec3.zip',
 ]
 
 [tool.pytest.ini_options]

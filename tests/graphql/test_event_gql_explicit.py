@@ -15,7 +15,7 @@ import pytest
 import logging
 
 from tests.support.asserts import assert_delete, assert_insert, assert_read, assert_update
-from tests.support.explicit_fixtures import iso_datetime
+from tests.support.explicit_fixtures import EXPLICIT_PARENT_EVENT_ID
 
 
 @pytest.mark.explicit
@@ -106,7 +106,7 @@ async def test_gql_event_insert_update_delete_explicit(SchemaExecutor):
             "id": event_id,
             "name": inserted_name,
             "nameEn": inserted_name,
-            "mastereventId": "a64871f8-2308-48ff-adb2-33fb0b0741f1",
+            "mastereventId": str(EXPLICIT_PARENT_EVENT_ID),
             "description": "created by explicit GraphQL test",
             "startdate": "2026-01-01T00:00:00", #iso_datetime(1).isoformat(),
             "enddate": "2026-01-02T00:00:00", #iso_datetime(2).isoformat(),
@@ -248,7 +248,7 @@ async def test_gql_event_insert_rollback_on_error_explicit(SchemaExecutor):
             "event": {
                 "id": event_id,
                 "name": "pytest rollback gql event",
-                "mastereventId": "a64871f8-2308-48ff-adb2-33fb0b0741f1",
+                "mastereventId": str(EXPLICIT_PARENT_EVENT_ID),
                 "startdate": "2023-01-01T00:00:00", #iso_datetime(1).isoformat(),
                 "enddate": "2023-12-31T23:59:59", #iso_datetime(2).isoformat(),
             }

@@ -1,6 +1,6 @@
 import datetime
 import inspect
-import traceback
+import logging
 import typing
 import uuid
 
@@ -8,6 +8,7 @@ import sqlalchemy
 from uoishelpers.dataloaders.IDLoader import IDLoader
 
 T = typing.TypeVar('T', bound=IDLoader)
+logger = logging.getLogger(__name__)
 
 
 class ServiceExceptionWithCode(Exception):
@@ -108,6 +109,7 @@ class BaseService(typing.Generic[T]):
             return await cls.call_callback(OK, result)
 
         except sqlalchemy.exc.SQLAlchemyError as e:
+            logger.exception("Database service operation failed")
             return await cls.call_callback(
                 Error,
                 msg=f"Database error: {e} code({getattr(e, 'code', 'unknown')})",
@@ -124,16 +126,11 @@ class BaseService(typing.Generic[T]):
             )
 
         except Exception as e:
-            for origin in traceback.extract_tb(e.__traceback__):
-                print(f"ERR\t{origin.filename}:{origin.lineno}")
-            origin = traceback.extract_tb(e.__traceback__)[-1]
             code = getattr(e, 'code', 'unknown')
+            logger.exception("Unexpected service operation failure (code=%s)", code)
             return await cls.call_callback(
                 Error,
-                msg=f"{origin.filename}:{origin.lineno} => {type(e).__name__}: {e} code({code})",
-                exception=e,
-                filename=origin.filename,
-                lineno=origin.lineno,
+                msg="Unexpected service error",
                 code=code,
             )
 

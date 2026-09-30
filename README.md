@@ -20,13 +20,13 @@ Demonstrační boilerplate pro doménu `Event / EventInvitation` podle funkční
 Projekt pracuje s balíkem `uoishelpers` z repozitáře:
 
 ```text
-https://github.com/hrbolek/uoishelpers/archive/refs/heads/main.zip
+https://github.com/hrbolek/uoishelpers/archive/4e41615436d6effbe248d8503e4df373549bcec3.zip
 ```
 
 Závislost je uvedená přímo v `pyproject.toml`:
 
 ```toml
-'uoishelpers @ https://github.com/hrbolek/uoishelpers/archive/refs/heads/main.zip'
+'uoishelpers @ https://github.com/hrbolek/uoishelpers/archive/4e41615436d6effbe248d8503e4df373549bcec3.zip'
 ```
 
 Boilerplate proto nepřidává lokální náhražky pro `uoishelpers`. Používá importy ve stejném stylu jako funkční vzor, například:
@@ -38,7 +38,7 @@ from uoishelpers.gqlpermissions import OnlyForAuthentized
 from uoishelpers.resolvers import PageResolver, createInputs2
 ```
 
-Pro stabilní produkční build je vhodné později nahradit `main.zip` odkazem na konkrétní commit/tag, ale pro demonstrační studentskou platformu zůstává použit aktuální `main` podle zadání.
+Závislost je připnutá na konkrétní commit, aby instalace i CI používaly stejnou verzi.
 
 ## Vrstvy
 
